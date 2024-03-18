@@ -21,9 +21,11 @@ ARG BACKEND_PORT=5000
 ENV BACKEND_MODE=${BACKEND_MODE}
 ENV BACKEND_PORT=${BACKEND_PORT}
 
-COPY backend/bpmn_redrawer_backend bpmn_redrawer_backend/
-RUN [ -f bpmn_redrawer_backend/detectron_model/final_model.pth ] && echo "Object Detection model found" || { echo "Object Detection model not found!"; wget -O bpmn_redrawer_backend/detectron_model/final_model.pth https://huggingface.co/PROSLab/BPMN-Redrawer-Models/resolve/main/final_model.pth; }
-RUN [ -f bpmn_redrawer_backend/detectron_model/kp_final_model.pth ] && echo "KeyPoint Prediction model found" || { echo "KeyPoint Prediction model not found!"; wget -O bpmn_redrawer_backend/detectron_model/kp_final_model.pth https://huggingface.co/PROSLab/BPMN-Redrawer-Models/resolve/main/kp_final_model.pth; }
+COPY backend/DMNVisionTool_backend DMNVisionTool_backend/
+RUN [ -f DMNVisionTool_backend/detectron_model/DRD_model_final.pth ] && echo "Object Detection model found" || { echo "Object Detection model not found!"; wget -O DMNVisionTool_backend/detectron_model/DRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/DRD_model_final.pth; }
+RUN [ -f DMNVisionTool_backend/detectron_model/kp_DRD_model_final.pth ] && echo "KeyPoint Prediction model found" || { echo "KeyPoint Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/kp_DRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/kp_DRD_model_final.pth; }
+RUN [ -f DMNVisionTool_backend/detectron_model/Table_model_final.pth ] && echo "Object Detection model found" || { echo "Object Detection model not found!"; wget -O DMNVisionTool_backend/detectron_model/Table_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/Table_model_final.pth; }
+RUN [ -f DMNVisionTool_backend/detectron_model/TableStructure_model_final.pth ] && echo "Object Detection model found" || { echo "KeyPoint Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/TableStructure_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/TableStructure_model_final.pth; }
 
 # Install/update Pillow
 RUN pip install -U pip
@@ -44,10 +46,10 @@ RUN pip install git+https://github.com/facebookresearch/detectron2.git@ff53992b1
 
 
 # Copy frontend static files
-COPY --from=frontend /app/dist/spa /app/bpmn_redrawer_backend/static
+COPY --from=frontend /app/dist/spa /app/DMNVisionTool_backend/static
 
 # Set the command to run the application
-CMD uvicorn --host 0.0.0.0 --port ${BACKEND_PORT} --factory bpmn_redrawer_backend.app:create_app
+CMD uvicorn --host 0.0.0.0 --port ${BACKEND_PORT} --factory DMNVisionTool_backend.app:create_app
 
 # Expose the port the application runs on
 EXPOSE ${BACKEND_PORT}
