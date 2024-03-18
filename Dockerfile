@@ -33,6 +33,7 @@ RUN pip install -U pip
 # Install PyTorch
 RUN pip install torch torchvision torchaudio
 
+# Install uvicorn
 RUN pip install uvicorn
 
 
