@@ -1,6 +1,6 @@
 # BPMN Redrawer
 
-BPMN Redrawer is a web application that allows to upload images representing BPMN models to convert them in actual BPMN models stored in *.bpmn* format.
+DMN Computer Vision Tool is a web application that allows to upload images representing DMN models to convert them in actual DMJN models stored in *.dmn* format.
 
 ## Table of contents
 <!--ts-->
@@ -13,22 +13,22 @@ BPMN Redrawer is a web application that allows to upload images representing BPM
 
 ## Functionalities
 
-The user, through the simple and intuitive GUI, can load an image from the local storage in different formats (PNG, JPEG, BMP). The image is then displayed and is ready to be converted. After that, the backend receives the loaded image, extracts the elements and link them togheter in order to obtain the final *.bpmn* file. At this pont the result comes back to the frontend and, using the GUI, can be downloaded or can be shown and edited thanks to the integration of the [*bpmn-js*](https://bpmn.io/toolkit/bpmn-js/) library.
+The user, through the simple and intuitive GUI, can load an image from the local storage in different formats (PNG, JPEG, BMP). The image is then displayed and is ready to be converted. After that, the backend receives the loaded image, extracts the elements and link them togheter in order to obtain the final *.dmn* file. At this pont the result comes back to the frontend and, using the GUI, can be downloaded or can be shown and edited thanks to the integration of the [*bpmn-js*](https://bpmn.io/toolkit/bpmn-js/) library.
 
 Overall, the application is able to provide the following functionalities:
-- Convert an image into the corresponding *.bpmn* model;
+- Convert an image into the corresponding *.dmn* model;
 - Download the converted model;
 - Visualize the converted model and, next to it, the starting image;
 - Edit the converted model;
-- Open, edit and download an existing *.bpmn* model;
-- Create a BPMN model from scratch and download it as *.bpmn* file or *.svg* image;
-- Load an image next to the BPMN editor.
+- Open, edit and download an existing *.dmn* model;
+- Create a BPMN model from scratch and download it as *.dmn* file or *.svg* image;
+- Load an image next to the DMN editor.
 
-At present the application is able to detect the following BPMN elements with a fair average precision:
+At present the application is able to detect the following DMN elements with a fair average precision:
 
 <table>
 <tr><td>
-
+#TO BE CHANGED
 | BPMN Nodes                            | AP
 |---------------------------------------|-----
 | Start Event                           | 96.923
@@ -50,7 +50,7 @@ At present the application is able to detect the following BPMN elements with a 
 
 
 </td><td>
-
+#TO BE CHANGED
 | BPMN Nodes              | AP
 |-------------------------|-----
 | End Event               | 96.406
@@ -71,7 +71,7 @@ At present the application is able to detect the following BPMN elements with a 
 | Pool                    | 95.870
 
 </td><td>
-
+#TO BE CHANGED
 | BPMN Connecting Objects | AP-box | AP-keypoints|
 |-------------------------|--------|-------------|
 | Sequence Flow           | 82.988 | 96.865      |
@@ -84,13 +84,13 @@ At present the application is able to detect the following BPMN elements with a 
 
 ## Quickstart
 
-Our web application is available and ready to use at the following link:
+#Our web application is available and ready to use at the following link:
 **[BPMN Redrawer](https://pros.unicam.it/bpmn-redrawer-tool/)**.
 
-A tutorial on its usage is available by clicking the image below:
+#A tutorial on its usage is available by clicking the image below:
 [![Watch the video](https://img.youtube.com/vi/0e2qnbSp9XY/maxresdefault.jpg)](https://youtu.be/0e2qnbSp9XY)
 
-The user can perform very simple steps to obtain a *.bpmn* file starting from an image:
+The user can perform very simple steps to obtain a *.dmn* file starting from an image:
 - In the *HOME* page, the user can load an image from local storage with the corresponding button or one of the sample images by clicking on them;
 <p align="center">
 <img src="extra/images/home.png" width="90%" />
@@ -98,9 +98,9 @@ The user can perform very simple steps to obtain a *.bpmn* file starting from an
 
 - If correctly loaded, the image will be displayed;
 - Different options can be enabled to be performed by the backend, such as:
-    - object detection for the BPMN elements;
-    - keypoint detection for the BPMN flows;
-    - OCR for the BPMN labels;
+    - object detection for the DMN elements;
+    - keypoint detection for the DMN flows;
+    - OCR for the DMN labels;
 - Then the *CONVERT* button can be clicked to start the conversion (it takes a few seconds to complete the process);
 - Once the conversion is done, the user can either download or view and edit the resulting model;
 - By selecting the *VIEW IN EDITOR* button, the *EDITOR* page will allow the user to see the converted model and, if needed, to edit and correct it. The starting image is displayed next to the model and simplifies the revising process (a vertical splitter can be moved to resize the BPMN editor and the image viewer);
