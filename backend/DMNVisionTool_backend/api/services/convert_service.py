@@ -2,18 +2,18 @@ import jinja2
 from typing import List, TYPE_CHECKING
 from Levenshtein import distance
 
-from backend.graphs.graph_elements import Element, Diagram, Decision
-from backend.graphs.graph_requirements import Requirement, Association
-from backend.graphs.elements_factories import get_factory
-from backend.graphs.requirements_factories import get_keypoint_factory
-from backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
-from backend.tables.dmn_decisionLogic import Table 
-from backend.commons.utils import get_nearest_element, here, get_envelope_element
+from backend.DMNVisionTool_backend.graphs.graph_elements import Element, Diagram, Decision
+from backend.DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association
+from backend.DMNVisionTool_backend.graphs.elements_factories import get_factory
+from backend.DMNVisionTool_backend.graphs.requirements_factories import get_keypoint_factory
+from backend.DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
+from backend.DMNVisionTool_backend.tables.dmn_decisionLogic import Table 
+from backend.DMNVisionTool_backend.commons.utils import get_nearest_element, here, get_envelope_element
 
-from backend.graphs import elements_factories as ef
-from backend.graphs import requirements_factories as rf
-from backend.tables import table_factories as tf
-from backend.tables import decisionLogic_factories as df
+from backend.DMNVisionTool_backend.graphs import elements_factories as ef
+from backend.DMNVisionTool_backend.graphs import requirements_factories as rf
+from backend.DMNVisionTool_backend.tables import table_factories as tf
+from backend.DMNVisionTool_backend.tables import decisionLogic_factories as df
 
 if TYPE_CHECKING:
     from graphs.graph_predictions import (

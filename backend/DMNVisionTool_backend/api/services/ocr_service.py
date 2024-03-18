@@ -1,11 +1,11 @@
 import pytesseract
 from typing import List
 from numpy import ndarray
-from backend.graphs.graph_elements import Element
-from backend.graphs.graph_predictions import Text as GraphText
-from backend.tables.table_elements import TableElement
-from backend.tables.table_predictions import Text as TableText
-from backend.commons.utils import get_nearest_element
+from backend.DMNVisionTool_backend.graphs.graph_elements import Element
+from backend.DMNVisionTool_backend.graphs.graph_predictions import Text as GraphText
+from backend.DMNVisionTool_backend.tables.table_elements import TableElement
+from backend.DMNVisionTool_backend.tables.table_predictions import Text as TableText
+from backend.DMNVisionTool_backend.commons.utils import get_nearest_element
 from textblob import TextBlob
 
 

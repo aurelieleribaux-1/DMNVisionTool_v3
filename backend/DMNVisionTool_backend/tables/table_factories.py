@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from backend.tables.table_elements import (
+from backend.DMNVisionTool_backend.tables.table_elements import (
     TableElement,
     TableHeader,
     TableHitPolicy,
@@ -11,8 +11,8 @@ from backend.tables.table_elements import (
     OutputEntry,
 )
 
-from backend.tables.table_predictions import TableElementPrediction
-from backend.commons.utils import generate_id
+from backend.DMNVisionTool_backend.tables.table_predictions import TableElementPrediction
+from backend.DMNVisionTool_backend.commons.utils import generate_id
 
 def calculate_width_height(
     x_start: float, y_start: float, x_end: float, y_end: float

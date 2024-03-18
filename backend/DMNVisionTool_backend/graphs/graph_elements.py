@@ -3,7 +3,7 @@ from typing import List
 
 from jinja2 import Environment, BaseLoader
 
-from backend.graphs.graph_predictions import ObjectPrediction, Text
+from backend.DMNVisionTool_backend.graphs.graph_predictions import ObjectPrediction, Text
 
 class Element:
     """Parent class for all the elements that can be put within a DMN Model.

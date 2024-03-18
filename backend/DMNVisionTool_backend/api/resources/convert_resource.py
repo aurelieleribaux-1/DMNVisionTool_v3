@@ -1,5 +1,5 @@
 import time
-from backend.api.services import preprocessing_service as ss
+from backend.DMNVisionTool_backend.api.services import preprocessing_service as ss
 #from starlette.requests import Request
 #from starlette.responses import PlainTextResponse
 from backend.tables.table_factories import TableElementFactory 
@@ -8,11 +8,11 @@ from backend.api.services import (
     ocr_service as os,
     convert_service as cs,
 )
-from backend.graphs.elements_factories import DiagramFactory
-from backend.commons.utils import sample_dmn, here
-from backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
-from backend.tables.dmn_decisionLogic import Table
-from backend.graphs.graph_elements import Decision
+from backend.DMNVisionTool_backend.graphs.elements_factories import DiagramFactory
+from backend.DMNVisionTool_backend.commons.utils import sample_dmn, here
+from backend.DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
+from backend.DMNVisionTool_backend.tables.dmn_decisionLogic import Table
+from backend.DMNVisionTool_backend.graphs.graph_elements import Decision
 
 # At the moment, convert_image takes a file_path as argument, 
 # Later, we should add request handling in the function

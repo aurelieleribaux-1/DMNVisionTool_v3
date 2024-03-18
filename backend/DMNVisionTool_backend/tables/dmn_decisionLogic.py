@@ -3,8 +3,8 @@ from typing import List
 
 from jinja2 import Environment, BaseLoader
 
-from backend.tables.table_predictions import TablePrediction  #,Text
-from backend.tables.table_elements import TableHeader, TableHitPolicy
+from backend.DMNVisionTool_backend.tables.table_predictions import TablePrediction  #,Text
+from backend.DMNVisionTool_backend.tables.table_elements import TableHeader, TableHitPolicy
 
 
 class Decision_Logic:

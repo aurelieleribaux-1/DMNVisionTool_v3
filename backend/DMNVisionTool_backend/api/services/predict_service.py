@@ -10,13 +10,13 @@ from numpy import ndarray
 import os
 import cv2
 
-from backend.graphs.elements_factories import CATEGORIES
-from backend.graphs.graph_predictions import (
+from backend.DMNVisionTool_backend.graphs.elements_factories import CATEGORIES
+from backend.DMNVisionTool_backend.graphs.graph_predictions import (
     ObjectPrediction,
     KeyPointPrediction,
 )
 
-from backend.commons.utils import here
+from backend.DMNVisionTool_backend.commons.utils import here
 
 class ObjectPredictor:
     """Class used to represent a Detectron2 predictor trained with a faster_rcnn"""
