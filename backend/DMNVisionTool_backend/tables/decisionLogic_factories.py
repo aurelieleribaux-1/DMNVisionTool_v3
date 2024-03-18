@@ -1,7 +1,7 @@
 from typing import Tuple, List, Union, Set
-from backend.DMNVisionTool_backend.tables.dmn_decisionLogic import Table, Decision_Logic
-from backend.DMNVisionTool_backend.tables.table_predictions import TablePrediction
-from backend.DMNVisionTool_backend.commons.utils import generate_id
+from DMNVisionTool_backend.tables.dmn_decisionLogic import Table, Decision_Logic
+from DMNVisionTool_backend.tables.table_predictions import TablePrediction
+from DMNVisionTool_backend.commons.utils import generate_id
 
 class Factory:
     """Parent class for the factories used to create the DMN Tables. """

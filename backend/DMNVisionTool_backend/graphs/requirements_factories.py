@@ -1,6 +1,6 @@
-from backend.DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association, InformationRequirement, KnowledgeRequirement, AuthorityRequirement
-from backend.DMNVisionTool_backend.graphs.graph_predictions import KeyPointPrediction
-from backend.DMNVisionTool_backend.commons.utils import generate_id
+from DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association, InformationRequirement, KnowledgeRequirement, AuthorityRequirement
+from DMNVisionTool_backend.graphs.graph_predictions import KeyPointPrediction
+from DMNVisionTool_backend.commons.utils import generate_id
 
 class RequirementFactory:
     """Parent class for the factories used to create the DMN Requirements. """

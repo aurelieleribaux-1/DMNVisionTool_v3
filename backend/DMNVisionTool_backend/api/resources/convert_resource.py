@@ -1,18 +1,18 @@
 import time
-from backend.DMNVisionTool_backend.api.services import preprocessing_service as ss
+from DMNVisionTool_backend.api.services import preprocessing_service as ss
 #from starlette.requests import Request
 #from starlette.responses import PlainTextResponse
-from backend.DMNVisionTool_backend.tables.table_factories import TableElementFactory 
-from backend.DMNVisionTool_backend.api.services import (
+from DMNVisionTool_backend.tables.table_factories import TableElementFactory 
+from DMNVisionTool_backend.api.services import (
     predict_service as ps,
     ocr_service as os,
     convert_service as cs,
 )
-from backend.DMNVisionTool_backend.graphs.elements_factories import DiagramFactory
-from backend.DMNVisionTool_backend.commons.utils import sample_dmn, here
-from backend.DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
-from backend.DMNVisionTool_backend.tables.dmn_decisionLogic import Table
-from backend.DMNVisionTool_backend.graphs.graph_elements import Decision
+from DMNVisionTool_backend.graphs.elements_factories import DiagramFactory
+from DMNVisionTool_backend.commons.utils import sample_dmn, here
+from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
+from DMNVisionTool_backend.tables.dmn_decisionLogic import Table
+from DMNVisionTool_backend.graphs.graph_elements import Decision
 
 # At the moment, convert_image takes a file_path as argument, 
 # Later, we should add request handling in the function

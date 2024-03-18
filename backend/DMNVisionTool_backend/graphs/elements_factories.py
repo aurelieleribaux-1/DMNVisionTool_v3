@@ -1,6 +1,6 @@
 from typing import Tuple, List, Union, Set
 
-from backend.DMNVisionTool_backend.graphs.graph_elements import (
+from DMNVisionTool_backend.graphs.graph_elements import (
     Element,
     InputData,
     Decision,
@@ -10,8 +10,8 @@ from backend.DMNVisionTool_backend.graphs.graph_elements import (
     Diagram,
 )
 
-from backend.DMNVisionTool_backend.graphs.graph_predictions import ObjectPrediction
-from backend.DMNVisionTool_backend.commons.utils import generate_id
+from DMNVisionTool_backend.graphs.graph_predictions import ObjectPrediction
+from DMNVisionTool_backend.commons.utils import generate_id
 
 def calculate_width_height(
     x_start: float, y_start: float, x_end: float, y_end: float

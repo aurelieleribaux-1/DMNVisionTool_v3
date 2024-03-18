@@ -3,7 +3,7 @@ from typing import List
 
 from jinja2 import Environment, BaseLoader
 
-from backend.DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, Text
+from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, Text
 
 class TableElement:
     """Parent class for all the elements that can be put within a DMN Table.

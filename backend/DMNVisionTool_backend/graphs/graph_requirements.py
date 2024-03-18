@@ -1,6 +1,6 @@
 from jinja2 import Environment, BaseLoader
 
-from backend.DMNVisionTool_backend.graphs.graph_predictions import KeyPointPrediction
+from DMNVisionTool_backend.graphs.graph_predictions import KeyPointPrediction
 
 class Requirement:
     """Parent class for all the requirements that can be put within a DMN Diagram.
