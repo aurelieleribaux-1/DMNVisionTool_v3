@@ -33,6 +33,9 @@ RUN pip install -U pip
 # Install PyTorch
 RUN pip install torch torchvision torchaudio
 
+RUN pip install uvicorn
+
+
 # Update package lists and install tesseract-ocr
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
