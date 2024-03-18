@@ -2,8 +2,8 @@ import time
 from backend.DMNVisionTool_backend.api.services import preprocessing_service as ss
 #from starlette.requests import Request
 #from starlette.responses import PlainTextResponse
-from backend.tables.table_factories import TableElementFactory 
-from backend.api.services import (
+from backend.DMNVisionTool_backend.tables.table_factories import TableElementFactory 
+from backend.DMNVisionTool_backend.api.services import (
     predict_service as ps,
     ocr_service as os,
     convert_service as cs,
