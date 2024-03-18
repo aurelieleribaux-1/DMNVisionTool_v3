@@ -30,6 +30,9 @@ RUN [ -f DMNVisionTool_backend/detectron_model/TableStructure_model_final.pth ] 
 # Install/update Pillow
 RUN pip install -U pip
 
+# Install PyTorch
+RUN pip install torch torchvision torchaudio
+
 # Update package lists and install tesseract-ocr
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
