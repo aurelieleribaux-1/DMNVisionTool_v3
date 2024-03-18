@@ -40,7 +40,7 @@ RUN wget -O - https://notesalexp.org/debian/alexp_key.asc | apt-key add -
 RUN apt-get update
 
 # Install Python dependencies
-COPY backend/requirements.txt ./
+COPY backend/DMNVisionTool_backend/requirements.txt ./
 RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/facebookresearch/detectron2.git@ff53992b1985b63bd3262b5a36167098e3dada02
 
