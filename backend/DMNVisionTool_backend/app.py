@@ -7,8 +7,8 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
-from bpmn_redrawer_backend.api.resources.convert_resource import convert_image
-from bpmn_redrawer_backend.commons.utils import here
+from DMNVisionTool_backend.api.resources.convert_resource import convert_image
+from DMNVisionTool_backend.commons.utils import here
 
 
 def create_app():
