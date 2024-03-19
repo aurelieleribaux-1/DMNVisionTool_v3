@@ -1,4 +1,5 @@
 from typing import Tuple
+from typing import Type
 
 from DMNVisionTool_backend.tables.table_elements import (
     TableElement,
