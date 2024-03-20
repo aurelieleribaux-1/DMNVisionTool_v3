@@ -1,7 +1,7 @@
 import sys
 sys.path.append('.')
 import os
-#import uvicorn
+import uvicorn
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware

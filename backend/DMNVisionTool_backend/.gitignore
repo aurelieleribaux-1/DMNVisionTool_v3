@@ -94,8 +94,8 @@ ENV/
 # PyCharm folder
 .idea
 
-imagetodmn_backend/detectron_model/*
-!imagetodmn_backend/detectron_model/.gitkeep
+DMNVisionTool_backend/detectron_model/*
+!DMNVisionTool_backend/detectron_model/.gitkeep
 
-imagetodmn_backend/temp_files/*
-!imagetodmn_backend/temp_files/.gitkeepS
+DMNVisionTool_backend/temp_files/*
+!DMNVisionTool_backend/temp_files/.gitkeepS
