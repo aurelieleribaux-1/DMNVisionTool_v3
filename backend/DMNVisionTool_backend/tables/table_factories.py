@@ -39,7 +39,7 @@ class GenericTableElementFactory(TableElementFactory):
     """
     generated_ids = []
 
-    def __init__(self, element_class: type[TableElement]):
+    def __init__(self, element_class: Type[TableElement]):
         self.element_class = element_class
 
     def create_element(self, prediction: TableElementPrediction) -> TableElement:
