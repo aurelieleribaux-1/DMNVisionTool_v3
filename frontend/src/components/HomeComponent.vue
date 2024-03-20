@@ -121,7 +121,7 @@
 
   <div class="q-py-md" style="margin: auto; text-align: center; width: 100%">
     <div style="font-size: 18px">
-      BPMN Redrawer
+      DMN Computer Vision Tool 
       <br />
       {{ $t('home.university') }}
       <br />
