@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from jinja2 import Environment, BaseLoader
+from Jinja2 import Environment, BaseLoader
 
 from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, Text
 
