@@ -1,4 +1,4 @@
-from typing import Tuple, List, Union, Set
+from typing import Tuple, List, Union, Set, Type
 from DMNVisionTool_backend.tables.dmn_decisionLogic import Table, Decision_Logic
 from DMNVisionTool_backend.tables.table_predictions import TablePrediction
 from DMNVisionTool_backend.commons.utils import generate_id
@@ -16,7 +16,7 @@ class GenericFactory(Factory):
 
     """
 
-    def __init__(self, dl_class: type(Decision_Logic)):
+    def __init__(self, dl_class: Type[Decision_Logic]):
         self.dl_class = dl_class
 
     def create_table(self, prediction: TablePrediction) -> Decision_Logic:
