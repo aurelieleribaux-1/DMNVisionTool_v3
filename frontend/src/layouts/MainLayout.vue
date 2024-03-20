@@ -2,7 +2,7 @@
   <q-layout view="lHh LpR fFf">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-toolbar-title> BPMN Redrawer </q-toolbar-title>
+        <q-toolbar-title> DMN Computer Vision Tool </q-toolbar-title>
         <q-space></q-space>
         <dark-mode-changer></dark-mode-changer>
         <locale-changer></locale-changer>
