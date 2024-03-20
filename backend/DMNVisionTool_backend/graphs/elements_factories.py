@@ -1,4 +1,4 @@
-from typing import Tuple, List, Union, Set
+from typing import Tuple, List, Union, Set, Type
 
 from DMNVisionTool_backend.graphs.graph_elements import (
     Element,
@@ -55,7 +55,7 @@ class GenericElementFactory(ElementFactory):
     """
     generated_ids = []
 
-    def __init__(self, element_class: type[Element]):
+    def __init__(self, element_class: Type[Element]):
         self.element_class = element_class
 
     def create_element(self, prediction: ObjectPrediction) -> Element:
