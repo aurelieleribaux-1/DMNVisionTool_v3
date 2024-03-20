@@ -7,7 +7,7 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
-from DMNVisionTool_backend.api.resources.convert_resource import convert_image
+from DMNVisionTool_backend.api.resources.convert_resource import convert_images
 from DMNVisionTool_backend.commons.utils import here
 
 
@@ -16,7 +16,7 @@ def create_app():
     app = Starlette(
         debug=debug,
         routes=[
-            Route('/api/v1/convert', convert_image, methods=['POST']),
+            Route('/api/v1/convert', convert_images, methods=['POST']),
         ],
         middleware=[
             Middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'])
