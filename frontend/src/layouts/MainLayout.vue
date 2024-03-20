@@ -18,8 +18,8 @@
         align="justify"
         v-model="tab"
         inline-label
-        indicator-color="secondary"
-        active-bg-color="primary"
+        indicator-color="dark"
+        active-bg-color="positive"
       >
         <q-route-tab
           name="home"

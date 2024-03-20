@@ -10,13 +10,13 @@
     <q-file
       ref="filePicker"
       style="display: none"
-      accept=".png, .jpeg, .jpg, .bmp"
+      accept=".png, .jpeg, .jpg
       v-model="file"
       @update:model-value="loadImage(file as File)"
     ></q-file>
     <div class="q-pt-xl" style="text-align: center">
       <q-btn
-        color="primary"
+        color="positive"
         icon="upload_file"
         :label="$t('home.load')"
         @click="filePicker?.pickFiles()"
@@ -126,9 +126,6 @@
       {{ $t('home.university') }}
       <br />
     </div>
-    <div class="row justify-center">
-      <q-img src="../assets/university-logo.png" width="173px" height="215px" />
-    </div>
   </div>
 </template>
 
@@ -174,7 +171,6 @@ export default defineComponent({
         file.name.endsWith('.png') ||
         file.name.endsWith('.jpeg') ||
         file.name.endsWith('.jpg') ||
-        file.name.endsWith('.bmp')
       ) {
         await loadImage(file);
       }
