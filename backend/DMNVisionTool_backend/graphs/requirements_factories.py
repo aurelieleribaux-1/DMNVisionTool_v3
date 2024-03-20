@@ -1,6 +1,7 @@
 from DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association, InformationRequirement, KnowledgeRequirement, AuthorityRequirement
 from DMNVisionTool_backend.graphs.graph_predictions import KeyPointPrediction
 from DMNVisionTool_backend.commons.utils import generate_id
+from typing import Type
 
 class RequirementFactory:
     """Parent class for the factories used to create the DMN Requirements. """
@@ -18,7 +19,7 @@ class GenericRequirementFactory(RequirementFactory):
     requirement_class : type of Requirement
         The actual subclass of Requirement to create.
     """
-    def __init__(self, requirement_class: type[Requirement]):
+    def __init__(self, requirement_class: Type[Requirement]):
         self.requirement_class = requirement_class
 
     def create_requirement(self, prediction: KeyPointPrediction) -> Requirement:
