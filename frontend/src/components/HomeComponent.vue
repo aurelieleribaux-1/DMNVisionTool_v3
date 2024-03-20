@@ -10,7 +10,7 @@
     <q-file
       ref="filePicker"
       style="display: none"
-      accept=".png, .jpeg, .jpg
+      accept=".png, .jpeg, .jpg, .bmp"
       v-model="file"
       @update:model-value="loadImage(file as File)"
     ></q-file>
@@ -171,6 +171,7 @@ export default defineComponent({
         file.name.endsWith('.png') ||
         file.name.endsWith('.jpeg') ||
         file.name.endsWith('.jpg') ||
+        file.name.endsWith('.bmp')
       ) {
         await loadImage(file);
       }
