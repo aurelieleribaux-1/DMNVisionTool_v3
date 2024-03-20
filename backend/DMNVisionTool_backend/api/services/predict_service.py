@@ -1,7 +1,6 @@
 from typing import List
 
 import cv2
-from google.colab.patches import cv2_imshow
 from detectron2.utils.visualizer import Visualizer, ColorMode
 from detectron2 import model_zoo # Need to import detectron on Github
 from detectron2.config import get_cfg
@@ -55,7 +54,7 @@ class ObjectPredictor:
                        instance_mode=ColorMode.IMAGE_BW
                        )
         out = v.draw_instance_predictions(outs["instances"].to("cpu"))
-        cv2_imshow(out.get_image()[:, :, ::-1])
+        #cv2_imshow(out.get_image()[:, :, ::-1])
         cv2.waitKey(0)
 
         return outs
@@ -97,7 +96,7 @@ class KeyPointPredictor:
         for kp in outs.get("instances").pred_keypoints.numpy():
              cv2.circle(img, (int(kp[0][0]), int(kp[0][1])), 4, (0, 255, 0), -1)
              cv2.circle(img, (int(kp[3][0]), int(kp[3][1])), 4, (0, 0, 255), -1)
-        cv2_imshow(img)
+        #cv2_imshow(img)
         cv2.waitKey(0)
 
         return outs
@@ -162,10 +161,10 @@ def PredictKeypoint(image: ndarray) -> List[KeyPointPrediction]:
     ]
     
 ############## Tables ####################
-from backend.tables.table_factories import CATEGORIES 
-from backend.tables.decisionLogic_factories import TABLE_CATEGORIES
-from backend.tables.table_predictions import TableElementPrediction, TablePrediction
-from backend.commons.utils import here 
+from DMNVisionTool_backend.tables.table_factories import CATEGORIES 
+from DMNVisionTool_backend.tables.decisionLogic_factories import TABLE_CATEGORIES
+from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, TablePrediction
+from DMNVisionTool_backend.commons.utils import here 
 
 class TablePredictor:
     """Class used to represent a Detectron2 predictor trained with a faster_rcnn"""
@@ -204,7 +203,7 @@ class TablePredictor:
                        instance_mode=ColorMode.IMAGE_BW
                        )
         out = v.draw_instance_predictions(outs["instances"].to("cpu"))
-        cv2_imshow(out.get_image()[:, :, ::-1])
+        #cv2_imshow(out.get_image()[:, :, ::-1])
         cv2.waitKey(0)
 
         return outs
@@ -247,7 +246,7 @@ class TableElementPredictor:
                        instance_mode=ColorMode.IMAGE_BW
                        )
         out = v.draw_instance_predictions(outs["instances"].to("cpu"))
-        cv2_imshow(out.get_image()[:, :, ::-1])
+        #cv2_imshow(out.get_image()[:, :, ::-1])
         cv2.waitKey(0)
 
         return outs
