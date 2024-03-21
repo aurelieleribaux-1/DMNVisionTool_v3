@@ -127,9 +127,51 @@ export default defineComponent({
 
   setup() {
     const tab = ref('home');
+    const file = ref(null);
+    const imgSrc = ref('');
+    const elementsEnabled = ref(false);
+    const flowsEnabled = ref(false);
+    const ocrEnabled = ref(false);
+    const imageLoaded = ref(false);
+
+    const loadImage = (file: File) => {
+      // Logic to load the image
+    };
+
+    const convertImage = () => {
+      // Logic to convert image
+    };
+
+    const loadingOK = () => {
+      // Logic when image loading is successful
+    };
+
+    const loadingError = () => {
+      // Logic when image loading fails
+    };
+
+    const allowDrop = (event: Event) => {
+      // Logic to allow dropping
+    };
+
+    const drop = (event: Event) => {
+      // Logic when dropping
+    };
 
     return {
       tab,
+      file,
+      imgSrc,
+      elementsEnabled,
+      flowsEnabled,
+      ocrEnabled,
+      imageLoaded,
+      loadImage,
+      convertImage,
+      loadingOK,
+      loadingError,
+      allowDrop,
+      drop,
     };
   },
 });
