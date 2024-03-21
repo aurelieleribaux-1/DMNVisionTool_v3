@@ -11,7 +11,7 @@
 
     <!-- Main Content Section -->
     <main class="main-content">
-      <div class="content-wrapper">
+      <div class="upload-container">
         <!-- Left Section -->
         <section class="upload-section">
           <h2>Upload Image 1</h2>
