@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh LpR fFf">
-    <q-header elevated class="bg-green-8 text-white">
+    <q-header elevated class="bg-purple-8 text-white">
       <q-toolbar>
         <q-toolbar-title> DMN Computer Vision Tool </q-toolbar-title>
         <q-space></q-space>
@@ -19,7 +19,7 @@
         v-model="tab"
         inline-label
         indicator-color="secondary"
-        active-bg-color="positive"
+        active-bg-color="accent"
       >
         <q-route-tab
           name="home"
