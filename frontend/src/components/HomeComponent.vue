@@ -153,7 +153,7 @@
         </section>
       </div>
     </main>
-    
+
     <!-- Footer Section -->
     <footer class="footer">
       <h2>Navigation</h2>
@@ -277,8 +277,19 @@ export default defineComponent({
 }
 
 /* Style for individual sections */
-section {
-  margin-bottom: 20px;
+.upload-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.upload-section {
+  flex: 1;
+  margin: 0 10px; /* Adjust this margin for spacing between sections */
+}
+
+.image-display {
+  margin-top: 20px;
 }
 
 h2 {
