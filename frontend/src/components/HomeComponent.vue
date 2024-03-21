@@ -11,54 +11,54 @@
         </div>
       </div>
     </header>
-  </div>
+
     <!-- Main Content Section -->
     <main class="main-content">
       <div class="upload-container">
         <!-- Left Section -->
-        <section class="upload-section">
+        <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'left')">
           <h2>Upload Image 1</h2>
           <q-btn
             color="accent"
             icon="upload_file"
             :label="$t('home.upload_image')"
-            @click="filePicker?.pickFiles()"
+            @click="filePickerLeft?.pickFiles()"
           ></q-btn>
           <q-file
-            ref="filePicker"
+            ref="filePickerLeft"
             style="display: none"
             accept=".png, .jpeg, .jpg, .bmp"
-            v-model="file"
-            @update:model-value="loadImage(file as File)"
+            v-model="fileLeft"
+            @update:model-value="loadImageLeft(fileLeft as File)"
           ></q-file>
           <div class="options">
             <q-checkbox
               class="q-pr-md"
-              v-model="elementsEnabled"
+              v-model="elementsEnabledLeft"
               :label="$t('home.show_elements')"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabled"
+              :disable="!elementsEnabledLeft"
               class="q-pr-md"
-              v-model="flowsEnabled"
+              v-model="flowsEnabledLeft"
               :label="$t('home.show_flows')"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabled"
+              :disable="!elementsEnabledLeft"
               class="q-pr-md"
-              v-model="ocrEnabled"
+              v-model="ocrEnabledLeft"
               label="Enable OCR"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabled"
+              :disable="!elementsEnabledLeft"
               class="q-pr-md"
-              v-model="isGraph"
+              v-model="isGraphLeft"
               label="Graph"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabled"
+              :disable="!elementsEnabledLeft"
               class="q-pr-md"
-              v-model="isTable"
+              v-model="isTableLeft"
               label="Table"
             ></q-checkbox>
           </div>
@@ -69,65 +69,65 @@
                 :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
                 sizes="(max-width: 200px) 200px, (max-height: 200px) 200px"
                 fit="contain"
-                position="25% 25%"
+                position="50% 50%"
                 width="200px"
                 height="200px"
                 placeholder-src="../assets/default-placeholder.png"
                 no-spinner
-                :src="(imgSrc as string)"
+                :src="(imgSrcLeft as string)"
                 @load="loadingOK"
-                @error="loadingError"
+                @error="loadingError('left')"
                 @dragover="allowDrop($event)"
-                @drop="drop($event)"
+                @drop="drop($event, 'left')"
               ></q-img>
             </div>
           </div>
         </section>
 
         <!-- Right Section -->
-        <section class="upload-section">
+        <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'right')">
           <h2>Upload Image 2</h2>
           <q-btn
             color="accent"
             icon="upload_file"
             :label="$t('home.upload_image')"
-            @click="filePicker2?.pickFiles()"
+            @click="filePickerRight?.pickFiles()"
           ></q-btn>
           <q-file
-            ref="filePicker2"
+            ref="filePickerRight"
             style="display: none"
             accept=".png, .jpeg, .jpg, .bmp"
-            v-model="file2"
-            @update:model-value="loadImage2(file2 as File)"
+            v-model="fileRight"
+            @update:model-value="loadImageRight(fileRight as File)"
           ></q-file>
           <div class="options">
             <q-checkbox
               class="q-pr-md"
-              v-model="elementsEnabled2"
+              v-model="elementsEnabledRight"
               :label="$t('home.show_elements')"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabled2"
+              :disable="!elementsEnabledRight"
               class="q-pr-md"
-              v-model="flowsEnabled2"
+              v-model="flowsEnabledRight"
               :label="$t('home.show_flows')"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabled2"
+              :disable="!elementsEnabledRight"
               class="q-pr-md"
-              v-model="ocrEnabled2"
+              v-model="ocrEnabledRight"
               label="Enable OCR"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabled2"
+              :disable="!elementsEnabledRight"
               class="q-pr-md"
-              v-model="isGraph2"
+              v-model="isGraphRight"
               label="Graph"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabled2"
+              :disable="!elementsEnabledRight"
               class="q-pr-md"
-              v-model="isTable2"
+              v-model="isTableRight"
               label="Table"
             ></q-checkbox>
           </div>
@@ -138,16 +138,16 @@
                 :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
                 sizes="(max-width: 200px) 200px, (max-height: 200px) 200px"
                 fit="contain"
-                position="25% 25%"
+                position="50% 50%"
                 width="200px"
                 height="200px"
                 placeholder-src="../assets/default-placeholder.png"
                 no-spinner
-                :src="(imgSrc as string)"
+                :src="(imgSrcRight as string)"
                 @load="loadingOK"
-                @error="loadingError"
+                @error="loadingError('right')"
                 @dragover="allowDrop($event)"
-                @drop="drop($event)"
+                @drop="drop($event, 'right')"
               ></q-img>
             </div>
           </div>
@@ -173,18 +173,20 @@
           ></q-img>
         </div>
       </div>
+    </div>
 
-      <!-- Footer Section -->
-      <div class="q-py-md" style="margin: auto; text-align: center; width: 100%">
-        <div style="font-size: 18px">
-          DMN Computer Vision Tool
+    <!-- Footer Section -->
+    <div class="q-py-md" style="margin: auto; text-align: center; width: 100%">
+      <div style="font-size: 18px">
+        DMN Computer Vision Tool
           <br />
           {{ $t('home.university') }}
           <br />
-        </div>
       </div>
     </div>
+  </div>
 </template>
+
 
 
 <script lang="ts">
@@ -203,13 +205,18 @@ export default defineComponent({
   setup() {
     const $q = useQuasar();
     const router = useRouter();
-    const filePicker: Ref<QFile | null> = ref(null);
-    const file: Ref<File | null> = ref(null);
-    const imageFile: Ref<File | null> = ref(null);
-    const imgSrc: Ref<string | null> = ref(null);
+    const filePickerLeft: Ref<QFile | null> = ref(null);
+    const filePickerRight: Ref<QFile | null> = ref(null);
+    const fileLeft: Ref<File | null> = ref(null);
+    const fileRight: Ref<File | null> = ref(null);
+    const imageFileLeft: Ref<File | null> = ref(null);
+    const imageFileRight: Ref<File | null> = ref(null);
+    const imgSrcLeft: Ref<string | null> = ref(null);
+    const imgSrcRight: Ref<string | null> = ref(null);
     const conversionDialog: Ref<boolean> = ref(false);
     const conversionResult: Ref<string | null> = ref(null);
-    const imageLoaded = ref(false);
+    const imageLoadedLeft = ref(false);
+    const imageLoadedRight = ref(false);
     const elementsEnabled = ref(true);
     const flowsEnabled = ref(true);
     const ocrEnabled = ref(true);
@@ -218,7 +225,7 @@ export default defineComponent({
       e.preventDefault();
     };
 
-    const drop = async (e: DragEvent) => {
+    const drop = async (e: DragEvent, section: string) => {
       e.preventDefault();
       const files = (e.dataTransfer as DataTransfer).files;
       if (files.length != 1) {
@@ -226,42 +233,58 @@ export default defineComponent({
       }
       const file = files[0];
       if (
-        file.name.endsWith('.png') ||
-        file.name.endsWith('.jpeg') ||
-        file.name.endsWith('.jpg') ||
-        file.name.endsWith('.bmp')
+         file.name.endsWith('.png') ||
+         file.name.endsWith('.jpeg') ||
+         file.name.endsWith('.jpg') ||
+         file.name.endsWith('.bmp')
       ) {
-        await loadImage(file);
+        if (section === 'left') {
+          if (fileLeft.value !== null) { 
+            await loadImageLeft(fileLeft.value);
+          }
+        } else if (section === 'right') {
+          if (fileRight.value !== null) {
+           await loadImageRight(fileRight.value);
+          }
+        }
       }
     };
 
-    const loadExampleImage = async (i: number) => {
-      const blob = await (
-        await fetch(
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          require(`../assets/example${i}.png`) as string
-        )
-      ).blob();
-      await loadImage(new File([blob], `example${i}.png`));
+    
+    const loadImageLeft = async (fileToLoad: File) => {
+      await blobToDataURL(fileToLoad)
+       .then((result) => {
+          imgSrcLeft.value = result;
+          imageLoadedLeft.value = true;
+          imageFileLeft.value = fileToLoad;
+       })
+       .catch(() => {
+          imgSrcLeft.value = null;
+          imageLoadedLeft.value = false;
+          $q.notify({
+              message: i18n.global.t('home.errorReading'),
+              type: 'negative',
+          });
+          imageFileLeft.value = null;
+       });
     };
 
-    const loadImage = async (fileToLoad: File) => {
+    const loadImageRight = async (fileToLoad: File) => {
       await blobToDataURL(fileToLoad)
-        .then((result) => {
-          imgSrc.value = result;
-          imageLoaded.value = true;
-          imageFile.value = fileToLoad;
-        })
-        .catch(() => {
-          imgSrc.value = null;
-          imageLoaded.value = false;
+       .then((result) => {
+          imgSrcRight.value = result;
+          imageLoadedRight.value = true;
+          imageFileRight.value = fileToLoad;
+       })
+       .catch(() => {
+          imgSrcRight.value = null;
+          imageLoadedRight.value = false;
           $q.notify({
-            message: i18n.global.t('home.errorReading'),
-            type: 'negative',
+              message: i18n.global.t('home.errorReading'),
+              type: 'negative',
           });
-          imageFile.value = null;
-        });
-      file.value = null;
+          imageFileRight.value = null;
+       });
     };
 
     const loadingOK = () => {
@@ -271,20 +294,20 @@ export default defineComponent({
       });
     };
 
-    const loadingError = () => {
-      imgSrc.value = null;
-      imageLoaded.value = false;
-      $q.notify({
-        message: i18n.global.t('home.errorLoading'),
-        type: 'negative',
-      });
-      file.value = null;
-      imageFile.value = null;
+    const loadingError = (section: 'left' | 'right') => {
+        if (section === 'left') {
+          imgSrcLeft.value = null;
+          imageLoadedLeft.value = false;
+        } else if (section === 'right') {
+          imgSrcRight.value = null;
+          imageLoadedRight.value = false;
+        }
+        // Other error handling logic
     };
 
     const editModel = async () => {
       const bpmnStore = useBpmnStore();
-      const image = await blobToDataURL(new Blob([imageFile.value as File]));
+      const image = await blobToDataURL(new Blob([imageFileLeft.value as File]));
       const model = conversionResult.value;
       bpmnStore.image = image;
       bpmnStore.model = model;
@@ -295,7 +318,7 @@ export default defineComponent({
 
     const downloadModel = () => {
       exportFile(
-        (imageFile.value?.name as string) + '.bpmn',
+        (imageFileLeft.value?.name as string) + '.bpmn',
         conversionResult.value as string,
         {
           mimeType: 'text/xml',
@@ -306,7 +329,7 @@ export default defineComponent({
 
     const convertImage = async () => {
       const formData = new FormData();
-      formData.append('image', imageFile.value as File);
+      formData.append('image', imageFileLeft.value as File);
       formData.append('elements', String(elementsEnabled.value));
       formData.append('flows', String(flowsEnabled.value));
       formData.append('ocr', String(ocrEnabled.value));
@@ -359,17 +382,22 @@ export default defineComponent({
       api,
       allowDrop,
       drop,
-      imgSrc,
-      filePicker,
-      file,
-      imageFile,
-      imageLoaded,
+      imgSrcLeft,
+      imgSrcRight,
+      filePickerLeft,
+      filePickerRight,
+      fileLeft,
+      fileRight,
+      imageFileLeft,
+      imageFileRight,
+      imageLoadedLeft,
+      imageLoadedRight,
       loadingOK,
       loadingError,
       editModel,
       downloadModel,
-      loadImage,
-      loadExampleImage,
+      loadImageLeft,
+      loadImageRight,
       convertImage,
       conversionDialog,
       elementsEnabled,
@@ -379,6 +407,7 @@ export default defineComponent({
   },
 });
 </script>
+
 
 <style scoped>
 .container {
