@@ -153,7 +153,7 @@
         </section>
       </div>
     </main>
-
+    
     <!-- Footer Section -->
     <footer class="footer">
       <h2>Navigation</h2>
