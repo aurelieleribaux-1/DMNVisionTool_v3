@@ -1,4 +1,4 @@
-# BPMN Redrawer
+# DMN Computer Vision Tool
 
 DMN Computer Vision Tool is a web application that allows to upload images representing DMN models to convert them in actual DMJN models stored in *.dmn* format.
 
