@@ -16,7 +16,7 @@
         <section class="upload-section">
           <h2>Upload Image 1</h2>
           <q-btn
-            color="positive"
+            color="accent"
             icon="upload_file"
             :label="$t('home.upload_image')"
             @click="filePicker?.pickFiles()"
@@ -86,7 +86,7 @@
         <section class="upload-section">
           <h2>Upload Image 2</h2>
           <q-btn
-            color="positive"
+            color="accent"
             icon="upload_file"
             :label="$t('home.upload_image')"
             @click="filePicker2?.pickFiles()"
@@ -162,7 +162,7 @@
         v-model="tab"
         inline-label
         indicator-color="secondary"
-        active-bg-color="positive"
+        active-bg-color="accent"
       >
         <q-route-tab
           name="home"
