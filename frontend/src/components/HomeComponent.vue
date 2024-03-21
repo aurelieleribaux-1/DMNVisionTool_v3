@@ -38,7 +38,7 @@
               :label="$t('home.show_elements')"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabledLeft"
+              :disable="isTableLeft" 
               class="q-pr-md"
               v-model="flowsEnabledLeft"
               :label="$t('home.show_flows')"
@@ -50,13 +50,13 @@
               label="Enable OCR"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabledLeft"
+              :disable="isTableLeft" 
               class="q-pr-md"
               v-model="isGraphLeft"
               label="Graph"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabledLeft"
+              :disable="isGraphLeft" 
               class="q-pr-md"
               v-model="isTableLeft"
               label="Table"
@@ -80,6 +80,13 @@
                 @dragover="allowDrop($event)"
                 @drop="drop($event, 'left')"
               ></q-img>
+              <q-btn
+                 :disable="!imageLoadedLeft"
+                 color="accent"
+                 icon-right="arrow_forward"
+                 :label="$t('home.convert')"
+                 @click="convertImageLeft()"
+              ></q-btn>
             </div>
           </div>
         </section>
@@ -107,7 +114,7 @@
               :label="$t('home.show_elements')"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabledRight"
+              :disable="isTableRight" 
               class="q-pr-md"
               v-model="flowsEnabledRight"
               :label="$t('home.show_flows')"
@@ -119,13 +126,13 @@
               label="Enable OCR"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabledRight"
+              :disable="isTableRight" 
               class="q-pr-md"
               v-model="isGraphRight"
               label="Graph"
             ></q-checkbox>
             <q-checkbox
-              :disable="!elementsEnabledRight"
+              :disable="isGraphRight" 
               class="q-pr-md"
               v-model="isTableRight"
               label="Table"
@@ -149,6 +156,12 @@
                 @dragover="allowDrop($event)"
                 @drop="drop($event, 'right')"
               ></q-img>
+              <q-btn
+                :disable="!imageLoaded"
+                icon-right="arrow_forward"
+                :label="$t('home.convert')"
+                @click="convertImageRight()"
+              ></q-btn>
             </div>
           </div>
         </section>
@@ -217,9 +230,16 @@ export default defineComponent({
     const conversionResult: Ref<string | null> = ref(null);
     const imageLoadedLeft = ref(false);
     const imageLoadedRight = ref(false);
-    const elementsEnabled = ref(true);
-    const flowsEnabled = ref(true);
-    const ocrEnabled = ref(true);
+    const elementsEnabledLeft = ref(false);
+    const elementsEnabledRight = ref(false);
+    const flowsEnabledRight = ref(false);
+    const flowsEnabledLeft = ref(false);
+    const ocrEnabledLeft = ref(false);
+    const ocrEnabledRight = ref(false);
+    const isGraphLeft = ref(false);
+    const isGraphRight = ref(false);
+    const isTableLeft = ref(false);
+    const isTableRight = ref(false);
 
     const allowDrop = (e: DragEvent) => {
       e.preventDefault();
@@ -327,12 +347,12 @@ export default defineComponent({
       );
     };
 
-    const convertImage = async () => {
+    const convertImageLeft = async () => {
       const formData = new FormData();
       formData.append('image', imageFileLeft.value as File);
-      formData.append('elements', String(elementsEnabled.value));
-      formData.append('flows', String(flowsEnabled.value));
-      formData.append('ocr', String(ocrEnabled.value));
+      formData.append('elements', String(elementsEnabledLeft.value));
+      formData.append('flows', String(flowsEnabledLeft.value));
+      formData.append('ocr', String(ocrEnabledLeft.value));
       const source = axios.CancelToken.source();
       const uploadDialog = $q
         .dialog({
@@ -345,6 +365,57 @@ export default defineComponent({
         .onCancel(() => {
           source.cancel();
         });
+
+        await api
+        .post<string>('/convert', formData, {
+          cancelToken: source.token,
+          headers: { 'Content-Type': 'multipart/form-data' },
+          onUploadProgress: (progressEvent: ProgressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+            uploadDialog.update({
+              message:
+                progress == 100
+                  ? i18n.global.t('home.waitingForConversion')
+                  : i18n.global.t('home.uploadingProgress', {
+                      progress: progress,
+                    }),
+            });
+          },
+        })
+        .then((res) => {
+          uploadDialog.hide();
+          conversionResult.value = res.data;
+          conversionDialog.value = true;
+        })
+        .catch(() => {
+          uploadDialog.hide();
+          $q.notify({
+            message: i18n.global.t('home.errorUploading'),
+            type: 'negative',
+          });
+        });
+    };
+      
+    const convertImageRight = async () => {
+        const formData = new FormData();
+        formData.append('image', imageFileRight.value as File);
+        formData.append('elements', String(elementsEnabledRight.value));
+        formData.append('flows', String(flowsEnabledRight.value));
+        formData.append('ocr', String(ocrEnabledRight.value));
+        const source = axios.CancelToken.source();
+        const uploadDialog = $q
+          .dialog({
+            message: i18n.global.t('home.uploading'),
+            progress: true,
+            persistent: true,
+            ok: false,
+            cancel: true,
+          })
+          .onCancel(() => {
+            source.cancel();
+          });
 
       await api
         .post<string>('/convert', formData, {
@@ -398,11 +469,19 @@ export default defineComponent({
       downloadModel,
       loadImageLeft,
       loadImageRight,
-      convertImage,
+      convertImageLeft,
+      convertImageRight,
       conversionDialog,
-      elementsEnabled,
-      flowsEnabled,
-      ocrEnabled,
+      elementsEnabledLeft,
+      elementsEnabledRight,
+      flowsEnabledLeft,
+      flowsEnabledRight,
+      ocrEnabledLeft,
+      ocrEnabledRight,
+      isTableLeft,
+      isTableRight,
+      isGraphLeft,
+      isGraphRight,
     };
   },
 });
@@ -419,6 +498,7 @@ export default defineComponent({
   background-color: white; /* White header background */
   color: black; /* Black text */
   padding: 0px 20px; /* Adjust top and bottom padding */
+  font-size: 100px; /* Increase font size */
 }
 
 .header-controls {
@@ -427,7 +507,7 @@ export default defineComponent({
 
 .main-content {
   flex: 1; /* Fill remaining vertical space */
-  padding: 0 20px 20px; /* Adjust left and right padding */
+  padding: 0 40px 40px; /* Adjust left and right padding */
   overflow-y: auto; /* Enable vertical scrolling if needed */
 }
 
@@ -446,7 +526,7 @@ export default defineComponent({
 
 .upload-section {
   flex: 1;
-  margin: 0px 10px; /* Adjust this margin for spacing between sections */
+  margin: 0px 40px; /* Adjust this margin for spacing between sections */
 }
 
 .image-display {

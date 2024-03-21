@@ -19,10 +19,10 @@ export default {
     waitingForConversion:
       'Please give us some seconds. We are busy transforming your model!',
     errorUploading: 'Error while uploading',
-    elements: 'Elements',
-    flows: 'Flows',
+    show_elements: 'Elements',
+    show_flows: 'Flows',
     examples: 'Examples',
-    examplesInstruction: 'Please choose the right option below in order to load your image',
+    examplesInstruction: 'Here you can find some examples images. Feel free to use them as trying out.',
   },
   editor: {
     drop: 'Drop',
