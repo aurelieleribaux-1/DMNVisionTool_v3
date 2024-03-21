@@ -11,11 +11,10 @@
 
     <!-- Main Content Section -->
     <main class="main-content">
-      <!-- Image Upload Section -->
-      <section class="upload-section">
-        <h2>Get Started</h2>
-        <div style="display: flex; align-items: center;">
-          <!-- First upload button -->
+      <div class="content-wrapper">
+        <!-- Left Section -->
+        <section class="upload-section">
+          <h2>Upload Image 1</h2>
           <q-btn
             color="positive"
             icon="upload_file"
@@ -29,30 +28,7 @@
             v-model="file"
             @update:model-value="loadImage(file as File)"
           ></q-file>
-
-          <!-- Second upload button -->
-          <q-btn
-            color="positive"
-            icon="upload_file"
-            :label="$t('home.upload_image')"
-            @click="filePicker2?.pickFiles()"
-          ></q-btn>
-          <q-file
-            ref="filePicker2"
-            style="display: none"
-            accept=".png, .jpeg, .jpg, .bmp"
-            v-model="file2"
-            @update:model-value="loadImage2(file2 as File)"
-          ></q-file>
-        </div>
-      </section>
-
-      <!-- Options Section -->
-      <section class="options-section">
-        <h2>Customize Your Experience</h2>
-        <div class="options">
-          <!-- Checkboxes for first image -->
-          <div>
+          <div class="options">
             <q-checkbox
               class="q-pr-md"
               v-model="elementsEnabled"
@@ -70,7 +46,6 @@
               v-model="ocrEnabled"
               label="Enable OCR"
             ></q-checkbox>
-            <!-- Additional checkboxes for specifying image type -->
             <q-checkbox
               :disable="!elementsEnabled"
               class="q-pr-md"
@@ -84,9 +59,46 @@
               label="Table"
             ></q-checkbox>
           </div>
+          <div class="image-display">
+            <h2>Your Uploaded Image 1</h2>
+            <div class="image-container">
+              <q-img
+                v-if="imgSrc"
+                :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
+                sizes="(max-width: 200px) 200px, (max-height: 200px) 200px"
+                fit="contain"
+                position="50% 50%"
+                width="200px"
+                height="200px"
+                placeholder-src="../assets/default-placeholder.png"
+                no-spinner
+                :src="imgSrc"
+                @load="loadingOK"
+                @error="loadingError"
+                @dragover="allowDrop($event)"
+                @drop="drop($event)"
+              ></q-img>
+            </div>
+          </div>
+        </section>
 
-          <!-- Checkboxes for second image -->
-          <div>
+        <!-- Right Section -->
+        <section class="upload-section">
+          <h2>Upload Image 2</h2>
+          <q-btn
+            color="positive"
+            icon="upload_file"
+            :label="$t('home.upload_image')"
+            @click="filePicker2?.pickFiles()"
+          ></q-btn>
+          <q-file
+            ref="filePicker2"
+            style="display: none"
+            accept=".png, .jpeg, .jpg, .bmp"
+            v-model="file2"
+            @update:model-value="loadImage2(file2 as File)"
+          ></q-file>
+          <div class="options">
             <q-checkbox
               class="q-pr-md"
               v-model="elementsEnabled2"
@@ -104,7 +116,6 @@
               v-model="ocrEnabled2"
               label="Enable OCR"
             ></q-checkbox>
-            <!-- Additional checkboxes for specifying image type -->
             <q-checkbox
               :disable="!elementsEnabled2"
               class="q-pr-md"
@@ -118,61 +129,29 @@
               label="Table"
             ></q-checkbox>
           </div>
-        </div>
-        <q-btn
-          :disable="!imageLoaded"
-          color="primary"
-          icon-right="arrow_forward"
-          :label="$t('home.convert_image')"
-          @click="convertImage()"
-        ></q-btn>
-      </section>
-
-      <!-- Image Display Section -->
-      <section class="image-display">
-        <h2>Your Uploaded Images</h2>
-        <div class="image-container" style="display: flex;">
-          <!-- First image display -->
-          <div style="margin-right: 20px;">
-            <q-img
-              v-if="imgSrc"
-              :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
-              sizes="(max-width: 200px) 200px, (max-height: 200px) 200px"
-              fit="contain"
-              position="50% 50%"
-              width="200px"
-              height="200px"
-              placeholder-src="../assets/default-placeholder.png"
-              no-spinner
-              :src="imgSrc"
-              @load="loadingOK"
-              @error="loadingError"
-              @dragover="allowDrop($event)"
-              @drop="drop($event)"
-            ></q-img>
+          <div class="image-display">
+            <h2>Your Uploaded Image 2</h2>
+            <div class="image-container">
+              <q-img
+                v-if="imgSrc2"
+                :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
+                sizes="(max-width: 200px) 200px, (max-height: 200px) 200px"
+                fit="contain"
+                position="50% 50%"
+                width="200px"
+                height="200px"
+                placeholder-src="../assets/default-placeholder.png"
+                no-spinner
+                :src="imgSrc2"
+                @load="loadingOK"
+                @error="loadingError"
+                @dragover="allowDrop($event)"
+                @drop="drop($event)"
+              ></q-img>
+            </div>
           </div>
-
-          <!-- Second image display -->
-          <div>
-            <q-img
-              v-if="imgSrc2"
-              :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
-              sizes="(max-width: 200px) 200px, (max-height: 200px) 200px"
-              fit="contain"
-              position="50% 50%"
-              width="200px"
-              height="200px"
-              placeholder-src="../assets/default-placeholder.png"
-              no-spinner
-              :src="imgSrc2"
-              @load="loadingOK"
-              @error="loadingError"
-              @dragover="allowDrop($event)"
-              @drop="drop($event)"
-            ></q-img>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
 
     <!-- Footer Section -->
