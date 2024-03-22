@@ -59,10 +59,10 @@ class InformationRequirement(Requirement):
     def render_requirement(self):
         """Returns the xml string associated to a InformationRequirement"""
         
-        if "Decision" in self.hRef:
+        if self.hRef is not None and "Decision" in self.hRef:
             template = """<informationRequirement id="{{ requirement.id }}"> <requiredDecision href="#{{ requirement.hRef }}" /> </informationRequirement>"""
 
-        elif "Input" in self.hRef: 
+        elif self.hRef is not None and "Input" in self.hRef: 
             template = """<informationRequirement id="{{ requirement.id }}"> <requiredInput href="#{{ requirement.hRef }}" /> </informationRequirement>"""
 
         render_template = self.jinja_environment.from_string(template)
@@ -153,7 +153,8 @@ class Association:
            requiredKnowledge href="#{{ flow.Ref }}" /> <knowledgeRequirement>" """
         render_template = self.jinja_environment.from_string(template)
         data = render_template.render(association=self)
-
+        
+        return data
     def render_shape(self):
         """Returns the xml string containing the shape information of this kind of flow"""
         template = """<dmndi:DMNEdge id="{{ association.id }}_di" dmnElementRef="{{ association.sourceRef }}" >

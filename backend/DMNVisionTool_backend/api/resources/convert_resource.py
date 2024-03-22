@@ -34,38 +34,44 @@ async def convert_images(request:Request):
     ocr_img, predict_img = ss.get_ocr_and_predict_images(path)
 
     if ocr_img is None or predict_img is None:
-                return PlainTextResponse(content=sample_dmn, status_code=200)
+            return PlainTextResponse(content=sample_dmn, status_code=200)
     #i = 0
-    tables = [] 
+    #tables = [] 
     #for path, is_graph, is_table in zip(paths, graph, decisionLogic):
     #    i+=1
     #    print("Iteration:", i)
     if "graph" in form and form["graph"] == 'true':
             # Process the path as a graph
-            #print(f"Converting {path} as a graph...")
+            print(f"Converting as a graph...")
             if "elements" in form and form["elements"] == 'true':
-            # Process the path as a graph
-            #print(f"Converting {path} as a graph...")
-              obj_predictions = ps.PredictObject(predict_img)
-              #print("obj_predictions:", obj_predictions)
-              elements = cs.convert_object_predictions(obj_predictions)
-              #print("elements:", elements)
+                # Process the path as a graph
+                #print(f"Converting {path} as a graph...")
+                obj_predictions = ps.PredictObject(predict_img)
+                #print("obj_predictions:", obj_predictions)
+                elements = cs.convert_object_predictions(obj_predictions)
+                #print("elements:", elements)
             
-            if "flows" in form and form["flows"] == 'true':
-                # Keypoints predictions
-                kp_predictions = ps.PredictKeypoint(ocr_img)
-                #print("kp_predictions:", kp_predictions)
-                requirements = cs.convert_keypoint_prediction(kp_predictions)
-                #print("requirements:", requirements)
-                cs.connect_requirements(requirements, elements)
-                cs.reference_requirements(requirements, elements)
-                elements.extend(requirements)
+                if "flows" in form and form["flows"] == 'true':
+                   # Keypoints predictions
+                   kp_predictions = ps.PredictKeypoint(ocr_img)
+                   #print("kp_predictions:", kp_predictions)
+                   requirements = cs.convert_keypoint_prediction(kp_predictions)
+                   #print("requirements:", requirements)
+                   cs.connect_requirements(requirements, elements)
+                   cs.reference_requirements(requirements, elements)
+                   elements.extend(requirements)
 
-            if "ocr" in form and form["ocr"] == 'true':
-                # OCR
-                text = os.get_text_from_img(ocr_img)
-                os.link_text(text, elements)
-            
+                if "ocr" in form and form["ocr"] == 'true':
+                   # OCR
+                   text = os.get_text_from_img(ocr_img)
+                   os.link_text(text, elements)
+                
+                dmn_diagram = DiagramFactory.create_element(elements) ## elementsConnect
+                rendered_dmn_model = cs.render_diagram(dmn_diagram)
+                
+            else:
+                rendered_dmn_model = sample_dmn
+
     elif "decisionLogic" in form and form["decisionLogic"] == 'true':
             # Process the path as a table
             # print(f"Converting {path} as a table...")
@@ -142,10 +148,10 @@ async def convert_images(request:Request):
     #            header_label = table.header.get_label()
     #            print("Table's header:", header_label)
     
-    dmn_diagram = DiagramFactory.create_element(elements) ## elementsConnect
-    rendered_dmn_model = cs.render_diagram(dmn_diagram)
+    #dmn_diagram = DiagramFactory.create_element(elementsConnect) 
+    #rendered_dmn_model = cs.render_diagram(dmn_diagram)
     
-    return rendered_dmn_model
+    return PlainTextResponse(content=rendered_dmn_model, status_code=200)
 
 # At the moment, convert_image takes a file_path as argument, 
 # Later, we should add request handling in the function
