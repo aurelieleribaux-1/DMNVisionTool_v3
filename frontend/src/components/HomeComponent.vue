@@ -80,6 +80,31 @@
                 @dragover="allowDrop($event)"
                 @drop="drop($event, 'left')"
               ></q-img>
+              <q-dialog v-model="conversionDialog" persistent>
+                <q-card>
+                  <q-card-section class="row items-center">
+                    <span class="q-ml-sm">{{ $t('home.converted') }}</span>
+                    <q-space />
+                    <q-btn icon="close" flat round dense v-close-popup />
+                  </q-card-section>
+                  <q-card-actions align="right">
+                    <q-btn
+                      flat
+                      icon="download"
+                      label="Download"
+                      color="primary"
+                      @click="downloadModelLeft()"
+                    />
+                    <q-btn
+                      flat
+                      icon="arrow_forward"
+                      :label="$t('home.open')"
+                      color="primary"
+                      @click="editModelLeft()"
+                    />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
               <q-btn
                  :disable="!imageLoadedLeft"
                  color="accent"
@@ -156,6 +181,31 @@
                 @dragover="allowDrop($event)"
                 @drop="drop($event, 'right')"
               ></q-img>
+              <q-dialog v-model="conversionDialog" persistent>
+                <q-card>
+                  <q-card-section class="row items-center">
+                    <span class="q-ml-sm">{{ $t('home.converted') }}</span>
+                    <q-space />
+                    <q-btn icon="close" flat round dense v-close-popup />
+                  </q-card-section>
+                  <q-card-actions align="right">
+                    <q-btn
+                      flat
+                      icon="download"
+                      label="Download"
+                      color="primary"
+                      @click="downloadModelRight()"
+                    />
+                    <q-btn
+                      flat
+                      icon="arrow_forward"
+                      :label="$t('home.open')"
+                      color="primary"
+                      @click="editModelRight()"
+                    />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
               <q-btn
                 :disable="!imageLoaded"
                 color="accent"
@@ -326,7 +376,7 @@ export default defineComponent({
         // Other error handling logic
     };
 
-    const editModel = async () => {
+    const editModelLeft = async () => {
       const bpmnStore = useBpmnStore();
       const image = await blobToDataURL(new Blob([imageFileLeft.value as File]));
       const model = conversionResult.value;
@@ -337,9 +387,31 @@ export default defineComponent({
       });
     };
 
-    const downloadModel = () => {
+    const editModelRight = async () => {
+      const bpmnStore = useBpmnStore();
+      const image = await blobToDataURL(new Blob([imageFileRight.value as File]));
+      const model = conversionResult.value;
+      bpmnStore.image = image;
+      bpmnStore.model = model;
+      await router.push({
+        name: 'editor',
+      });
+    };
+
+    const downloadModelLeft = () => {
       exportFile(
         (imageFileLeft.value?.name as string) + '.bpmn',
+        conversionResult.value as string,
+        {
+          mimeType: 'text/xml',
+          encoding: 'utf-8',
+        }
+      );
+    };
+
+    const downloadModelRight = () => {
+      exportFile(
+        (imageFileRight.value?.name as string) + '.bpmn',
         conversionResult.value as string,
         {
           mimeType: 'text/xml',
@@ -466,8 +538,8 @@ export default defineComponent({
       imageLoadedRight,
       loadingOK,
       loadingError,
-      editModel,
-      downloadModel,
+      editModelLeft,
+      downloadModelLeft,
       loadImageLeft,
       loadImageRight,
       convertImageLeft,
