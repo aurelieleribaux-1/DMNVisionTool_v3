@@ -26,7 +26,7 @@ class ObjectPredictor:
             model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model/Output") # Make sure to use right directory
-        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")  # path to the trained model
+        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "DRD_model_final.pth")  # path to the trained model
         #cfg.MODEL.WEIGHTS = here("../../detectron_model/final_model.pth") # Make sure to use the right name
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 26
@@ -69,7 +69,7 @@ class KeyPointPredictor:
             model_zoo.get_config_file("COCO-Keypoints/keypoint_rcnn_R_50_FPN_1x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model/OutputFlowV3")
-        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
+        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "kp_DRD_model_final.pth")
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.8
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4
         cfg.MODEL.RETINANET.NUM_CLASSES = 4
@@ -175,7 +175,7 @@ class TablePredictor:
             model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model/OutputTable") # Make sure to use right directory
-        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")  # path to the trained model
+        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "Table_model_final.pth")  # path to the trained model
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 26
         cfg.MODEL.DEVICE = "cpu"
@@ -218,7 +218,7 @@ class TableElementPredictor:
             model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model/OutputTableElement") # Make sure to use right directory
-        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")  # path to the trained model
+        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "TableStructure_model_final.pth")  # path to the trained model
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 26
         cfg.MODEL.DEVICE = "cpu"
