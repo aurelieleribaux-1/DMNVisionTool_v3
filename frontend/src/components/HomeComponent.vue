@@ -31,6 +31,31 @@
             v-model="fileLeft"
             @update:model-value="loadImageLeft(fileLeft as File)"
           ></q-file>
+          <q-dialog v-model="conversionDialog" persistent>
+                <q-card>
+                  <q-card-section class="row items-center">
+                    <span class="q-ml-sm">{{ $t('home.converted') }}</span>
+                    <q-space />
+                    <q-btn icon="close" flat round dense v-close-popup />
+                  </q-card-section>
+                  <q-card-actions align="right">
+                    <q-btn
+                      flat
+                      icon="download"
+                      label="Download"
+                      color="primary"
+                      @click="downloadModelLeft()"
+                    />
+                    <q-btn
+                      flat
+                      icon="arrow_forward"
+                      :label="$t('home.open')"
+                      color="primary"
+                      @click="editModelLeft()"
+                    />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
           <div class="options">
             <q-checkbox
               class="q-pr-md"
@@ -80,31 +105,6 @@
                 @dragover="allowDrop($event)"
                 @drop="drop($event, 'left')"
               ></q-img>
-              <q-dialog v-model="conversionDialog" persistent>
-                <q-card>
-                  <q-card-section class="row items-center">
-                    <span class="q-ml-sm">{{ $t('home.converted') }}</span>
-                    <q-space />
-                    <q-btn icon="close" flat round dense v-close-popup />
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      flat
-                      icon="download"
-                      label="Download"
-                      color="primary"
-                      @click="downloadModelLeft()"
-                    />
-                    <q-btn
-                      flat
-                      icon="arrow_forward"
-                      :label="$t('home.open')"
-                      color="primary"
-                      @click="editModelLeft()"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
               <q-btn
                  :disable="!imageLoadedLeft"
                  color="accent"
@@ -132,6 +132,31 @@
             v-model="fileRight"
             @update:model-value="loadImageRight(fileRight as File)"
           ></q-file>
+          <q-dialog v-model="conversionDialog" persistent>
+                <q-card>
+                  <q-card-section class="row items-center">
+                    <span class="q-ml-sm">{{ $t('home.converted') }}</span>
+                    <q-space />
+                    <q-btn icon="close" flat round dense v-close-popup />
+                  </q-card-section>
+                  <q-card-actions align="right">
+                    <q-btn
+                      flat
+                      icon="download"
+                      label="Download"
+                      color="primary"
+                      @click="downloadModelRight()"
+                    />
+                    <q-btn
+                      flat
+                      icon="arrow_forward"
+                      :label="$t('home.open')"
+                      color="primary"
+                      @click="editModelRight()"
+                    />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
           <div class="options">
             <q-checkbox
               class="q-pr-md"
@@ -181,31 +206,6 @@
                 @dragover="allowDrop($event)"
                 @drop="drop($event, 'right')"
               ></q-img>
-              <q-dialog v-model="conversionDialog" persistent>
-                <q-card>
-                  <q-card-section class="row items-center">
-                    <span class="q-ml-sm">{{ $t('home.converted') }}</span>
-                    <q-space />
-                    <q-btn icon="close" flat round dense v-close-popup />
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      flat
-                      icon="download"
-                      label="Download"
-                      color="primary"
-                      @click="downloadModelRight()"
-                    />
-                    <q-btn
-                      flat
-                      icon="arrow_forward"
-                      :label="$t('home.open')"
-                      color="primary"
-                      @click="editModelRight()"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
               <q-btn
                 :disable="!imageLoaded"
                 color="accent"
@@ -277,8 +277,10 @@ export default defineComponent({
     const imageFileRight: Ref<File | null> = ref(null);
     const imgSrcLeft: Ref<string | null> = ref(null);
     const imgSrcRight: Ref<string | null> = ref(null);
-    const conversionDialog: Ref<boolean> = ref(false);
-    const conversionResult: Ref<string | null> = ref(null);
+    const conversionDialogLeft: Ref<boolean> = ref(false);
+    const conversionDialogRight: Ref<boolean> = ref(false);
+    const conversionResultLeft: Ref<string | null> = ref(null);
+    const conversionResultRight: Ref<string | null> = ref(null);
     const imageLoadedLeft = ref(false);
     const imageLoadedRight = ref(false);
     const elementsEnabledLeft = ref(false);
@@ -338,6 +340,7 @@ export default defineComponent({
           });
           imageFileLeft.value = null;
        });
+      fileLeft.value = null;
     };
 
     const loadImageRight = async (fileToLoad: File) => {
@@ -356,6 +359,7 @@ export default defineComponent({
           });
           imageFileRight.value = null;
        });
+      fileRight.value = null;
     };
 
     const loadingOK = () => {
@@ -379,7 +383,7 @@ export default defineComponent({
     const editModelLeft = async () => {
       const bpmnStore = useBpmnStore();
       const image = await blobToDataURL(new Blob([imageFileLeft.value as File]));
-      const model = conversionResult.value;
+      const model = conversionResultLeft.value;
       bpmnStore.image = image;
       bpmnStore.model = model;
       await router.push({
@@ -390,7 +394,7 @@ export default defineComponent({
     const editModelRight = async () => {
       const bpmnStore = useBpmnStore();
       const image = await blobToDataURL(new Blob([imageFileRight.value as File]));
-      const model = conversionResult.value;
+      const model = conversionResultRight.value;
       bpmnStore.image = image;
       bpmnStore.model = model;
       await router.push({
@@ -401,7 +405,7 @@ export default defineComponent({
     const downloadModelLeft = () => {
       exportFile(
         (imageFileLeft.value?.name as string) + '.bpmn',
-        conversionResult.value as string,
+        conversionResultLeft.value as string,
         {
           mimeType: 'text/xml',
           encoding: 'utf-8',
@@ -412,7 +416,7 @@ export default defineComponent({
     const downloadModelRight = () => {
       exportFile(
         (imageFileRight.value?.name as string) + '.bpmn',
-        conversionResult.value as string,
+        conversionResultRight.value as string,
         {
           mimeType: 'text/xml',
           encoding: 'utf-8',
@@ -426,6 +430,9 @@ export default defineComponent({
       formData.append('elements', String(elementsEnabledLeft.value));
       formData.append('flows', String(flowsEnabledLeft.value));
       formData.append('ocr', String(ocrEnabledLeft.value));
+      formData.append('graph', String(isGraphLeft.value));
+      formData.append('decisionLogic', String(isTableLeft.value));
+
       const source = axios.CancelToken.source();
       const uploadDialog = $q
         .dialog({
@@ -459,8 +466,8 @@ export default defineComponent({
         })
         .then((res) => {
           uploadDialog.hide();
-          conversionResult.value = res.data;
-          conversionDialog.value = true;
+          conversionResultLeft.value = res.data;
+          conversionDialogLeft.value = true;
         })
         .catch(() => {
           uploadDialog.hide();
@@ -490,35 +497,35 @@ export default defineComponent({
             source.cancel();
           });
 
-      await api
-        .post<string>('/convert', formData, {
-          cancelToken: source.token,
-          headers: { 'Content-Type': 'multipart/form-data' },
-          onUploadProgress: (progressEvent: ProgressEvent) => {
-            const progress = Math.round(
-              (progressEvent.loaded / progressEvent.total) * 100
-            );
-            uploadDialog.update({
-              message:
-                progress == 100
-                  ? i18n.global.t('home.waitingForConversion')
-                  : i18n.global.t('home.uploadingProgress', {
-                      progress: progress,
-                    }),
+        await api
+          .post<string>('/convert', formData, {
+            cancelToken: source.token,
+            headers: { 'Content-Type': 'multipart/form-data' },
+            onUploadProgress: (progressEvent: ProgressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded / progressEvent.total) * 100
+              );
+              uploadDialog.update({
+                message:
+                  progress == 100
+                    ? i18n.global.t('home.waitingForConversion')
+                    : i18n.global.t('home.uploadingProgress', {
+                        progress: progress,
+                       }),
+              });
+            },
+          })
+          .then((res) => {
+            uploadDialog.hide();
+            conversionResultRight.value = res.data;
+            conversionDialogRight.value = true;
+          })
+          .catch(() => {
+            uploadDialog.hide();
+            $q.notify({
+              message: i18n.global.t('home.errorUploading'),
+              type: 'negative',
             });
-          },
-        })
-        .then((res) => {
-          uploadDialog.hide();
-          conversionResult.value = res.data;
-          conversionDialog.value = true;
-        })
-        .catch(() => {
-          uploadDialog.hide();
-          $q.notify({
-            message: i18n.global.t('home.errorUploading'),
-            type: 'negative',
-          });
         });
     };
 
@@ -544,7 +551,8 @@ export default defineComponent({
       loadImageRight,
       convertImageLeft,
       convertImageRight,
-      conversionDialog,
+      conversionDialogLeft,
+      conversionDialogRight,
       elementsEnabledLeft,
       elementsEnabledRight,
       flowsEnabledLeft,
