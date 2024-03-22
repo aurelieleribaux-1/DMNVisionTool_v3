@@ -1,9 +1,9 @@
 {
-  "name": "bpmn_redrawer",
+  "name": "dmn_computer_vision_tool",
   "version": "0.0.1",
-  "description": "Frontend for BPMN Redrawer",
-  "productName": "BPMN Redrawer",
-  "author": "DragonAlex98 <alessandro.antinori@studenti.unicam.it>",
+  "description": "Frontend for DMN Computer vision tool",
+  "productName": "DMN Computer vision tool",
+  "author": "/",
   "private": true,
   "scripts": {
     "start": "node server.js",
