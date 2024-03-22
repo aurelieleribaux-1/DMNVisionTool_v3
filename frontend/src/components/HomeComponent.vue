@@ -66,12 +66,12 @@
             <h2>Your Uploaded Image 1</h2>
             <div class="image-container">
               <q-img
-                :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
-                sizes="(max-width: 200px) 200px, (max-height: 200px) 200px"
+                :style="'border: 2px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
+                sizes="(max-width: 800px) 800px, (max-height: 600px) 600px"
                 fit="contain"
                 position="50% 50%"
-                width="200px"
-                height="200px"
+                width="800px"
+                height="600px"
                 placeholder-src="../assets/default-placeholder.png"
                 no-spinner
                 :src="(imgSrcLeft as string)"
@@ -142,12 +142,12 @@
             <h2>Your Uploaded Image 2</h2>
             <div class="image-container">
               <q-img
-                :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
-                sizes="(max-width: 200px) 200px, (max-height: 200px) 200px"
+                :style="'border: 2px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
+                sizes="(max-width: 800px) 800px, (max-height: 600px) 600px"
                 fit="contain"
                 position="50% 50%"
-                width="200px"
-                height="200px"
+                width="800px"
+                height="600px"
                 placeholder-src="../assets/default-placeholder.png"
                 no-spinner
                 :src="(imgSrcRight as string)"
@@ -158,6 +158,7 @@
               ></q-img>
               <q-btn
                 :disable="!imageLoaded"
+                color="accent"
                 icon-right="arrow_forward"
                 :label="$t('home.convert')"
                 @click="convertImageRight()"
