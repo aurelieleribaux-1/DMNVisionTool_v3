@@ -1,6 +1,4 @@
 from typing import List
-
-import cv2
 from detectron2.utils.visualizer import Visualizer, ColorMode
 from detectron2 import model_zoo # Need to import detectron on Github
 from detectron2.config import get_cfg
@@ -55,7 +53,7 @@ class ObjectPredictor:
                        )
         out = v.draw_instance_predictions(outs["instances"].to("cpu"))
         #cv2_imshow(out.get_image()[:, :, ::-1])
-        cv2.waitKey(0)
+        #cv2.waitKey(0)
 
         return outs
 
@@ -97,7 +95,7 @@ class KeyPointPredictor:
              cv2.circle(img, (int(kp[0][0]), int(kp[0][1])), 4, (0, 255, 0), -1)
              cv2.circle(img, (int(kp[3][0]), int(kp[3][1])), 4, (0, 0, 255), -1)
         #cv2_imshow(img)
-        cv2.waitKey(0)
+        #cv2.waitKey(0)
 
         return outs
 
@@ -204,7 +202,7 @@ class TablePredictor:
                        )
         out = v.draw_instance_predictions(outs["instances"].to("cpu"))
         #cv2_imshow(out.get_image()[:, :, ::-1])
-        cv2.waitKey(0)
+        #cv2.waitKey(0)
 
         return outs
 
@@ -247,7 +245,7 @@ class TableElementPredictor:
                        )
         out = v.draw_instance_predictions(outs["instances"].to("cpu"))
         #cv2_imshow(out.get_image()[:, :, ::-1])
-        cv2.waitKey(0)
+        #cv2.waitKey(0)
 
         return outs
 

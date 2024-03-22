@@ -142,7 +142,7 @@ async def convert_images(request:Request):
     #            header_label = table.header.get_label()
     #            print("Table's header:", header_label)
     
-    dmn_diagram = DiagramFactory.create_element(element) ## elementsConnect
+    dmn_diagram = DiagramFactory.create_element(elements) ## elementsConnect
     rendered_dmn_model = cs.render_diagram(dmn_diagram)
     
     return rendered_dmn_model
