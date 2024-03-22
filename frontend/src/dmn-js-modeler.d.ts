@@ -1,6 +1,6 @@
 // Type Declaration file to provide TypeScript type information about
 // bpmn-js, which is written in JavaScript
-declare module 'bpmn-js/lib/Modeler' {
+declare module 'dmn-js/lib/Modeler' {
   export interface WriterOptions {
     format?: boolean;
     preamble?: boolean;

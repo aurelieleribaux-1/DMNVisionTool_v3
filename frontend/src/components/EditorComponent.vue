@@ -13,7 +13,7 @@
           <q-file
             ref="filePicker"
             style="display: none"
-            accept=".bpmn"
+            accept=".dmn"
             v-model="pickedFile"
             @update:model-value="uploadDiagram(pickedFile as File)"
           ></q-file>
@@ -36,7 +36,7 @@
 
       <div class="message error">
         <div class="note">
-          <p>Ooops, we could not display the BPMN 2.0 diagram.</p>
+          <p>Ooops, we could not display the DMN 2.0 diagram.</p>
 
           <div class="details">
             <span>cause of the problem</span>
@@ -48,24 +48,24 @@
       <div class="canvas" id="js-canvas"></div>
     </div>
 
-    <ul class="download-buttons" v-if="successfulLoadBPMN">
+    <ul class="download-buttons" v-if="successfulLoadDMN">
       <q-file
-        ref="bpmnFilePicker"
+        ref="dmnFilePicker"
         style="display: none"
-        accept=".bpmn"
-        v-model="bpmnFile"
-        @update:model-value="uploadDiagram(bpmnFile as File)"
+        accept=".dmn"
+        v-model="dmnFile"
+        @update:model-value="uploadDiagram(dmnFile as File)"
       ></q-file>
       <li>
         <q-btn
           icon="upload"
-          label="BPMN"
+          label="DMN"
           outline
-          @click="bpmnFilePicker?.pickFiles()"
+          @click="dmnFilePicker?.pickFiles()"
         />
       </li>
       <li>
-        <q-btn icon="download" label="BPMN" outline @click="downloadAsBPMN" />
+        <q-btn icon="download" label="DMN" outline @click="downloadAsDMN" />
       </li>
       <li>
         <q-btn icon="download" label="SVG" outline @click="downloadAsSVG" />
@@ -77,24 +77,24 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, Ref, onUnmounted } from 'vue';
 import { useQuasar, QFile, exportFile } from 'quasar';
-import 'bpmn-js/dist/assets/diagram-js.css';
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
-import Modeler from 'bpmn-js/lib/Modeler';
+import 'dmn-js/dist/assets/diagram-js.css';
+import 'dmn-js/dist/assets/dmn-font/css/dmn-embedded.css';
+import Modeler from 'dmn-js/lib/Modeler';
 import { onBeforeRouteLeave } from 'vue-router';
 import { i18n } from 'src/boot/i18n';
-import { useBpmnStore } from 'src/store/bpmnStore';
+import { useDmnStore } from 'src/store/dmnStore';
 
 export default defineComponent({
   name: 'EditorComponent',
 
   setup() {
     const $q = useQuasar();
-    const bpmnStore = useBpmnStore();
+    const dmnStore = useDmnStore();
     const filePicker: Ref<QFile | null> = ref(null);
     const pickedFile: Ref<File | null> = ref(null);
-    const bpmnFilePicker: Ref<QFile | null> = ref(null);
-    const bpmnFile: Ref<File | null> = ref(null);
-    const successfulLoadBPMN = ref(false);
+    const dmnFilePicker: Ref<QFile | null> = ref(null);
+    const dmnFile: Ref<File | null> = ref(null);
+    const successfulLoadDMN = ref(false);
 
     let container: HTMLElement | null;
     let modeler: Modeler;
@@ -104,13 +104,13 @@ export default defineComponent({
         await modeler.importXML(xml);
         container?.classList.remove('with-error');
         container?.classList.add('with-diagram');
-        successfulLoadBPMN.value = true;
+        successfulLoadDMN.value = true;
       } catch (err) {
         container?.classList.remove('with-diagram');
         container?.classList.add('with-error');
         const errorNode = container?.querySelectorAll('.error pre')[0];
         (errorNode as Element).textContent = (err as Error).message;
-        successfulLoadBPMN.value = false;
+        successfulLoadDMN.value = false;
       }
     }
 
@@ -149,7 +149,7 @@ export default defineComponent({
 
     // Ask for confirmation before leaving the editor
     onBeforeRouteLeave((_to, _from, next) => {
-      if (!successfulLoadBPMN.value) {
+      if (!successfulLoadDMN.value) {
         next();
         return;
       }
@@ -167,7 +167,7 @@ export default defineComponent({
       container = document.getElementById('js-drop-zone');
       modeler = new Modeler({
         container: '#js-canvas',
-        // Enable bpmn-js keyboard shortcuts
+        // Enable dmn-js keyboard shortcuts
         keyboard: { bindTo: document },
       });
       if (!window.FileList || !window.FileReader) {
@@ -180,12 +180,12 @@ export default defineComponent({
         registerFileDrop(openDiagram);
       }
 
-      if (bpmnStore.model) {
-        void openDiagram(bpmnStore.model);
+      if (dmnStore.model) {
+        void openDiagram(dmnStore.model);
       }
     });
 
-    // Detach the bpmn-js modeler from parent when changing page
+    // Detach the dmn-js modeler from parent when changing page
     onUnmounted(() => {
       modeler.detach();
     });
@@ -198,7 +198,7 @@ export default defineComponent({
       e.preventDefault();
       const files = e.dataTransfer?.files;
       if (files?.length == 1) {
-        if (files[0].name.endsWith('.bpmn')) {
+        if (files[0].name.endsWith('.dmn')) {
           await openDiagram(await files[0].text());
         }
       }
@@ -209,17 +209,17 @@ export default defineComponent({
       drop,
       filePicker,
       pickedFile,
-      bpmnFilePicker,
-      bpmnFile,
-      successfulLoadBPMN,
+      dmnFilePicker,
+      dmnFile,
+      successfulLoadDMN,
 
-      async downloadAsBPMN() {
+      async downloadAsDMN() {
         try {
           const { xml } = await modeler.saveXML({ format: true });
-          exportFile('diagram.bpmn', xml);
+          exportFile('diagram.dmn', xml);
         } catch (err) {
           $q.notify({
-            message: i18n.global.t('editor.errorSaveBPMN'),
+            message: i18n.global.t('editor.errorSaveDMN'),
             type: 'negative',
           });
         }
@@ -240,7 +240,7 @@ export default defineComponent({
       // When creating a new diagram, just open the default one
       createNewDiagram() {
         const sampleDiagram =
-          '<?xml version="1.0" encoding="UTF-8"?><bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn"><bpmn2:process id="Process_1" isExecutable="false"><bpmn2:startEvent id="StartEvent_1" /></bpmn2:process><bpmndi:BPMNDiagram id="BPMNDiagram_1"><bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1"><bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1"><dc:Bounds height="36.0" width="36.0" x="412.0" y="240.0" /></bpmndi:BPMNShape></bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn2:definitions>';
+          '<?xml version="1.0" encoding="UTF-8"?><dmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dmn2="http://www.omg.org/spec/DMN/20100524/MODEL" xmlns:dmndi="http://www.omg.org/spec/DMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/DMN/20100524/MODEL DMN20.xsd" id="sample-diagram" targetNamespace="http://dmn.io/schema/dmn"><dmn2:process id="Process_1" isExecutable="false"><dmn2:startEvent id="StartEvent_1" /></dmn2:process><dmndi:DMNDiagram id="DMNDiagram_1"><dmndi:DMNPlane id="DMNPlane_1" dmnElement="Process_1"><dmndi:DMNShape id="_DMNShape_StartEvent_2" dmnElement="StartEvent_1"><dc:Bounds height="36.0" width="36.0" x="412.0" y="240.0" /></dmndi:dmnShape></dmndi:DMNPlane></dmndi:DMNDiagram></dmn2:definitions>';
         void openDiagram(sampleDiagram);
       },
 

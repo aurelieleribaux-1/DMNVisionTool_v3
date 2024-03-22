@@ -34,7 +34,7 @@
 import { defineComponent, ref } from 'vue';
 import EditorComponent from 'src/components/EditorComponent.vue';
 import ViewerComponent from 'src/components/ViewerComponent.vue';
-import { useBpmnStore } from 'src/store/bpmnStore';
+import { useDmnStore } from 'src/store/dmnStore';
 
 export default defineComponent({
   name: 'PageEditor',
@@ -42,11 +42,11 @@ export default defineComponent({
   components: { EditorComponent, ViewerComponent },
 
   setup() {
-    const bpmnStore = useBpmnStore();
+    const dmnStore = useDmnStore();
 
     // Use a splitter to manage the size of the editor and the image viewer
     const splitterModel = ref(
-      bpmnStore.image != null && bpmnStore.model != null ? 50 : 90
+      dmnStore.image != null && dmnStore.model != null ? 50 : 90
     );
 
     return {

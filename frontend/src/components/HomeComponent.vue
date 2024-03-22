@@ -207,7 +207,7 @@
                 @drop="drop($event, 'right')"
               ></q-img>
               <q-btn
-                :disable="!imageLoaded"
+                :disable="!imageLoadedRight"
                 color="accent"
                 icon-right="arrow_forward"
                 :label="$t('home.convert')"
@@ -261,7 +261,7 @@ import { useRouter } from 'vue-router';
 import { i18n } from 'src/boot/i18n';
 import { blobToDataURL } from './utils/image-utils';
 import axios from 'axios';
-import { useBpmnStore } from 'src/store/bpmnStore';
+import { useDmnStore } from 'src/store/dmnStore';
 
 export default defineComponent({
   name: 'HomeComponent',
@@ -381,11 +381,11 @@ export default defineComponent({
     };
 
     const editModelLeft = async () => {
-      const bpmnStore = useBpmnStore();
+      const dmnStore = useDmnStore();
       const image = await blobToDataURL(new Blob([imageFileLeft.value as File]));
       const model = conversionResultLeft.value;
-      bpmnStore.image = image;
-      bpmnStore.model = model;
+      dmnStore.image = image;
+      dmnStore.model = model;
       await router.push({
         name: 'editor',
       });
@@ -404,7 +404,7 @@ export default defineComponent({
 
     const downloadModelLeft = () => {
       exportFile(
-        (imageFileLeft.value?.name as string) + '.bpmn',
+        (imageFileLeft.value?.name as string) + '.dmn',
         conversionResultLeft.value as string,
         {
           mimeType: 'text/xml',
@@ -415,7 +415,7 @@ export default defineComponent({
 
     const downloadModelRight = () => {
       exportFile(
-        (imageFileRight.value?.name as string) + '.bpmn',
+        (imageFileRight.value?.name as string) + '.dmn',
         conversionResultRight.value as string,
         {
           mimeType: 'text/xml',
@@ -484,6 +484,8 @@ export default defineComponent({
         formData.append('elements', String(elementsEnabledRight.value));
         formData.append('flows', String(flowsEnabledRight.value));
         formData.append('ocr', String(ocrEnabledRight.value));
+        formData.append('graph', String(isGraphRight.value));
+        formData.append('decisionLogic', String(isTableRight.value));
         const source = axios.CancelToken.source();
         const uploadDialog = $q
           .dialog({

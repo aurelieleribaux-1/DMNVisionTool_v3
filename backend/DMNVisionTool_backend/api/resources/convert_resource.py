@@ -35,8 +35,7 @@ async def convert_images(request:Request):
 
     if ocr_img is None or predict_img is None:
             return PlainTextResponse(content=sample_dmn, status_code=200)
-    #i = 0
-    #tables = [] 
+    #i = 0 
     #for path, is_graph, is_table in zip(paths, graph, decisionLogic):
     #    i+=1
     #    print("Iteration:", i)
@@ -74,69 +73,73 @@ async def convert_images(request:Request):
 
     elif "decisionLogic" in form and form["decisionLogic"] == 'true':
             # Process the path as a table
-            # print(f"Converting {path} as a table...")
+            print(f"Converting as a table...")
             if "elements" in form and form["elements"] == 'true':
-               table_predictions = ps.PredictTable(predict_img)
-               #print("table_predictions:", table_predictions)
-               ConvertedTables = cs.convert_table_predictions(table_predictions)
-               ts_predictions = ps.PredictTableElement(predict_img)
-               #print("ts_predictions:", ts_predictions)
-               table_elements = cs.convert_tableElement_predictions(ts_predictions)
-            
-            if "ocr" in form and form["ocr"] == 'true':
-               # OCR 
-               text = os.get_text_from_table_img(ocr_img)
-               os.link_text_table(text, table_elements)
-               #print("table_elements after OCR:", table_elements)
-            
-            # Link table elements together
-            # Assign empty variables
-            #table = Table 
-            #table_header = TableHeader
-            #table_hitPolicy = TableHitPolicy
-            #table_inputs = []
-            #table_outputs = []
-            #table_rules = []
-            #input_entries = []
-            #output_entries = []   
-            # Assign table element predictions to the variables
-            #for Convertedtable in ConvertedTables:
-            #     if isinstance(Convertedtable, Table):
-            #        table = Convertedtable
-            #for table_element in table_elements:
-            #    if isinstance(table_element, TableHeader):
-            #        table_header = table_element
-            #    elif isinstance(table_element, TableHitPolicy):
-            #        table_hitPolicy = table_element
-            #    elif isinstance(table_element, TableInput):
-            #        table_inputs.append(table_element)
-            #    elif isinstance(table_element, TableOutput):
-            #        table_outputs.append(table_element)
-            #    elif isinstance(table_element, TableRule):
-            #        table_rules.append(table_element)
-            #    elif isinstance(table_element, InputEntry):
-            #       input_entries.append(table_element)
-            #    elif isinstance(table_element, OutputEntry):
-            #        output_entries.append(table_element)
+                table_predictions = ps.PredictTable(predict_img)
+                #print("table_predictions:", table_predictions)
+                ConvertedTables = cs.convert_table_predictions(table_predictions)
+                ts_predictions = ps.PredictTableElement(predict_img)
+                #print("ts_predictions:", ts_predictions)
+                table_elements = cs.convert_tableElement_predictions(ts_predictions)
+               
+                # Link table elements together
+                # Assign empty variables
+                tables = []
+                table = Table 
+                table_header = TableHeader
+                table_hitPolicy = TableHitPolicy
+                table_inputs = []
+                table_outputs = []
+                table_rules = []
+                input_entries = []
+                output_entries = []   
+                # Assign table element predictions to the variables
+                for Convertedtable in ConvertedTables:
+                    if isinstance(Convertedtable, Table):
+                       table = Convertedtable
+                for table_element in table_elements:
+                    if isinstance(table_element, TableHeader):
+                       table_header = table_element
+                    elif isinstance(table_element, TableHitPolicy):
+                       table_hitPolicy = table_element
+                    elif isinstance(table_element, TableInput):
+                       table_inputs.append(table_element)
+                    elif isinstance(table_element, TableOutput):
+                       table_outputs.append(table_element)
+                    elif isinstance(table_element, TableRule):
+                       table_rules.append(table_element)
+                    elif isinstance(table_element, InputEntry):
+                       input_entries.append(table_element)
+                    elif isinstance(table_element, OutputEntry):
+                       output_entries.append(table_element)
                     
-            # Prints for checking
-            #print("table:", table)
-            #print("table_header:", table_header)
-            #print("table_hitPolicy:", table_hitPolicy)
-            #print("table_inputs:", table_inputs)
-            #print("table_outputs:", table_outputs)
-            #print("table_rules:", table_rules)
-            #print("input_entries:", input_entries)
-            #print("output_entries:", output_entries)  
+                # Prints for checking
+                #print("table:", table)
+                #print("table_header:", table_header)
+                #print("table_hitPolicy:", table_hitPolicy)
+                #print("table_inputs:", table_inputs)
+                #print("table_outputs:", table_outputs)
+                #print("table_rules:", table_rules)
+                #print("input_entries:", input_entries)
+                #print("output_entries:", output_entries)  
             
-            #table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)               
-            #tableConnect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
-            #print("table after connecting:", tableConnect)
-            #tables.append(tableConnect)
+                table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)               
+                tableConnect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
+                #print("table after connecting:", tableConnect)
+                tables.append(tableConnect)
             
-        #else:
-            # Handle other cases, if necessary
-            #print(f"No specific conversion for {path}")
+            
+                if "ocr" in form and form["ocr"] == 'true':
+                  # OCR 
+                  text = os.get_text_from_table_img(ocr_img)
+                  os.link_text_table(text, table_elements)
+                  #print("table_elements after OCR:", table_elements)
+            
+                dmn_diagram = DiagramFactory.create_element(tables) ## elementsConnect
+                rendered_dmn_model = cs.render_diagram(dmn_diagram)
+            
+            else:
+                 rendered_dmn_model = sample_dmn
             
     #elementsConnect = cs.connect_graph2tables(elements, tables)
     #for element in elementsConnect:
