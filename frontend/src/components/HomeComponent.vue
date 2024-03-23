@@ -31,7 +31,7 @@
             v-model="fileLeft"
             @update:model-value="loadImageLeft(fileLeft as File)"
           ></q-file>
-          <q-dialog v-model="conversionDialog" persistent>
+          <q-dialog v-model="conversionDialogLeft" persistent>
                 <q-card>
                   <q-card-section class="row items-center">
                     <span class="q-ml-sm">{{ $t('home.converted') }}</span>
@@ -132,7 +132,7 @@
             v-model="fileRight"
             @update:model-value="loadImageRight(fileRight as File)"
           ></q-file>
-          <q-dialog v-model="conversionDialog" persistent>
+          <q-dialog v-model="conversionDialogRight" persistent>
                 <q-card>
                   <q-card-section class="row items-center">
                     <span class="q-ml-sm">{{ $t('home.converted') }}</span>
@@ -392,11 +392,11 @@ export default defineComponent({
     };
 
     const editModelRight = async () => {
-      const bpmnStore = useBpmnStore();
+      const dmnStore = useDmnStore();
       const image = await blobToDataURL(new Blob([imageFileRight.value as File]));
       const model = conversionResultRight.value;
-      bpmnStore.image = image;
-      bpmnStore.model = model;
+      dmnStore.image = image;
+      dmnStore.model = model;
       await router.push({
         name: 'editor',
       });
