@@ -1,76 +1,92 @@
 <template>
-  <div class="absolute-full" @dragover="allowDrop($event)" @drop="drop($event)">
-    <div class="content" id="js-drop-zone">
-      <div class="message intro">
-        <div class="note">
-          <q-btn
-            class="drop-button"
-            disable
-            outline
-            :label="$t('editor.drop')"
-          />
-          /
-          <q-file
-            ref="filePicker"
-            style="display: none"
-            accept=".dmn"
-            v-model="pickedFile"
-            @update:model-value="uploadDiagram(pickedFile as File)"
-          ></q-file>
-          <q-btn
-            class="open-button"
-            outline
-            :label="$t('editor.open')"
-            @click="filePicker?.pickFiles()"
-          />
-          /
-          <q-btn
-            class="create-button"
-            outline
-            :label="$t('editor.create')"
-            @click="createNewDiagram"
-          />
-          {{ $t('editor.intro') }}
-        </div>
-      </div>
+  <div class="editor-container">
+    <!-- Left side for editor -->
+    <div class="editor-panel">
+      <!-- Editor content goes here -->
+      <div class="editor-content">
+        <div class="absolute-full" @dragover="allowDrop($event)" @drop="drop($event)">
+          <div class="content" id="js-drop-zone">
+            <div class="message intro">
+              <div class="note">
+                <q-btn
+                  class="drop-button"
+                  disable
+                  outline
+                  :label="$t('editor.drop')"
+                />
+                /
+                <q-file
+                  ref="filePicker"
+                  style="display: none"
+                  accept=".dmn"
+                  v-model="pickedFile"
+                  @update:model-value="uploadDiagram(pickedFile as File)"
+                ></q-file>
+                <q-btn
+                  class="open-button"
+                  outline
+                  :label="$t('editor.open')"
+                  @click="filePicker?.pickFiles()"
+                />
+                /
+                <q-btn
+                  class="create-button"
+                  outline
+                  :label="$t('editor.create')"
+                  @click="createNewDiagram"
+                />
+                {{ $t('editor.intro') }}
+              </div>
+            </div>
 
-      <div class="message error">
-        <div class="note">
-          <p>Ooops, we could not display the DMN 2.0 diagram.</p>
+            <div class="message error">
+              <div class="note">
+                <p>Ooops, we could not display the DMN 2.0 diagram.</p>
 
-          <div class="details">
-            <span>cause of the problem</span>
-            <pre></pre>
+                <div class="details">
+                  <span>cause of the problem</span>
+                  <pre></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="canvas" id="js-canvas"></div>
           </div>
+
+          <ul class="download-buttons" v-if="successfulLoadDMN">
+            <q-file
+              ref="dmnFilePicker"
+              style="display: none"
+              accept=".dmn"
+              v-model="dmnFile"
+              @update:model-value="uploadDiagram(dmnFile as File)"
+            ></q-file>
+            <li>
+              <q-btn
+                icon="upload"
+                label="DMN"
+                outline
+                @click="dmnFilePicker?.pickFiles()"
+              />
+            </li>
+            <li>
+              <q-btn icon="download" label="DMN" outline @click="downloadAsDMN" />
+            </li>
+            <li>
+              <q-btn icon="download" label="SVG" outline @click="downloadAsSVG" />
+            </li>
+          </ul>
         </div>
       </div>
-
-      <div class="canvas" id="js-canvas"></div>
     </div>
 
-    <ul class="download-buttons" v-if="successfulLoadDMN">
-      <q-file
-        ref="dmnFilePicker"
-        style="display: none"
-        accept=".dmn"
-        v-model="dmnFile"
-        @update:model-value="uploadDiagram(dmnFile as File)"
-      ></q-file>
-      <li>
-        <q-btn
-          icon="upload"
-          label="DMN"
-          outline
-          @click="dmnFilePicker?.pickFiles()"
-        />
-      </li>
-      <li>
-        <q-btn icon="download" label="DMN" outline @click="downloadAsDMN" />
-      </li>
-      <li>
-        <q-btn icon="download" label="SVG" outline @click="downloadAsSVG" />
-      </li>
-    </ul>
+    <!-- Right side for other content -->
+    <div class="other-panel">
+      <!-- Other content goes here -->
+      <div class="other-content">
+        <!-- Placeholder for other content -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -276,6 +292,26 @@ html {
 }
 a:link {
   text-decoration: none;
+}
+
+.editor-container {
+  display: flex;
+  height: 100%;
+}
+
+.editor-panel {
+  flex: 1;
+  overflow: hidden;
+}
+
+.other-panel {
+  flex: 1;
+  overflow: hidden;
+}
+
+.editor-content,
+.other-content {
+  height: 100%;
 }
 .content,
 .content > div {
