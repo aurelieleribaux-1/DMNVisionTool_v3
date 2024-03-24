@@ -1,92 +1,76 @@
 <template>
-  <div class="editor-container">
-    <!-- Left side for editor -->
-    <div class="editor-panel">
-      <!-- Editor content goes here -->
-      <div class="editor-content">
-        <div class="absolute-full" @dragover="allowDrop($event)" @drop="drop($event)">
-          <div class="content" id="js-drop-zone">
-            <div class="message intro">
-              <div class="note">
-                <q-btn
-                  class="drop-button"
-                  disable
-                  outline
-                  :label="$t('editor.drop')"
-                />
-                /
-                <q-file
-                  ref="filePicker"
-                  style="display: none"
-                  accept=".dmn"
-                  v-model="pickedFile"
-                  @update:model-value="uploadDiagram(pickedFile as File)"
-                ></q-file>
-                <q-btn
-                  class="open-button"
-                  outline
-                  :label="$t('editor.open')"
-                  @click="filePicker?.pickFiles()"
-                />
-                /
-                <q-btn
-                  class="create-button"
-                  outline
-                  :label="$t('editor.create')"
-                  @click="createNewDiagram"
-                />
-                {{ $t('editor.intro') }}
-              </div>
-            </div>
-
-            <div class="message error">
-              <div class="note">
-                <p>Ooops, we could not display the DMN 2.0 diagram.</p>
-
-                <div class="details">
-                  <span>cause of the problem</span>
-                  <pre></pre>
-                </div>
-              </div>
-            </div>
-
-            <div class="canvas" id="js-canvas"></div>
-          </div>
-
-          <ul class="download-buttons" v-if="successfulLoadDMN">
-            <q-file
-              ref="dmnFilePicker"
-              style="display: none"
-              accept=".dmn"
-              v-model="dmnFile"
-              @update:model-value="uploadDiagram(dmnFile as File)"
-            ></q-file>
-            <li>
-              <q-btn
-                icon="upload"
-                label="DMN"
-                outline
-                @click="dmnFilePicker?.pickFiles()"
-              />
-            </li>
-            <li>
-              <q-btn icon="download" label="DMN" outline @click="downloadAsDMN" />
-            </li>
-            <li>
-              <q-btn icon="download" label="SVG" outline @click="downloadAsSVG" />
-            </li>
-          </ul>
+  <div class="absolute-full" @dragover="allowDrop($event)" @drop="drop($event)">
+    <div class="content" id="js-drop-zone">
+      <div class="message intro">
+        <div class="note">
+          <q-btn
+            class="drop-button"
+            disable
+            outline
+            :label="$t('editor.drop')"
+          />
+          /
+          <q-file
+            ref="filePicker"
+            style="display: none"
+            accept=".dmn"
+            v-model="pickedFile"
+            @update:model-value="uploadDiagram(pickedFile as File)"
+          ></q-file>
+          <q-btn
+            class="open-button"
+            outline
+            :label="$t('editor.open')"
+            @click="filePicker?.pickFiles()"
+          />
+          /
+          <q-btn
+            class="create-button"
+            outline
+            :label="$t('editor.create')"
+            @click="createNewDiagram"
+          />
+          {{ $t('editor.intro') }}
         </div>
       </div>
+
+      <div class="message error">
+        <div class="note">
+          <p>Ooops, we could not display the DMN 1.3 diagram.</p>
+
+          <div class="details">
+            <span>cause of the problem</span>
+            <pre></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="canvas" id="js-canvas"></div>
     </div>
 
-    <!-- Right side for other content -->
-    <div class="other-panel">
-      <!-- Other content goes here -->
-      <div class="other-content">
-        <!-- Placeholder for other content -->
-      </div>
-    </div>
+    <ul class="download-buttons" v-if="successfulLoadDMN">
+      <q-file
+        ref="dmnFilePicker"
+        style="display: none"
+        accept=".dmn"
+        v-model="dmnFile"
+        @update:model-value="uploadDiagram(dmnFile as File)"
+      ></q-file>
+      <li>
+        <q-btn
+          icon="upload"
+          label="DMN"
+          outline
+          @click="dmnFilePicker?.pickFiles()"
+        />
+      </li>
+      <li>
+        <q-btn icon="download" label="DMN" outline @click="downloadAsDMN" />
+      </li>
+      <li>
+        <q-btn icon="download" label="SVG" outline @click="downloadAsSVG" />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -95,6 +79,12 @@ import { defineComponent, onMounted, ref, Ref, onUnmounted } from 'vue';
 import { useQuasar, QFile, exportFile } from 'quasar';
 import 'dmn-js/dist/assets/diagram-js.css';
 import 'dmn-js/dist/assets/dmn-font/css/dmn-embedded.css';
+import 'dmn-js/dist/assets/diagram-js.css';
+import 'dmn-js/dist/assets/dmn-js-shared.css';
+import 'dmn-js/dist/assets/dmn-js-drd.css';
+import 'dmn-js/dist/assets/dmn-js-decision-table.css';
+import 'dmn-js/dist/assets/dmn-js-decision-table-controls.css';
+import 'dmn-js/dist/assets/dmn-font/css/dmn.css';
 import Modeler from 'dmn-js/lib/Modeler';
 import { onBeforeRouteLeave } from 'vue-router';
 import { i18n } from 'src/boot/i18n';
@@ -285,7 +275,7 @@ export default defineComponent({
 body,
 html {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: 100px;
   height: 100%;
   padding: 0;
   margin: 0;
@@ -293,31 +283,10 @@ html {
 a:link {
   text-decoration: none;
 }
-
-.editor-container {
-  display: flex;
-  height: 100%;
-}
-
-.editor-panel {
-  flex: 1;
-  overflow: hidden;
-}
-
-.other-panel {
-  flex: 1;
-  overflow: hidden;
-}
-
-.editor-content,
-.other-content {
-  height: 100%;
-}
 .content,
 .content > div {
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 .content > .message {
   text-align: center;
@@ -345,12 +314,19 @@ a:link {
 .content.with-diagram .intro {
   display: none;
 }
-.content .canvas,
+.content
+.canvas {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
 .content.with-error .canvas {
-  visibility: hidden;
+  visibility: visible;
 }
 .content.with-diagram .canvas {
   visibility: visible;
+  height: 100%;
+  padding: 50px 100px; /* Adjust top and bottom padding */
 }
 .download-buttons {
   position: absolute;
