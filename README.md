@@ -126,19 +126,14 @@ This is needed when working with the application without using containers. When 
 
 To build the image, from the root folder it is sufficient to launch the command:
 ```bash
-docker build -t bpmn-redrawer-image .
+docker build -t dmn-computer-vision-tool .
 ```
 
 Once the image has been built, it is possible to run it with the command:
 ```bash
-docker run -d -p 5000:5000 -e BACKEND_PORT=5000 -e BACKEND_MODE=production --name bpmn-redrawer-container bpmn-redrawer-image
+docker run -d -p 5000:5000 -e BACKEND_PORT=5000 -e BACKEND_MODE=production --name dmn-visiontool-container dmn-computer-vision-tool
 ```
 
-Otherwise the application can be run with a single command, using the latest image available on DockerHub:
-
-```bash
-docker run -d -p 5000:5000 -e BACKEND_PORT=5000 -e BACKEND_MODE=production --name bpmn-redrawer-container proslab/bpmn-redrawer
-```
 
 Two variables are available when running the container:
 - BACKEND_MODE: <b>development</b> or <b>production</b> (default=<b>production</b>)
