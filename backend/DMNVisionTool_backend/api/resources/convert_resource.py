@@ -24,66 +24,62 @@ async def convert_images(request:Request):
     str
         The converted dmn model
     """
-
     form = await request.form()
-    file = form.get('image')
+    image_left = form.get('imageLeft')
+    image_right = form.get('imageRight')
     t = int(time.time_ns())
-    path = here("../../temp_files/img_{}_{}".format(t, file.filename))
-    with open(path, 'wb+') as disk_file:
-        disk_file.write(await file.read())
-    ocr_img, predict_img = ss.get_ocr_and_predict_images(path)
+    path_left = here("../../temp_files/img_{}_{}".format(t, image_left.filename))
+    path_right = here("../../temp_files/img_{}_{}".format(t, image_right.filename))
+    
+    with open(path_left, 'wb+') as disk_file_left, open(path_right, 'wb+') as disk_file_right:
+        disk_file_left.write(await image_left.read())
+        disk_file_right.write(await image_right.read())
+        
+    ocr_img_left, predict_img_left = ss.get_ocr_and_predict_images(path_left)
+    ocr_img_right, predict_img_right = ss.get_ocr_and_predict_images(path_right)
 
-    if ocr_img is None or predict_img is None:
-            return PlainTextResponse(content=sample_dmn, status_code=200)
-    #i = 0 
-    #for path, is_graph, is_table in zip(paths, graph, decisionLogic):
-    #    i+=1
-    #    print("Iteration:", i)
-    if "graph" in form and form["graph"] == 'true':
-            # Process the path as a graph
-            print(f"Converting as a graph...")
-            if "elements" in form and form["elements"] == 'true':
-                # Process the path as a graph
-                #print(f"Converting {path} as a graph...")
+    if ocr_img_left is None or predict_img_left is None or ocr_img_right is None or predict_img_right is None:
+        return PlainTextResponse(content=sample_dmn, status_code=200)
+
+    drd_elements_left, drd_elements_right = None, None
+    tables_left, tables_right = [], []
+
+    for idx, (ocr_img, predict_img, path, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
+        [(ocr_img_left, predict_img_left, path_left, 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
+         (ocr_img_right, predict_img_right, path_right, 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
+         start=1):
+        
+        if graph_field in form and form[graph_field] == 'true':
+            print(f"Converting image {idx} as a graph...")
+            drd_elements = None
+            if elements_field in form and form[elements_field] == 'true':
                 obj_predictions = ps.PredictObject(predict_img)
-                #print("obj_predictions:", obj_predictions)
-                elements = cs.convert_object_predictions(obj_predictions)
-                #print("elements:", elements)
-            
-                if "flows" in form and form["flows"] == 'true':
-                   # Keypoints predictions
-                   kp_predictions = ps.PredictKeypoint(ocr_img)
-                   #print("kp_predictions:", kp_predictions)
-                   requirements = cs.convert_keypoint_prediction(kp_predictions)
-                   #print("requirements:", requirements)
-                   cs.connect_requirements(requirements, elements)
-                   cs.reference_requirements(requirements, elements)
-                   elements.extend(requirements)
+                drd_elements = cs.convert_object_predictions(obj_predictions)
 
-                if "ocr" in form and form["ocr"] == 'true':
-                   # OCR
-                   text = os.get_text_from_img(ocr_img)
-                   os.link_text(text, elements)
-                
-                dmn_diagram = DiagramFactory.create_element(elements) ## elementsConnect
-                rendered_dmn_model = cs.render_diagram(dmn_diagram)
-                
-            else:
-                rendered_dmn_model = sample_dmn
+                if flow_field in form and form[flow_field] == 'true':
+                    kp_predictions = ps.PredictKeypoint(ocr_img)
+                    requirements = cs.convert_keypoint_prediction(kp_predictions)
+                    cs.connect_requirements(requirements, drd_elements)
+                    cs.reference_requirements(requirements, drd_elements)
+                    drd_elements.extend(requirements)
 
-    elif "decisionLogic" in form and form["decisionLogic"] == 'true':
-            # Process the path as a table
-            print(f"Converting as a table...")
-            if "elements" in form and form["elements"] == 'true':
+                if ocr_field in form and form[ocr_field] == 'true':
+                    text = os.get_text_from_img(ocr_img)
+                    os.link_text(text, drd_elements)
+
+            if idx == 1:
+                drd_elements_left = drd_elements
+            elif idx == 2:
+                drd_elements_right = drd_elements
+
+        elif decisionLogic_field in form and form[decisionLogic_field] == 'true':
+            print(f"Converting image {idx} as a table...")
+            if elements_field in form and form[elements_field] == 'true':
                 table_predictions = ps.PredictTable(predict_img)
-                #print("table_predictions:", table_predictions)
-                ConvertedTables = cs.convert_table_predictions(table_predictions)
+                converted_tables = cs.convert_table_predictions(table_predictions)
                 ts_predictions = ps.PredictTableElement(predict_img)
-                #print("ts_predictions:", ts_predictions)
                 table_elements = cs.convert_tableElement_predictions(ts_predictions)
-               
-                # Link table elements together
-                # Assign empty variables
+                
                 tables = []
                 table = Table 
                 table_header = TableHeader
@@ -92,11 +88,11 @@ async def convert_images(request:Request):
                 table_outputs = []
                 table_rules = []
                 input_entries = []
-                output_entries = []   
-                # Assign table element predictions to the variables
-                for Convertedtable in ConvertedTables:
-                    if isinstance(Convertedtable, Table):
-                       table = Convertedtable
+                output_entries = []  
+
+                for converted_table in converted_tables:
+                    if isinstance(converted_table, Table):
+                       table = converted_table
                 for table_element in table_elements:
                     if isinstance(table_element, TableHeader):
                        table_header = table_element
@@ -112,52 +108,29 @@ async def convert_images(request:Request):
                        input_entries.append(table_element)
                     elif isinstance(table_element, OutputEntry):
                        output_entries.append(table_element)
-                    
-                # Prints for checking
-                #print("table:", table)
-                #print("table_header:", table_header)
-                #print("table_hitPolicy:", table_hitPolicy)
-                #print("table_inputs:", table_inputs)
-                #print("table_outputs:", table_outputs)
-                #print("table_rules:", table_rules)
-                #print("input_entries:", input_entries)
-                #print("output_entries:", output_entries)  
             
                 table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)               
-                tableConnect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
-                #print("table after connecting:", tableConnect)
-                tables.append(tableConnect)
-            
-            
-                if "ocr" in form and form["ocr"] == 'true':
-                  # OCR 
-                  text = os.get_text_from_table_img(ocr_img)
-                  os.link_text_table(text, table_elements)
-                  #print("table_elements after OCR:", table_elements)
-            
-                dmn_diagram = DiagramFactory.create_element(tables) ## elementsConnect
-                rendered_dmn_model = cs.render_diagram(dmn_diagram)
-            
-            else:
-                 rendered_dmn_model = sample_dmn
-            
-    #elementsConnect = cs.connect_graph2tables(elements, tables)
-    #for element in elementsConnect:
-    #    element_name = element.get_name()
-    #    print("Elements name:", element_name)
-    #for table in tables:
-    #    if isinstance(table, Table):
-    #        if isinstance(table_header, TableHeader):
-    #            header_label = table.header.get_label()
-    #            print("Table's header:", header_label)
-    
-    #dmn_diagram = DiagramFactory.create_element(elementsConnect) 
-    #rendered_dmn_model = cs.render_diagram(dmn_diagram)
+                table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
+
+                if ocr_field in form and form[ocr_field] == 'true':
+                    text = os.get_text_from_table_img(ocr_img)
+                    os.link_text_table(text, table_elements)  
+                
+                if idx == 1:
+                    tables_left.extend(converted_tables)
+                elif idx == 2:
+                    tables_right.extend(converted_tables)
+
+    if drd_elements_left is not None and tables_left is not None:
+        elements_connect = cs.connect_graph2tables(drd_elements_left, tables_left)
+    elif drd_elements_left is not None and tables_right is not None:
+        elements_connect = cs.connect_graph2tables(drd_elements_left, tables_right)
+    elif drd_elements_right is not None and tables_left is not None:
+        elements_connect = cs.connect_graph2tables(drd_elements_right, tables_left)
+    elif drd_elements_right is not None and tables_right is not None:
+        elements_connect = cs.connect_graph2tables(drd_elements_right, tables_right)
+
+    dmn_diagram = DiagramFactory.create_element(elements_connect) 
+    rendered_dmn_model = cs.render_diagram(dmn_diagram)
     
     return PlainTextResponse(content=rendered_dmn_model, status_code=200)
-
-# At the moment, convert_image takes a file_path as argument, 
-# Later, we should add request handling in the function
-# At the moment, convert_image takes a file_path as argument, 
-# Later, we should add request handling in the function
-
