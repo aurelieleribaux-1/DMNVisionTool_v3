@@ -33,7 +33,7 @@ class GenericFactory(Factory):
 
 # TO DO: Change keypoint categories numbers according to model
 TABLE_CATEGORIES = {
-    0: "Table",
+    8: "Table",
 }
 
 TABLE_FACTORIES = {
