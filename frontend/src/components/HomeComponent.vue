@@ -116,6 +116,17 @@
           </div>
         </section>
 
+        <!-- Convert Images Button -->
+        <div class="q-pa-md" style="text-align: center">
+          <q-btn
+            color="accent"
+            :label="$t('home.convert_images')"
+            @click="convertImages"
+            :disable="!imageLoadedLeft || !imageLoadedRight" 
+            class="convert-button"
+          ></q-btn>
+        </div>
+
         <!-- Right Section -->
         <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'right')">
           <h2>Upload Image 2</h2>
@@ -424,6 +435,95 @@ export default defineComponent({
       );
     };
 
+    const convertImages = async () => {
+       const formDataLeft = prepareFormDataLeft();
+       const formDataRight = prepareFormDataRight();
+    
+       const formData = new FormData();
+       const [leftData, rightData] = await Promise.all([formDataLeft, formDataRight]);
+    
+       for (const [key, value] of leftData.entries()) {
+           formData.append(key, value);  // Appending data for left image
+       }
+       for (const [key, value] of rightData.entries()) {
+           formData.append(key, value);  // Appending data for right image
+       }
+    
+       const result = await uploadAndConvert(formData);
+
+       console.log("Result:", result);
+    };
+
+
+    const prepareFormDataLeft =  () => {
+      const formData = new FormData();
+      formData.append('imageLeft', imageFileLeft.value as File);
+      formData.append('elementsLeft', String(elementsEnabledLeft.value));
+      formData.append('flowsLeft', String(flowsEnabledLeft.value));
+      formData.append('ocrLeft', String(ocrEnabledLeft.value));
+      formData.append('graphLeft', String(isGraphLeft.value));
+      formData.append('decisionLogicLeft', String(isTableLeft.value));
+      return formData;
+    };
+
+    const prepareFormDataRight =  () => {
+      const formData = new FormData();
+      formData.append('imageRight', imageFileRight.value as File);
+      formData.append('elementsRight', String(elementsEnabledRight.value));
+      formData.append('flowsRight', String(flowsEnabledRight.value));
+      formData.append('ocrRight', String(ocrEnabledRight.value));
+      formData.append('graphRight', String(isGraphRight.value));
+      formData.append('decisionLogicRight', String(isTableRight.value));
+      return formData;
+    };
+
+    const uploadAndConvert = async (formData: FormData)  => {
+      const source = axios.CancelToken.source();
+      const uploadDialog = $q
+        .dialog({
+          message: i18n.global.t('home.uploading'),
+          progress: true,
+          persistent: true,
+          ok: false,
+          cancel: true,
+        })
+        .onCancel(() => {
+          source.cancel();
+        });
+
+        await api
+        .post<string>('/convert', formData, {
+          cancelToken: source.token,
+          headers: { 'Content-Type': 'multipart/form-data' },
+          onUploadProgress: (progressEvent: ProgressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+            uploadDialog.update({
+              message:
+                progress == 100
+                  ? i18n.global.t('home.waitingForConversion')
+                  : i18n.global.t('home.uploadingProgress', {
+                      progress: progress,
+                    }),
+            });
+          },
+        })
+        .then((res) => {
+          uploadDialog.hide();
+          conversionResultLeft.value = res.data;
+          conversionDialogLeft.value = true;
+        })
+        .catch(() => {
+          uploadDialog.hide();
+          $q.notify({
+            message: i18n.global.t('home.errorUploading'),
+            type: 'negative',
+          });
+        });
+    };
+
+
     const convertImageLeft = async () => {
       const formData = new FormData();
       formData.append('image', imageFileLeft.value as File);
@@ -553,6 +653,7 @@ export default defineComponent({
       loadImageRight,
       convertImageLeft,
       convertImageRight,
+      convertImages,
       conversionDialogLeft,
       conversionDialogRight,
       elementsEnabledLeft,
@@ -600,6 +701,12 @@ export default defineComponent({
   display: flex;
   justify-content: space-around;
   width: 100%;
+}
+
+/*style of the end button*/
+.convert-button {
+  font-size: 18px; /* Increase font size */
+  padding: 16px 32px; /* Increase padding */
 }
 
 /* Ensure checkboxes are clickable */
