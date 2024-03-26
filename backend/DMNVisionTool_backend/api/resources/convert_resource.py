@@ -129,7 +129,11 @@ async def convert_images(request:Request):
         elements_connect = cs.connect_graph2tables(drd_elements_right, tables_left)
     elif drd_elements_right is not None and tables_right is not None:
         elements_connect = cs.connect_graph2tables(drd_elements_right, tables_right)
-
+    
+    for element in elements_connect:
+        element_name = element.get_name()
+        print("Elements name:", element_name)
+        
     dmn_diagram = DiagramFactory.create_element(elements_connect) 
     rendered_dmn_model = cs.render_diagram(dmn_diagram)
     
