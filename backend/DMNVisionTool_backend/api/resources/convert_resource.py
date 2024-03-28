@@ -41,8 +41,8 @@ async def convert_images(request:Request):
     if ocr_img_left is None or predict_img_left is None or ocr_img_right is None or predict_img_right is None:
         return PlainTextResponse(content=sample_dmn, status_code=200)
 
-    drd_elements_left, drd_elements_right = None, None
-    tables_left, tables_right = [], []
+    #drd_elements_left, drd_elements_right = None, None
+    #tables_left, tables_right = [], []
 
     for idx, (ocr_img, predict_img, path, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
         [(ocr_img_left, predict_img_left, path_left, 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
@@ -51,7 +51,7 @@ async def convert_images(request:Request):
         
         if graph_field in form and form[graph_field] == 'true':
             print(f"Converting image {idx} as a graph...")
-            drd_elements = None
+            #drd_elements = None
             if elements_field in form and form[elements_field] == 'true':
                 obj_predictions = ps.PredictObject(predict_img)
                 drd_elements = cs.convert_object_predictions(obj_predictions)
@@ -61,16 +61,16 @@ async def convert_images(request:Request):
                     requirements = cs.convert_keypoint_prediction(kp_predictions)
                     cs.connect_requirements(requirements, drd_elements)
                     cs.reference_requirements(requirements, drd_elements)
-                    drd_elements.extend(requirements)
+                    #drd_elements.extend(requirements)
 
                 if ocr_field in form and form[ocr_field] == 'true':
                     text = os.get_text_from_img(ocr_img)
                     os.link_text(text, drd_elements)
 
-            if idx == 1:
-                drd_elements_left = drd_elements
-            elif idx == 2:
-                drd_elements_right = drd_elements
+            #if idx == 1:
+            #    drd_elements_left = drd_elements
+            #elif idx == 2:
+            #    drd_elements_right = drd_elements
 
         elif decisionLogic_field in form and form[decisionLogic_field] == 'true':
             print(f"Converting image {idx} as a table...")
@@ -79,62 +79,67 @@ async def convert_images(request:Request):
                 converted_tables = cs.convert_table_predictions(table_predictions)
                 ts_predictions = ps.PredictTableElement(predict_img)
                 table_elements = cs.convert_tableElement_predictions(ts_predictions)
+
                 
-                tables = []
-                table = Table 
-                table_header = TableHeader
-                table_hitPolicy = TableHitPolicy
-                table_inputs = []
-                table_outputs = []
-                table_rules = []
-                input_entries = []
-                output_entries = []  
-
-                for converted_table in converted_tables:
-                    if isinstance(converted_table, Table):
-                       table = converted_table
-                for table_element in table_elements:
-                    if isinstance(table_element, TableHeader):
-                       table_header = table_element
-                    elif isinstance(table_element, TableHitPolicy):
-                       table_hitPolicy = table_element
-                    elif isinstance(table_element, TableInput):
-                       table_inputs.append(table_element)
-                    elif isinstance(table_element, TableOutput):
-                       table_outputs.append(table_element)
-                    elif isinstance(table_element, TableRule):
-                       table_rules.append(table_element)
-                    elif isinstance(table_element, InputEntry):
-                       input_entries.append(table_element)
-                    elif isinstance(table_element, OutputEntry):
-                       output_entries.append(table_element)
-            
-                table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)               
-                table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
-
                 if ocr_field in form and form[ocr_field] == 'true':
                     text = os.get_text_from_table_img(ocr_img)
-                    os.link_text_table(text, table_elements)  
-                
-                if idx == 1:
-                    tables_left.extend(converted_tables)
-                elif idx == 2:
-                    tables_right.extend(converted_tables)
+                    os.link_text_table(text, table_elements) 
 
-    if drd_elements_left is not None and tables_left is not None:
-        elements_connect = cs.connect_graph2tables(drd_elements_left, tables_left)
-    elif drd_elements_left is not None and tables_right is not None:
-        elements_connect = cs.connect_graph2tables(drd_elements_left, tables_right)
-    elif drd_elements_right is not None and tables_left is not None:
-        elements_connect = cs.connect_graph2tables(drd_elements_right, tables_left)
-    elif drd_elements_right is not None and tables_right is not None:
-        elements_connect = cs.connect_graph2tables(drd_elements_right, tables_right)
-    
-    for element in elements_connect:
-        element_name = element.get_name()
-        print("Elements name:", element_name)
+                    tables = []
+                    table = Table 
+                    table_header = TableHeader
+                    table_hitPolicy = TableHitPolicy
+                    table_inputs = []
+                    table_outputs = []
+                    table_rules = []
+                    input_entries = []
+                    output_entries = []  
+
+                    for converted_table in converted_tables:
+                        if isinstance(converted_table, Table):
+                           table = converted_table
+                    for table_element in table_elements:
+                        if isinstance(table_element, TableHeader):
+                           table_header = table_element
+                        elif isinstance(table_element, TableHitPolicy):
+                           table_hitPolicy = table_element
+                        elif isinstance(table_element, TableInput):
+                           table_inputs.append(table_element)
+                        elif isinstance(table_element, TableOutput):
+                           table_outputs.append(table_element)
+                        elif isinstance(table_element, TableRule):
+                           table_rules.append(table_element)
+                        elif isinstance(table_element, InputEntry):
+                           input_entries.append(table_element)
+                        elif isinstance(table_element, OutputEntry):
+                           output_entries.append(table_element)
+            
+                    table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)               
+                    table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
+                    tables.append(table_connect) 
+                
+                #if idx == 1:
+                #    tables_left = tables 
+                #elif idx == 2:
+                #    tables_right = tables 
+    elements_connect = cs.connect_graph2tables(drd_elements, tables)
+    #if drd_elements_left is not None and tables_left is not None:
+    #    elements_connect = cs.connect_graph2tables(drd_elements_left, tables_left)
+    #    print('ok1')
+    #elif drd_elements_left is not None and tables_right is not None:
+    #    elements_connect = cs.connect_graph2tables(drd_elements_left, tables_right)
+    #   print('ok2')
+    #elif drd_elements_right is not None and tables_left is not None:
+    #    elements_connect = cs.connect_graph2tables(drd_elements_right, tables_left)
+    #    print('ok3')
+    #elif drd_elements_right is not None and tables_right is not None:
+    #    elements_connect = cs.connect_graph2tables(drd_elements_right, tables_right)
+    #    print('ok4')
+
         
     dmn_diagram = DiagramFactory.create_element(elements_connect) 
     rendered_dmn_model = cs.render_diagram(dmn_diagram)
+    print("XML representation of the DMN model:")
+    print(rendered_dmn_model)
     
     return PlainTextResponse(content=rendered_dmn_model, status_code=200)
