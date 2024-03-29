@@ -86,6 +86,11 @@
               v-model="isTableLeft"
               label="Table"
             ></q-checkbox>
+            <q-checkbox 
+              class="q-pr-md"
+              v-model="SketchLeft"
+              label="Handwritten File"
+            ></q-checkbox>
           </div>
           <div class="image-display">
             <h2>Your Uploaded Image 1</h2>
@@ -105,13 +110,6 @@
                 @dragover="allowDrop($event)"
                 @drop="drop($event, 'left')"
               ></q-img>
-              <q-btn
-                 :disable="!imageLoadedLeft"
-                 color="accent"
-                 icon-right="arrow_forward"
-                 :label="$t('home.convert')"
-                 @click="convertImageLeft()"
-              ></q-btn>
             </div>
           </div>
         </section>
@@ -198,6 +196,11 @@
               v-model="isTableRight"
               label="Table"
             ></q-checkbox>
+            <q-checkbox 
+              class="q-pr-md"
+              v-model="SketchRight"
+              label="Handwritten File"
+            ></q-checkbox>
           </div>
           <div class="image-display">
             <h2>Your Uploaded Image 2</h2>
@@ -217,13 +220,6 @@
                 @dragover="allowDrop($event)"
                 @drop="drop($event, 'right')"
               ></q-img>
-              <q-btn
-                :disable="!imageLoadedRight"
-                color="accent"
-                icon-right="arrow_forward"
-                :label="$t('home.convert')"
-                @click="convertImageRight()"
-              ></q-btn>
             </div>
           </div>
         </section>
@@ -304,6 +300,9 @@ export default defineComponent({
     const isGraphRight = ref(false);
     const isTableLeft = ref(false);
     const isTableRight = ref(false);
+    const SketchLeft = ref(false);
+    const SketchRight = ref(false);
+
 
     const allowDrop = (e: DragEvent) => {
       e.preventDefault();
@@ -463,6 +462,7 @@ export default defineComponent({
       formData.append('ocrLeft', String(ocrEnabledLeft.value));
       formData.append('graphLeft', String(isGraphLeft.value));
       formData.append('decisionLogicLeft', String(isTableLeft.value));
+      formData.append('sketchLeft', String(SketchLeft.value));
       return formData;
     };
 
@@ -474,6 +474,7 @@ export default defineComponent({
       formData.append('ocrRight', String(ocrEnabledRight.value));
       formData.append('graphRight', String(isGraphRight.value));
       formData.append('decisionLogicRight', String(isTableRight.value));
+      formData.append('sketchRight', String(SketchRight.value));
       return formData;
     };
 
@@ -522,152 +523,6 @@ export default defineComponent({
           });
         });
     };
-
-
-    const convertImageLeft = async () => {
-      const formData = new FormData();
-      formData.append('image', imageFileLeft.value as File);
-      formData.append('elements', String(elementsEnabledLeft.value));
-      formData.append('flows', String(flowsEnabledLeft.value));
-      formData.append('ocr', String(ocrEnabledLeft.value));
-      formData.append('graph', String(isGraphLeft.value));
-      formData.append('decisionLogic', String(isTableLeft.value));
-
-      const source = axios.CancelToken.source();
-      const uploadDialog = $q
-        .dialog({
-          message: i18n.global.t('home.uploading'),
-          progress: true,
-          persistent: true,
-          ok: false,
-          cancel: true,
-        })
-        .onCancel(() => {
-          source.cancel();
-        });
-
-        await api
-        .post<string>('/convert', formData, {
-          cancelToken: source.token,
-          headers: { 'Content-Type': 'multipart/form-data' },
-          onUploadProgress: (progressEvent: ProgressEvent) => {
-            const progress = Math.round(
-              (progressEvent.loaded / progressEvent.total) * 100
-            );
-            uploadDialog.update({
-              message:
-                progress == 100
-                  ? i18n.global.t('home.waitingForConversion')
-                  : i18n.global.t('home.uploadingProgress', {
-                      progress: progress,
-                    }),
-            });
-          },
-        })
-        .then((res) => {
-          uploadDialog.hide();
-          conversionResultLeft.value = res.data;
-          conversionDialogLeft.value = true;
-        })
-        .catch(() => {
-          uploadDialog.hide();
-          $q.notify({
-            message: i18n.global.t('home.errorUploading'),
-            type: 'negative',
-          });
-        });
-    };
-      
-    const convertImageRight = async () => {
-        const formData = new FormData();
-        formData.append('image', imageFileRight.value as File);
-        formData.append('elements', String(elementsEnabledRight.value));
-        formData.append('flows', String(flowsEnabledRight.value));
-        formData.append('ocr', String(ocrEnabledRight.value));
-        formData.append('graph', String(isGraphRight.value));
-        formData.append('decisionLogic', String(isTableRight.value));
-        const source = axios.CancelToken.source();
-        const uploadDialog = $q
-          .dialog({
-            message: i18n.global.t('home.uploading'),
-            progress: true,
-            persistent: true,
-            ok: false,
-            cancel: true,
-          })
-          .onCancel(() => {
-            source.cancel();
-          });
-
-        await api
-          .post<string>('/convert', formData, {
-            cancelToken: source.token,
-            headers: { 'Content-Type': 'multipart/form-data' },
-            onUploadProgress: (progressEvent: ProgressEvent) => {
-              const progress = Math.round(
-                (progressEvent.loaded / progressEvent.total) * 100
-              );
-              uploadDialog.update({
-                message:
-                  progress == 100
-                    ? i18n.global.t('home.waitingForConversion')
-                    : i18n.global.t('home.uploadingProgress', {
-                        progress: progress,
-                       }),
-              });
-            },
-          })
-          .then((res) => {
-            uploadDialog.hide();
-            conversionResultRight.value = res.data;
-            conversionDialogRight.value = true;
-          })
-          .catch(() => {
-            uploadDialog.hide();
-            $q.notify({
-              message: i18n.global.t('home.errorUploading'),
-              type: 'negative',
-            });
-        });
-    };
-
-    return {
-      api,
-      allowDrop,
-      drop,
-      imgSrcLeft,
-      imgSrcRight,
-      filePickerLeft,
-      filePickerRight,
-      fileLeft,
-      fileRight,
-      imageFileLeft,
-      imageFileRight,
-      imageLoadedLeft,
-      imageLoadedRight,
-      loadingOK,
-      loadingError,
-      editModelLeft,
-      downloadModelLeft,
-      loadImageLeft,
-      loadImageRight,
-      convertImageLeft,
-      convertImageRight,
-      convertImages,
-      conversionDialogLeft,
-      conversionDialogRight,
-      elementsEnabledLeft,
-      elementsEnabledRight,
-      flowsEnabledLeft,
-      flowsEnabledRight,
-      ocrEnabledLeft,
-      ocrEnabledRight,
-      isTableLeft,
-      isTableRight,
-      isGraphLeft,
-      isGraphRight,
-    };
-  },
 });
 </script>
 
