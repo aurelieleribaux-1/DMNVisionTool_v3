@@ -44,11 +44,76 @@ async def convert_images(request:Request):
     #drd_elements_left, drd_elements_right = None, None
     #tables_left, tables_right = [], []
 
-    for idx, (ocr_img, predict_img, path, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
-        [(ocr_img_left, predict_img_left, path_left, 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
-         (ocr_img_right, predict_img_right, path_right, 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
+    for idx, (ocr_img, predict_img, path, sketch_field, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
+        [(ocr_img_left, predict_img_left, path_left, 'sketchLeft', 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
+         (ocr_img_right, predict_img_right, path_right, 'sketchRight', 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
          start=1):
-        
+      if sketch_field in form and form[sketch_field] == 'true': 
+        if graph_field in form and form[graph_field] == 'true':
+            print(f"Converting image {idx} as a graph...")
+            #drd_elements = None
+            if elements_field in form and form[elements_field] == 'true':
+                obj_predictions = ps.SketchPredictObject(predict_img)
+                drd_elements = cs.convert_object_predictions(obj_predictions)
+
+                if flow_field in form and form[flow_field] == 'true':
+                    kp_predictions = ps.SketchPredictKeypoint(ocr_img)
+                    requirements = cs.convert_keypoint_prediction(kp_predictions)
+                    cs.connect_requirements(requirements, drd_elements)
+                    cs.reference_requirements(requirements, drd_elements)
+                    #drd_elements.extend(requirements)
+
+                #if ocr_field in form and form[ocr_field] == 'true':
+                #    text = os.get_text_from_img(ocr_img)
+                #    os.link_text(text, drd_elements)
+
+        #elif decisionLogic_field in form and form[decisionLogic_field] == 'true':
+        #    print(f"Converting image {idx} as a table...")
+        #    if elements_field in form and form[elements_field] == 'true':
+        #        table_predictions = ps.PredictTable(predict_img)
+        #        converted_tables = cs.convert_table_predictions(table_predictions)
+        #        ts_predictions = ps.PredictTableElement(predict_img)
+        #        table_elements = cs.convert_tableElement_predictions(ts_predictions)
+
+                
+        #        if ocr_field in form and form[ocr_field] == 'true':
+        #            text = os.get_text_from_table_img(ocr_img)
+        #            os.link_text_table(text, table_elements) 
+
+        #            tables = []
+        #            table = Table 
+        #            table_header = TableHeader
+        #            table_hitPolicy = TableHitPolicy
+        #            table_inputs = []
+        #            table_outputs = []
+        #            table_rules = []
+        #            input_entries = []
+        #            output_entries = []  
+
+        #           for converted_table in converted_tables:
+        #                if isinstance(converted_table, Table):
+        #                   table = converted_table
+        #            for table_element in table_elements:
+        #                if isinstance(table_element, TableHeader):
+        #                   table_header = table_element
+        #                elif isinstance(table_element, TableHitPolicy):
+        #                   table_hitPolicy = table_element
+        #                elif isinstance(table_element, TableInput):
+        #                   table_inputs.append(table_element)
+        #                elif isinstance(table_element, TableOutput):
+        #                   table_outputs.append(table_element)
+        #                elif isinstance(table_element, TableRule):
+        #                   table_rules.append(table_element)
+        #                elif isinstance(table_element, InputEntry):
+        #                   input_entries.append(table_element)
+        #                elif isinstance(table_element, OutputEntry):
+        #                   output_entries.append(table_element)
+            
+        #            table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)               
+        #            table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
+        #            tables.append(table_connect) 
+                
+      else: 
         if graph_field in form and form[graph_field] == 'true':
             print(f"Converting image {idx} as a graph...")
             #drd_elements = None
@@ -117,7 +182,7 @@ async def convert_images(request:Request):
                     table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)               
                     table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
                     tables.append(table_connect) 
-                
+    
                 #if idx == 1:
                 #    tables_left = tables 
                 #elif idx == 2:
