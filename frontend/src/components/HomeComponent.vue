@@ -86,10 +86,10 @@
               v-model="isTableLeft"
               label="Table"
             ></q-checkbox>
-            <q-checkbox 
+            <q-checkbox
               class="q-pr-md"
               v-model="SketchLeft"
-              label="Handwritten File"
+              label="Handwritten file"
             ></q-checkbox>
           </div>
           <div class="image-display">
@@ -196,10 +196,10 @@
               v-model="isTableRight"
               label="Table"
             ></q-checkbox>
-            <q-checkbox 
+            <q-checkbox
               class="q-pr-md"
               v-model="SketchRight"
-              label="Handwritten File"
+              label="Handwritten file"
             ></q-checkbox>
           </div>
           <div class="image-display">
@@ -301,8 +301,7 @@ export default defineComponent({
     const isTableLeft = ref(false);
     const isTableRight = ref(false);
     const SketchLeft = ref(false);
-    const SketchRight = ref(false);
-
+    const sketchRight = ref(false);
 
     const allowDrop = (e: DragEvent) => {
       e.preventDefault();
@@ -523,6 +522,46 @@ export default defineComponent({
           });
         });
     };
+
+
+    
+    return {
+      api,
+      allowDrop,
+      drop,
+      imgSrcLeft,
+      imgSrcRight,
+      filePickerLeft,
+      filePickerRight,
+      fileLeft,
+      fileRight,
+      imageFileLeft,
+      imageFileRight,
+      imageLoadedLeft,
+      imageLoadedRight,
+      loadingOK,
+      loadingError,
+      editModelLeft,
+      downloadModelLeft,
+      loadImageLeft,
+      loadImageRight,
+      convertImages,
+      conversionDialogLeft,
+      conversionDialogRight,
+      elementsEnabledLeft,
+      elementsEnabledRight,
+      flowsEnabledLeft,
+      flowsEnabledRight,
+      ocrEnabledLeft,
+      ocrEnabledRight,
+      isTableLeft,
+      isTableRight,
+      isGraphLeft,
+      isGraphRight,
+      SketchLeft,
+      SketchRight,
+    };
+  },
 });
 </script>
 
