@@ -22,7 +22,11 @@ export default {
     show_elements: 'Elements',
     show_flows: 'Flows',
     examples: 'Examples',
-    examplesInstruction: 'Here you can find some examples images. Feel free to use them as trying out.',
+    examplesInstruction: 'How to use our tool? Here you can find some example images. Please follow these instructions:',
+    specifyImageType: '1. Specify if the image is a table or a graph using the dropdown menu.',
+    specifyHandwritten: '2. Specify if the image is handwritten or not by selecting "Yes" or "No".',
+    specifyContent: '3. Describe the content of the image (e.g., elements, flows, OCR) in the designated field.',
+    convertImages: '4. Click on "Home_Convert Images" to proceed with the conversion.',
   },
   editor: {
     drop: 'Drop',
