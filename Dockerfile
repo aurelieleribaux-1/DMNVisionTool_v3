@@ -26,6 +26,9 @@ RUN [ -f DMNVisionTool_backend/detectron_model/DRD_model_final.pth ] && echo "Ob
 RUN [ -f DMNVisionTool_backend/detectron_model/kp_DRD_model_final.pth ] && echo "KeyPoint Prediction model found" || { echo "KeyPoint Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/kp_DRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/kp_DRD_model_final.pth; }
 RUN [ -f DMNVisionTool_backend/detectron_model/Table_model_final.pth ] && echo "Object Detection model found" || { echo "Object Detection model not found!"; wget -O DMNVisionTool_backend/detectron_model/Table_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/Table_model_final.pth; }
 RUN [ -f DMNVisionTool_backend/detectron_model/TableStructure_model_final.pth ] && echo "Object Detection model found" || { echo "KeyPoint Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/TableStructure_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/TableStructure_model_final.pth; }
+RUN [ -f DMNVisionTool_backend/detectron_model/SketchDRD_model_final.pth ] && echo "Object Detection model found" || { echo "KeyPoint Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/SketchDRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/SketchDRD_model_final.pth; }
+RUN [ -f DMNVisionTool_backend/detectron_model/Sketchkp_DRD_model_final.pth ] && echo "KeyPoint Detection model found" || { echo "Object Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/Sketchkp_DRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/Sketchkp_DRD_model_final.pth; }
+#tba tables 
 
 # Install/update Pillow
 RUN pip install -U pip
