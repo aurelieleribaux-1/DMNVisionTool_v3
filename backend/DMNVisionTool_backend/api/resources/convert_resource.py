@@ -58,13 +58,8 @@ async def convert_images(request:Request):
                     requirements = cs.convert_keypoint_prediction(kp_predictions)
                     cs.connect_requirements(requirements, drd_elements)
                     cs.reference_requirements(requirements, drd_elements)
-                    drd_elements.extend(requirements)
-                    
-                    #for because there are no tables yet
-                    dmn_diagram = DiagramFactory.create_element(drd_elements) 
-                    rendered_dmn_model = cs.render_diagram(dmn_diagram)
-                    print("XML representation of the DMN model:")
-                    print(rendered_dmn_model)
+                   
+                  
                 
                 #commented out for now because no text extraction yet 
                 #if ocr_field in form and form[ocr_field] == 'true':
