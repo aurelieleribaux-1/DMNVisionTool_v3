@@ -120,7 +120,6 @@
             color="accent"
             :label="$t('home.convert_images')"
             @click="convertImages"
-            :disable="!imageLoadedLeft || !imageLoadedRight" 
             class="convert-button"
           ></q-btn>
         </div>
@@ -301,7 +300,7 @@ export default defineComponent({
     const isTableLeft = ref(false);
     const isTableRight = ref(false);
     const SketchLeft = ref(false);
-    const sketchRight = ref(false);
+    const SketchRight = ref(false);
 
     const allowDrop = (e: DragEvent) => {
       e.preventDefault();
