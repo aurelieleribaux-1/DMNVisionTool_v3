@@ -65,8 +65,6 @@ async def convert_images(request:Request):
                     rendered_dmn_model = cs.render_diagram(dmn_diagram)
                     print("XML representation of the DMN model:")
                     print(rendered_dmn_model)
-    
-                    return PlainTextResponse(content=rendered_dmn_model, status_code=200)
                 
                 #commented out for now because no text extraction yet 
                 #if ocr_field in form and form[ocr_field] == 'true':
@@ -183,7 +181,7 @@ async def convert_images(request:Request):
                     table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
                     tables.append(table_connect) 
 
-    #elements_connect = cs.connect_graph2tables(drd_elements, tables)
+    elements_connect = cs.connect_graph2tables(drd_elements, tables)
     #if drd_elements_left is not None and tables_left is not None:
     #    elements_connect = cs.connect_graph2tables(drd_elements_left, tables_left)
     #    print('ok1')
@@ -198,9 +196,9 @@ async def convert_images(request:Request):
     #    print('ok4')
 
         
-    #dmn_diagram = DiagramFactory.create_element(elements_connect) 
-    #rendered_dmn_model = cs.render_diagram(dmn_diagram)
-    #print("XML representation of the DMN model:")
-    #print(rendered_dmn_model)
+    dmn_diagram = DiagramFactory.create_element(elements_connect) 
+    rendered_dmn_model = cs.render_diagram(dmn_diagram)
+    print("XML representation of the DMN model:")
+    print(rendered_dmn_model)
     
     return PlainTextResponse(content=rendered_dmn_model, status_code=200)
