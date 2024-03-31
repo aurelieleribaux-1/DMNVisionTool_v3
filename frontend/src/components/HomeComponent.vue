@@ -44,7 +44,7 @@
                       icon="download"
                       label="Download"
                       color="primary"
-                      @click="downloadModelLeft()"
+                      @click="downloadModel()"
                     />
                     <q-btn
                       flat
@@ -150,13 +150,6 @@
                   <q-card-actions align="right">
                     <q-btn
                       flat
-                      icon="download"
-                      label="Download"
-                      color="primary"
-                      @click="downloadModelRight()"
-                    />
-                    <q-btn
-                      flat
                       icon="arrow_forward"
                       :label="$t('home.open')"
                       color="primary"
@@ -227,8 +220,18 @@
 
     <!-- Example Images Section -->
     <div class="q-pa-md" style="text-align: center">
-      <div style="font-size: 18px">{{ $t('home.examples') }}</div>
-      <div style="font-size: 14px">{{ $t('home.examplesInstruction') }}</div>
+      <div style="font-size: 40px">{{ $t('home.examples') }}</div>
+      <div style="font-size: 35px">{{ $t('home.examplesInstruction') }}</div>
+      <!-- New Instructions for Image Specifications -->
+      <div style="font-size: 35px; text-align: left">
+        <ol>
+          <li>{{ $t('home.specifyImageType') }}</li>
+          <li>{{ $t('home.specifyHandwritten') }}</li>
+          <li>{{ $t('home.specifyContent') }}</li>
+          <li>{{ $t('home.convertImages') }}</li>
+        </ol>
+      </div>
+      <!-- End of New Instructions -->
       <div class="row justify-evenly wrap">
         <div class="q-pa-sm" v-for="i in 3" :key="i">
           <q-img
@@ -410,10 +413,11 @@ export default defineComponent({
       });
     };
 
-    const downloadModelLeft = () => {
+    const downloadModel = () => {
+      const fileName = (imageFileLeft.value?.name as string).replace(/\..+$/, '.dmn');
       exportFile(
-        (imageFileLeft.value?.name as string) + '.dmn',
-        conversionResultLeft.value as string,
+         fileName,
+         conversionResultLeft.value as string,
         {
           mimeType: 'text/xml',
           encoding: 'utf-8',
@@ -421,16 +425,6 @@ export default defineComponent({
       );
     };
 
-    const downloadModelRight = () => {
-      exportFile(
-        (imageFileRight.value?.name as string) + '.dmn',
-        conversionResultRight.value as string,
-        {
-          mimeType: 'text/xml',
-          encoding: 'utf-8',
-        }
-      );
-    };
 
     const convertImages = async () => {
        const formDataLeft = prepareFormDataLeft();
@@ -541,7 +535,7 @@ export default defineComponent({
       loadingOK,
       loadingError,
       editModelLeft,
-      downloadModelLeft,
+      downloadModel,
       loadImageLeft,
       loadImageRight,
       convertImages,

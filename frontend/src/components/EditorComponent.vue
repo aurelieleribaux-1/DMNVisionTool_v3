@@ -67,9 +67,6 @@
       <li>
         <q-btn icon="download" label="DMN" outline @click="downloadAsDMN" />
       </li>
-      <li>
-        <q-btn icon="download" label="SVG" outline @click="downloadAsSVG" />
-      </li>
     </ul>
   </div>
 </template>
@@ -220,33 +217,50 @@ export default defineComponent({
       successfulLoadDMN,
 
       async downloadAsDMN() {
-        try {
-          const { xml } = await modeler.saveXML({ format: true });
-          exportFile('diagram.dmn', xml);
-        } catch (err) {
-          $q.notify({
-            message: i18n.global.t('editor.errorSaveDMN'),
-            type: 'negative',
-          });
-        }
+            try {
+                // Get the diagram XML from the modeler
+                const xmlPromise = new Promise<string>((resolve, reject) => {
+                   modeler.saveXML({ format: true }, (err: any, xmlOrWarn: string | any) => {
+                     if (err) {
+                        reject(err);
+                     } else {
+                          resolve(xmlOrWarn as string);
+                     }
+                   }).catch((error) => {
+                     console.error('Error saving XML:', error);
+                     reject(error); // Reject the promise if an error occurs during saving XML
+                   });
+                });
+                 const xml = await xmlPromise; 
+
+                 if (xml) {
+                        const blob = new Blob([xml], { type: 'application/xml' });
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'diagram.dmn';
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                   } else {
+                        $q.notify({
+                          message: i18n.global.t('editor.errorSaveDMN'),
+                          type: 'negative',
+                        });
+                   }
+                } catch(error) {
+                    $q.notify({
+                      message: i18n.global.t('editor.errorSaveDMN'),
+                      type: 'negative',
+                    });
+                }
       },
 
-      async downloadAsSVG() {
-        try {
-          const { svg } = await modeler.saveSVG();
-          exportFile('diagram.svg', svg);
-        } catch (err) {
-          $q.notify({
-            message: i18n.global.t('editor.errorSaveSVG'),
-            type: 'negative',
-          });
-        }
-      },
+
 
       // When creating a new diagram, just open the default one
       createNewDiagram() {
         const sampleDiagram =
-          '<?xml version="1.0" encoding="UTF-8"?><dmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dmn2="http://www.omg.org/spec/DMN/20100524/MODEL" xmlns:dmndi="http://www.omg.org/spec/DMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/DMN/20100524/MODEL DMN20.xsd" id="sample-diagram" targetNamespace="http://dmn.io/schema/dmn"><dmn2:process id="Process_1" isExecutable="false"><dmn2:startEvent id="StartEvent_1" /></dmn2:process><dmndi:DMNDiagram id="DMNDiagram_1"><dmndi:DMNPlane id="DMNPlane_1" dmnElement="Process_1"><dmndi:DMNShape id="_DMNShape_StartEvent_2" dmnElement="StartEvent_1"><dc:Bounds height="36.0" width="36.0" x="412.0" y="240.0" /></dmndi:dmnShape></dmndi:DMNPlane></dmndi:DMNDiagram></dmn2:definitions>';
+          '<?xml version="1.0" encoding="UTF-8"?><dmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dmn2="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns:dmndi="http://www.omg.org/spec/DMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/DMN/20100524/MODEL DMN20.xsd" id="sample-diagram" targetNamespace="http://dmn.io/schema/dmn"><dmn2:process id="Process_1" isExecutable="false"><dmn2:startEvent id="StartEvent_1" /></dmn2:process><dmndi:DMNDiagram id="DMNDiagram_1"><dmndi:DMNPlane id="DMNPlane_1" dmnElement="Process_1"><dmndi:DMNShape id="_DMNShape_StartEvent_2" dmnElement="StartEvent_1"><dc:Bounds height="36.0" width="36.0" x="412.0" y="240.0" /></dmndi:dmnShape></dmndi:DMNPlane></dmndi:DMNDiagram></dmn2:definitions>';
         void openDiagram(sampleDiagram);
       },
 
