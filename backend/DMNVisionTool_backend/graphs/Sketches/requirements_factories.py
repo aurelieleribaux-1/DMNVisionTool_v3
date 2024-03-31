@@ -35,9 +35,9 @@ class GenericRequirementFactory(RequirementFactory):
 
 # TO DO: Change keypoint categories numbers according to model
 KEYPOINT_CATEGORIES = {
-    1: "InformationRequirement",
+    1: "KnowledgeRequirement",
     2: "AuthorityRequirement",
-    3: "KnowledgeRequirement",
+    3: "InformationRequirement",
     4: "Association"
 }
 

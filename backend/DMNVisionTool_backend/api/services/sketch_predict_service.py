@@ -7,16 +7,17 @@ from numpy import ndarray
 import os
 import cv2
 
-from DMNVisionTool_backend.graphs.elements_factories import CATEGORIES
-from DMNVisionTool_backend.graphs.graph_predictions import (
+from DMNVisionTool_backend.graphs.Sketches.elements_factories import CATEGORIES
+from DMNVisionTool_backend.graphs.Sketches.graph_predictions import (
     ObjectPrediction,
     KeyPointPrediction,
 )
 
-from DMNVisionTool_backend.commons.utils import here
+from DMNVisionTool_backend.commons.Sketch_utils import here
 
-class ObjectPredictor:
-    """Class used to represent a Detectron2 predictor trained with a faster_rcnn"""
+  
+class SketchObjectPredictor:
+    """Class used to represent a Detectron2 predictor trained with a faster_rcnn (Handwritten versions)"""
 
     def __init__(self):
         cfg = get_cfg()
@@ -24,10 +25,10 @@ class ObjectPredictor:
             model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model") # Make sure to use right directory
-        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "DRD_model_final.pth")  # path to the trained model
+        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "SketchDRD_model_final.pth")  # path to the trained model
         #cfg.MODEL.WEIGHTS = here("../../detectron_model/final_model.pth") # Make sure to use the right name
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
-        cfg.MODEL.ROI_HEADS.NUM_CLASSES = 26
+        cfg.MODEL.ROI_HEADS.NUM_CLASSES = 5
         cfg.MODEL.DEVICE = "cpu"
         self._predictor = DefaultPredictor(cfg)
 
@@ -58,7 +59,7 @@ class ObjectPredictor:
         return outs
 
 
-class KeyPointPredictor:
+class SketchKeyPointPredictor:
     """Class used to represent a Detectron2 predictor trained with a keypoint_faster_rcnn"""
 
     def __init__(self):
@@ -67,7 +68,7 @@ class KeyPointPredictor:
             model_zoo.get_config_file("COCO-Keypoints/keypoint_rcnn_R_50_FPN_1x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model")
-        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "kp_DRD_model_final.pth")
+        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "Sketchkp_DRD_model_final.pth")
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.8
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4
         cfg.MODEL.RETINANET.NUM_CLASSES = 4
@@ -104,7 +105,7 @@ class KeyPointPredictor:
 #keypoint_predictor = KeyPointPredictor()
 
 
-def PredictObject(image: ndarray) -> List[ObjectPrediction]:
+def SketchPredictObject(image: ndarray) -> List[ObjectPrediction]:
     """Pass an image to a trained object detection neural network model that returns the detected instances with the
     associated labels
 
@@ -116,9 +117,9 @@ def PredictObject(image: ndarray) -> List[ObjectPrediction]:
     Return
     ------
     List[ObjectPrediction]
-        The list of ObjectPrediction
+        The list of SketchObjectPrediction
     """
-    object_predictor = ObjectPredictor()
+    object_predictor = SketchObjectPredictor()
 
     predictions = object_predictor.predict(image)
 
@@ -126,11 +127,13 @@ def PredictObject(image: ndarray) -> List[ObjectPrediction]:
     pred_classes = predictions.get("instances").get("pred_classes").numpy()
 
     predictions = list(zip(pred_boxes, pred_classes))
+    print('okpredictelemets')
 
     return [ObjectPrediction(label, *box) for box, label in predictions]
 
 
-def PredictKeypoint(image: ndarray) -> List[KeyPointPrediction]:
+
+def SketchPredictKeypoint(image: ndarray) -> List[KeyPointPrediction]:
     """Pass an image to a trained keypoint detection neural network model that returns the associated predictions
 
     Parameters
@@ -143,7 +146,7 @@ def PredictKeypoint(image: ndarray) -> List[KeyPointPrediction]:
     List[KeyPointPrediction]
         The list of KeyPointPrediction
     """
-    keypoint_predictor = KeyPointPredictor()
+    keypoint_predictor = SketchKeyPointPredictor()
     
     predictions = keypoint_predictor.predict(image)
 
@@ -152,13 +155,14 @@ def PredictKeypoint(image: ndarray) -> List[KeyPointPrediction]:
     keypoint = predictions.get("instances").pred_keypoints.numpy()
 
     predictions = list(zip(classes, boxes, keypoint))
+    print('okpredictkeypoints')
 
     return [
         KeyPointPrediction(clazz, *box, key[0], key[3]) # changed here 5/02
         for clazz, box, key in predictions
     ]
     
-############## Tables ####################
+############## Tables #################### tba 
 from DMNVisionTool_backend.tables.table_factories import CATEGORIES 
 from DMNVisionTool_backend.tables.decisionLogic_factories import TABLE_CATEGORIES
 from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, TablePrediction

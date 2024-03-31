@@ -11,7 +11,7 @@ from DMNVisionTool_backend.graphs.Sketches.graph_elements import (
 )
 
 from DMNVisionTool_backend.graphs.Sketches.graph_predictions import ObjectPrediction
-from DMNVisionTool_backend.commons.utils import generate_id
+from DMNVisionTool_backend.commons.Sketch_utils import generate_id
 
 def calculate_width_height(
     x_start: float, y_start: float, x_end: float, y_end: float
@@ -19,7 +19,7 @@ def calculate_width_height(
     """Returns the width and the height of a box given the initial and the ending x and y coordinates."""
     return abs(x_end - x_start), abs(y_end - y_start)
 
-class DiagramFactory:
+class DiagramFactorySketches:
     """Factory class used to create a Diagram given a set of elements
     """
     @staticmethod
@@ -76,7 +76,7 @@ CATEGORIES = {
     2: "BusinessKnowledge",
     3: "Decision",
     4: "InputData",
-    5: "TextAnnotation",
+    5: "TextAnnotation"
     }
 
 #FACTORIES = {
@@ -88,10 +88,10 @@ CATEGORIES = {
 #    }
 
 FACTORIES = {
+    "KnowledgeSource": GenericElementFactory(KnowledgeSource), 
+    "BusinessKnowledge": GenericElementFactory(BusinessKnowledge),
     "Decision": GenericElementFactory(Decision),
     "InputData": GenericElementFactory(InputData),
-    "BusinessKnowledge": GenericElementFactory(BusinessKnowledge),
-    "KnowledgeSource": GenericElementFactory(KnowledgeSource), 
     "TextAnnotation": GenericElementFactory(TextAnnotation)
     }
 

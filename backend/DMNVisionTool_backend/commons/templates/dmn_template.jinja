@@ -10,7 +10,7 @@
              modeler:executionPlatformVersion="8.2.0">
 
   {% for element in diagram.elements_list %}
-    {% if element.prediction.predicted_label == 8 %}
+    {% if element.prediction.predicted_label == 8 or element.prediction.predicted_label == 3 %}
       {% if element.requirements %}
         <decision id="{{ element.id }}" name="{{ element.get_name() }}">
             {% for requirements in element.requirements %}

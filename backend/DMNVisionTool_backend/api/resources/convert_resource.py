@@ -5,10 +5,13 @@ from starlette.responses import PlainTextResponse
 from DMNVisionTool_backend.tables.table_factories import TableElementFactory 
 from DMNVisionTool_backend.api.services import (
     predict_service as ps,
+    sketch_predict_service as sps,
     ocr_service as os,
     convert_service as cs,
+    sketch_convert_service as scs,
 )
 from DMNVisionTool_backend.graphs.elements_factories import DiagramFactory
+from DMNVisionTool_backend.graphs.Sketches.elements_factories import DiagramFactorySketches
 from DMNVisionTool_backend.commons.utils import sample_dmn, here
 from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
 from DMNVisionTool_backend.tables.dmn_decisionLogic import Table
@@ -47,17 +50,17 @@ async def convert_images(request:Request):
          start=1):
       if sketch_field in form and form[sketch_field] == 'true': 
         if graph_field in form and form[graph_field] == 'true':
-            print(f"Converting image {idx} as a graph...")
+            print(f"Converting image {idx} as a graph sketch...")
             #drd_elements = None
             if elements_field in form and form[elements_field] == 'true':
-                obj_predictions = ps.SketchPredictObject(predict_img)
-                drd_elements = cs.convert_object_predictions(obj_predictions)
+                obj_predictions = sps.SketchPredictObject(predict_img)
+                drd_elements = scs.convert_object_predictions(obj_predictions)
 
                 if flow_field in form and form[flow_field] == 'true':
-                    kp_predictions = ps.SketchPredictKeypoint(ocr_img)
-                    requirements = cs.convert_keypoint_prediction(kp_predictions)
-                    cs.connect_requirements(requirements, drd_elements)
-                    cs.reference_requirements(requirements, drd_elements)
+                    kp_predictions = sps.SketchPredictKeypoint(ocr_img)
+                    requirements = scs.convert_keypoint_prediction(kp_predictions)
+                    scs.connect_requirements(requirements, drd_elements)
+                    scs.reference_requirements(requirements, drd_elements)
                    
                   
                 
@@ -111,7 +114,13 @@ async def convert_images(request:Request):
         #            table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)           #can stay the same i think    
         #            table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules) #can stay the same i think 
         #            tables.append(table_connect) 
-                
+                     
+                     #elements_connect = scs.connect_graph2tables(drd_elements, tables)
+    
+                     #dmn_diagram = DiagramFactorySketches.create_element(elements_connect) 
+                     #rendered_dmn_model = scs.render_diagram(dmn_diagram)
+                     #print("XML representation of the DMN model:")
+                     #print(rendered_dmn_model)
       else: 
         if graph_field in form and form[graph_field] == 'true':
             print(f"Converting image {idx} as a graph...")
@@ -176,24 +185,12 @@ async def convert_images(request:Request):
                     table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
                     tables.append(table_connect) 
 
-    elements_connect = cs.connect_graph2tables(drd_elements, tables)
-    #if drd_elements_left is not None and tables_left is not None:
-    #    elements_connect = cs.connect_graph2tables(drd_elements_left, tables_left)
-    #    print('ok1')
-    #elif drd_elements_left is not None and tables_right is not None:
-    #    elements_connect = cs.connect_graph2tables(drd_elements_left, tables_right)
-    #   print('ok2')
-    #elif drd_elements_right is not None and tables_left is not None:
-    #    elements_connect = cs.connect_graph2tables(drd_elements_right, tables_left)
-    #    print('ok3')
-    #elif drd_elements_right is not None and tables_right is not None:
-    #    elements_connect = cs.connect_graph2tables(drd_elements_right, tables_right)
-    #    print('ok4')
-
-        
-    dmn_diagram = DiagramFactory.create_element(elements_connect) 
-    rendered_dmn_model = cs.render_diagram(dmn_diagram)
-    print("XML representation of the DMN model:")
-    print(rendered_dmn_model)
+                    elements_connect = cs.connect_graph2tables(drd_elements, tables)
+    
+                    dmn_diagram = DiagramFactory.create_element(elements_connect) 
+                    rendered_dmn_model = cs.render_diagram(dmn_diagram)
+                    print("XML representation of the DMN model:")
+                    print(rendered_dmn_model)
+    
     
     return PlainTextResponse(content=rendered_dmn_model, status_code=200)

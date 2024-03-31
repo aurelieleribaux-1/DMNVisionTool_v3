@@ -1,3 +1,5 @@
+from jinja2 import Environment, BaseLoader
+
 from DMNVisionTool_backend.graphs.Sketches.graph_predictions import KeyPointPrediction
 
 class Requirement:
