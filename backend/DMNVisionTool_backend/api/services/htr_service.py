@@ -22,16 +22,19 @@ def get_text_from_element(image_path: str, elements: List[Element]):
     List[Element]
         The list of updated Element with their text
     """
-    image = Image.open(image_path)
+    model = VisionEncoderDecoderModel.from_pretrained("microsoft/trocr-base-handwritten")
+    
+    image = Image.open(image_path).convert("RGB")
     
     for element in elements:
         bbox = element.prediction.get_box_coordinates()
         cropped_image = image.crop(bbox)
     
         processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
+        #model = VisionEncoderDecoderModel.from_pretrained('microsoft/trocr-base-handwritten').to(device)
         pixel_values = processor(cropped_image, return_tensors="pt").pixel_values
         generated_ids = model.generate(pixel_values)
         generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]        
         
         element.name.append(generated_text)
-        return elements
+    return elements
