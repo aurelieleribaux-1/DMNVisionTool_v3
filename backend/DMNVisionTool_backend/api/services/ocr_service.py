@@ -128,4 +128,3 @@ def link_text_table(texts: List[TableText], elements: List[TableElement]):
         nearest = get_nearest_element(text.center, elements)
         nearest.label.append(text)
     return elements
-
