@@ -1,6 +1,6 @@
-# BPMN Redrawer
+# DMN Vision Tool
 
-This folder contains the frontend code for BPMN Redrawer, developed at University of Camerino.
+This folder contains the frontend code for DMN Vision Tool
 
 ## Prerequisites
 **[Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable)**/**[NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)** and the package **[@quasar/cli](https://www.npmjs.com/package/@quasar/cli/v/1.3.2)** are the only prerequisites to develop/launch the frontend.

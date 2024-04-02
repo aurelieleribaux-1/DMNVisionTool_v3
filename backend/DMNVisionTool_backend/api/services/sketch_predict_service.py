@@ -162,7 +162,7 @@ def SketchPredictKeypoint(image: ndarray) -> List[KeyPointPrediction]:
         for clazz, box, key in predictions
     ]
     
-############## Tables #################### tba 
+############## Tables #################### 
 from DMNVisionTool_backend.tables.table_factories import CATEGORIES 
 from DMNVisionTool_backend.tables.decisionLogic_factories import TABLE_CATEGORIES
 from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, TablePrediction
@@ -177,7 +177,7 @@ class TablePredictor:
             model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model") # Make sure to use right directory
-        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "Table_model_final.pth")  # path to the trained model
+        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "SketchTable_model_final.pth")  # path to the trained model
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 26
         cfg.MODEL.DEVICE = "cpu"
@@ -210,7 +210,6 @@ class TablePredictor:
 
         return outs
 
-# My assumption: one predictor for the whole thing? Or two different predictors -> To check
 class TableElementPredictor:
     """Class used to represent a Detectron2 predictor trained with a faster_rcnn"""
 
@@ -220,7 +219,7 @@ class TableElementPredictor:
             model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model") # Make sure to use right directory
-        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "TableStructure_model_final.pth")  # path to the trained model
+        cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "SketchTableElement_model_final.pth")  # path to the trained model
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 26
         cfg.MODEL.DEVICE = "cpu"
