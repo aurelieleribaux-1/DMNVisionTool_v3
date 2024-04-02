@@ -55,38 +55,43 @@ async def convert_images(request:Request):
     if ocr_img_left is None or predict_img_left is None or ocr_img_right is None or predict_img_right is None:
         return PlainTextResponse(content=sample_dmn, status_code=200)
     
-    # Classification !! I assume only 4 fields here, to discuss if we want to add ocr/link/element etc
-    for idx, (ocr_img, predict_img, pdf_field, sketch_field, graph_field, table_field) in enumerate(
-        [(ocr_img_left, predict_img_left, 'pdfLeft','sketchLeft', 'graphLeft', 'tableLeft'), 
-         (ocr_img_right, predict_img_right, 'pdfRight', 'graphRight', 'graphRight', 'tableRight')], start=1):
+    # Classification
+    for idx, (ocr_img, predict_img, sketch_field, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
+        [(ocr_img_left, predict_img_left, 'sketchLeft', 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
+         (ocr_img_right, predict_img_right, 'sketchRight', 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
+         start=1):
         
         # PDF + GRAPH
-        if pdf_field in form and form[pdf_field] == 'true' and graph_field in form and form[graph_field]== 'true':
+        if sketch_field not in form and form[sketch_field] == 'false' and graph_field in form and form[graph_field]== 'true':
             print(f"Converting image {idx} as a PDF GRAPH...")
             
-            obj_predictions = ps.PredictObject(predict_img)
-            drd_elements = cs.convert_object_predictions(obj_predictions)
+            if elements_field in form and form[elements_field] == 'true':
+                obj_predictions = ps.PredictObject(predict_img)
+                drd_elements = cs.convert_object_predictions(obj_predictions)
 
-            kp_predictions = ps.PredictKeypoint(ocr_img)
-            requirements = cs.convert_keypoint_prediction(kp_predictions)
-            cs.connect_requirements(requirements, drd_elements)
-            cs.reference_requirements(requirements, drd_elements)
-            #drd_elements.extend(requirements) !! What's this line? 
+            if flow_field in form and form[flow_field] == 'true':
+                kp_predictions = ps.PredictKeypoint(ocr_img)
+                requirements = cs.convert_keypoint_prediction(kp_predictions)
+                cs.connect_requirements(requirements, drd_elements)
+                cs.reference_requirements(requirements, drd_elements)
             
-            text = os.get_text_from_img(ocr_img)
-            os.link_text(text, drd_elements)
+            if ocr_field in form and form[ocr_field] == 'true':
+                text = os.get_text_from_img(ocr_img)
+                os.link_text(text, drd_elements)
         
         # PDF + TABLE
-        elif pdf_field in form and form[pdf_field] == 'true' and table_field in form and form[table_field]== 'true':
+        elif sketch_field not in form and form[sketch_field] == 'false' and decisionLogic_field in form and form[decisionLogic_field]== 'true':
             print(f"Converting image {idx} as a PDF TABLE...")
             
-            table_predictions = ps.PredictTable(predict_img)
-            converted_tables = cs.convert_table_predictions(table_predictions)
-            ts_predictions = ps.PredictTableElement(predict_img)
-            table_elements = cs.convert_tableElement_predictions(ts_predictions)
+            if elements_field in form and form[elements_field] == 'true':
+                table_predictions = ps.PredictTable(predict_img)
+                converted_tables = cs.convert_table_predictions(table_predictions)
+                ts_predictions = ps.PredictTableElement(predict_img)
+                table_elements = cs.convert_tableElement_predictions(ts_predictions)
 
-            text = os.get_text_from_table_img(ocr_img)
-            os.link_text_table(text, table_elements) 
+            if ocr_field in form and form[ocr_field] == 'true':
+                text = os.get_text_from_table_img(ocr_img)
+                os.link_text_table(text, table_elements) 
 
             tables = []
             table = Table 
@@ -124,26 +129,32 @@ async def convert_images(request:Request):
         # SKETCH + GRAPH
         elif sketch_field in form and form[sketch_field] == 'true' and graph_field in form and form[graph_field]== 'true':
             print(f"Converting image {idx} as a SKETCH GRAPH...")
-            obj_predictions = sps.SketchPredictObject(predict_img)
-            drd_elements = scs.convert_object_predictions(obj_predictions)
             
-            kp_predictions = sps.SketchPredictKeypoint(predict_img)
-            requirements = scs.convert_keypoint_prediction(kp_predictions)
-            scs.connect_requirements(requirements, drd_elements) 
-            scs.reference_requirements(requirements, drd_elements)
+            if elements_field in form and form[elements_field] == 'true':
+                obj_predictions = sps.SketchPredictObject(predict_img)
+                drd_elements = scs.convert_object_predictions(obj_predictions)
             
-            htr.get_text_from_element(drd_elements, ocr_img)
+            if flow_field in form and form[flow_field] == 'true':
+                kp_predictions = sps.SketchPredictKeypoint(predict_img)
+                requirements = scs.convert_keypoint_prediction(kp_predictions)
+                scs.connect_requirements(requirements, drd_elements) 
+                scs.reference_requirements(requirements, drd_elements)
+            
+            if ocr_field in form and form[ocr_field] == 'true':
+                htr.get_text_from_element(drd_elements, ocr_img)
         
         # SKETCH + TABLE
-        elif sketch_field in form and form[sketch_field] == 'true' and table_field in form and form[table_field]== 'true':
+        elif sketch_field in form and form[sketch_field] == 'true' and decisionLogic_field in form and form[decisionLogic_field]== 'true':
             print(f"Converting image {idx} as a SKETCH TABLE...")
             
-            table_prediction = sps.PredictTable(predict_img) 
-            converted_tables = cs.convert_table_predictions(table_prediction) 
-            table_element_predictions = sps.PredictTableElement(predict_img)
-            table_elements = cs.convert_tableElement_predictions(table_element_predictions)
+            if elements_field in form and form[elements_field] == 'true':
+                table_prediction = sps.PredictTable(predict_img) 
+                converted_tables = cs.convert_table_predictions(table_prediction) 
+                table_element_predictions = sps.PredictTableElement(predict_img)
+                table_elements = cs.convert_tableElement_predictions(table_element_predictions)
             
-            htr.get_text_from_element(table_elements, ocr_img)
+            if ocr_field in form and form[ocr_field] == 'true':
+                htr.get_text_from_element(table_elements, ocr_img)
             
             # to do: Move this somewhere else to have a cleaner code here??
             tables = []
