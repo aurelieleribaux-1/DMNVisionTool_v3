@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh LpR fFf">
-    <q-header elevated class="bg-purple-8 text-white">
+    <q-header elevated class="bg-purple-8 text-black">
       <q-toolbar>
         <q-toolbar-title> DMN Computer Vision Tool </q-toolbar-title>
         <q-space></q-space>
