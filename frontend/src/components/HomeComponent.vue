@@ -563,46 +563,43 @@ export default defineComponent({
 .container {
   display: flex;
   flex-direction: column;
+  align-items: flex-start; /* Align content to the left */
+  width: 100%; /* Set container width to 100% */
+  max-width: 1000px; /* Limit maximum width */
+  margin: auto; /* Center the container horizontally */
 }
 
 .header {
   background-color: white; /* White header background */
   color: black; /* Black text */
-  padding: 0px 20px; /* Adjust top and bottom padding */
-  font-size: 100px; /* Increase font size */
+  padding: 20px; /* Adjust padding */
+  font-size: 36px; /* Adjust font size */
 }
 
 .header-controls {
-  margin-left: auto; /* Right-align header controls */
+  margin-left: auto; /* Align header controls to the right */
 }
 
 .main-content {
   flex: 1; /* Fill remaining vertical space */
-  padding: 0 10px 20px; /* Adjust left and right padding */
-  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 0 20px; /* Adjust padding */
+  overflow-y: auto; /* Enable vertical scrolling if needed */
 }
 
-/* Style for individual sections */
 .upload-container {
   display: flex;
   justify-content: space-around;
-  width: 50%;
+  width: 100%; /* Set width to 100% */
 }
 
-/*style of the end button*/
 .convert-button {
-  font-size: 18x; /* Increase font size */
-  padding: 16px 32px; /* Increase padding */
-}
-
-/* Ensure checkboxes are clickable */
-.q-checkbox input[type="checkbox"] {
-  pointer-events: auto;
+  font-size: 18px; /* Adjust font size */
+  padding: 12px 24px; /* Adjust padding */
 }
 
 .upload-section {
   flex: 1;
-  margin: 0px 40px; /* Adjust this margin for spacing between sections */
+  margin: 20px 0; /* Adjust margin for spacing between sections */
 }
 
 .image-display {

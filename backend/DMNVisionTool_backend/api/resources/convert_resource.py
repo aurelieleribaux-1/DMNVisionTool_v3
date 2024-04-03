@@ -16,7 +16,7 @@ from DMNVisionTool_backend.commons.utils import sample_dmn, here
 from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
 from DMNVisionTool_backend.tables.dmn_decisionLogic import Table
 from DMNVisionTool_backend.graphs.graph_elements import Decision
-from DMNVisionTool_backend.api.services import htr_service as htr 
+#from DMNVisionTool_backend.api.services import htr_service as htr 
 
 async def convert_images(request:Request):
     """Post method to manage the conversion of images to their corresponding
