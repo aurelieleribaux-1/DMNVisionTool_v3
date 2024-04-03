@@ -63,7 +63,7 @@
               :label="$t('home.show_elements')"
             ></q-checkbox>
             <q-checkbox
-              :disable="isTableLeft" 
+              :disable="isTableLeft"
               class="q-pr-md"
               v-model="flowsEnabledLeft"
               :label="$t('home.show_flows')"
@@ -75,13 +75,13 @@
               label="Enable OCR"
             ></q-checkbox>
             <q-checkbox
-              :disable="isTableLeft" 
+              :disable="isTableLeft"
               class="q-pr-md"
               v-model="isGraphLeft"
               label="Graph"
             ></q-checkbox>
             <q-checkbox
-              :disable="isGraphLeft" 
+              :disable="isGraphLeft"
               class="q-pr-md"
               v-model="isTableLeft"
               label="Table"
@@ -165,7 +165,7 @@
               :label="$t('home.show_elements')"
             ></q-checkbox>
             <q-checkbox
-              :disable="isTableRight" 
+              :disable="isTableRight"
               class="q-pr-md"
               v-model="flowsEnabledRight"
               :label="$t('home.show_flows')"
@@ -177,13 +177,13 @@
               label="Enable OCR"
             ></q-checkbox>
             <q-checkbox
-              :disable="isTableRight" 
+              :disable="isTableRight"
               class="q-pr-md"
               v-model="isGraphRight"
               label="Graph"
             ></q-checkbox>
             <q-checkbox
-              :disable="isGraphRight" 
+              :disable="isGraphRight"
               class="q-pr-md"
               v-model="isTableRight"
               label="Table"
@@ -236,11 +236,11 @@
         <div class="q-pa-sm" v-for="i in 3" :key="i">
           <q-img
             :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
-            sizes="(max-width: 400px) 400px, (max-height: 400px) 400px"
+            sizes="(max-width: 300px) 300px, (max-height: 300px) 300px"
             fit="contain"
             position="50% 50%"
-            width="400px"
-            height="400px"
+            width="300px"
+            height="300px"
             :src="require(`../assets/example${i}.png`)"
             @click="loadExampleImage(i)"
           ></q-img>
@@ -323,7 +323,7 @@ export default defineComponent({
          file.name.endsWith('.bmp')
       ) {
         if (section === 'left') {
-          if (fileLeft.value !== null) { 
+          if (fileLeft.value !== null) {
             await loadImageLeft(fileLeft.value);
           }
         } else if (section === 'right') {
@@ -334,7 +334,7 @@ export default defineComponent({
       }
     };
 
-    
+
     const loadImageLeft = async (fileToLoad: File) => {
       await blobToDataURL(fileToLoad)
        .then((result) => {
@@ -429,17 +429,17 @@ export default defineComponent({
     const convertImages = async () => {
        const formDataLeft = prepareFormDataLeft();
        const formDataRight = prepareFormDataRight();
-    
+
        const formData = new FormData();
        const [leftData, rightData] = await Promise.all([formDataLeft, formDataRight]);
-    
+
        for (const [key, value] of leftData.entries()) {
            formData.append(key, value);  // Appending data for left image
        }
        for (const [key, value] of rightData.entries()) {
            formData.append(key, value);  // Appending data for right image
        }
-    
+
        const result = await uploadAndConvert(formData);
 
        console.log("Result:", result);
@@ -517,7 +517,7 @@ export default defineComponent({
     };
 
 
-    
+
     return {
       api,
       allowDrop,
@@ -578,21 +578,20 @@ export default defineComponent({
 
 .main-content {
   flex: 1; /* Fill remaining vertical space */
-  padding: 0 40px 40px; /* Adjust left and right padding */
-  overflow-y: auto; /* Enable vertical scrolling if needed */
+  padding: 0 10px 20px; /* Adjust left and right padding */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
-
 
 /* Style for individual sections */
 .upload-container {
   display: flex;
   justify-content: space-around;
-  width: 100%;
+  width: 50%;
 }
 
 /*style of the end button*/
 .convert-button {
-  font-size: 18px; /* Increase font size */
+  font-size: 18x; /* Increase font size */
   padding: 16px 32px; /* Increase padding */
 }
 
