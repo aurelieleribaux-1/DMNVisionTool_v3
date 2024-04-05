@@ -157,18 +157,15 @@ def reference_requirements(requirements: List[Requirement], elements: List[Eleme
         
     return requirements
 
-# Text Annotations are a subclass of Element
-# Association are not a subclass of Requirement
-# Consider changing this for more clarity in the code
-def connect_textAnnotations(associations: List[Association], elements:List[Element]):
+def connect_textAnnotations(requirements: List[Requirement], elements:List[Element]):
     """Method that connects each text Annotation to the Element it is associated with.
     Adds a Text Annotation element to sourceRef 
     & Element to targetRef
     
     Parameters
     ----------
-    assocations: List[Association]
-        List of detected Associations
+    assocations: List[Requirement]
+        List of detected Requirements
     elements: List[Element]
         List of Element 
 
@@ -177,17 +174,20 @@ def connect_textAnnotations(associations: List[Association], elements:List[Eleme
     assocations: List[Association]
         List of detected Associations
     """
-    for association in associations:
-        tail = association.prediction.tail
-        head = association.prediction.head
+    for requirement in requirements:
+        if requirement is Association:
+            association = requirement
         
-        near_tail = get_nearest_element(tail, elements)
-        near_head = get_nearest_element(head, elements)
+            tail = association.prediction.tail
+            head = association.prediction.head
         
-        association.sourceRef = near_tail
-        association.targetRef = near_head
+            near_tail = get_nearest_element(tail, elements)
+            near_head = get_nearest_element(head, elements)
         
-    return associations
+            association.sourceRef = near_tail
+            association.targetRef = near_head
+        
+    return requirements
 
 # TO DO: I added prints to check the working of the function but we can delete those later
 def convert_table_predictions(predictions: List["TablePrediction"]):

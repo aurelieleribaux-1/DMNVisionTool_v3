@@ -122,7 +122,7 @@ class AuthorityRequirement(Requirement):
 
         return data
     
-class Association:
+class Association(Requirement):
     """Class for the associations (between textAnnotation and DMN Elements) that can be put within a DMN Diagram.
 
     Parameters

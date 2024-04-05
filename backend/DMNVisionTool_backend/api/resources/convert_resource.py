@@ -136,6 +136,7 @@ async def convert_images(request:Request):
                     requirements = cs.convert_keypoint_prediction(kp_predictions)
                     cs.connect_requirements(requirements, drd_elements)
                     cs.reference_requirements(requirements, drd_elements)
+                    cs.connect_textAnnotations(requirements, drd_elements)
                     #drd_elements.extend(requirements)
 
                 if ocr_field in form and form[ocr_field] == 'true':
