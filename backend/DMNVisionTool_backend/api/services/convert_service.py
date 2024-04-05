@@ -107,31 +107,6 @@ def render_diagram(dmn_diagram: Diagram):
 
     return output_text
 
-# TO DO: Only keep 1 render_diagram
-def render_diagram2(dmn_diagram: Diagram):
-    """Method that renders a Diagram class into the final dmn string
-
-    Parameters
-    ----------
-    dmn_diagram: Diagram
-        id + definition id + List of ObjectPrediction
-
-    Returns
-    -------
-    str
-        The string representing the final dmn model
-    """
-
-    template_loader = jinja2.FileSystemLoader(
-        searchpath=here("../../commons/templates/") 
-    )
-    template_env = jinja2.Environment(loader=template_loader)     
-    template_file = "dmntemplate2.jinja"
-    template = template_env.get_template(template_file)
-    output_text = template.render({"diagram": dmn_diagram})
-
-    return output_text
-
 def connect_requirements(requirements: List[Requirement], elements: List[Element]):
     """Method that connects each Requirement to the Element it is pointing to.
     Adds the requirements to the element.requirements list of the Element
