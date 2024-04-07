@@ -145,9 +145,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'BPMN Redrawer',
-        short_name: 'bpmn_redrawer',
-        description: 'Frontend for BPMN Redrawer',
+        name: 'DMN Computer Vision Tool',
+        short_name: 'dmn_computer_vision_tool',
+        description: 'Frontend for DMN computer vision tool',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
