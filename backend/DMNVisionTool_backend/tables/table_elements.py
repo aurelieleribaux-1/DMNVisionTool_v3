@@ -106,14 +106,19 @@ class TableInput(TableElement):
         return " ".join([text.text for text in self.label])
     
     def render_input(self):
-        template = """<input id="{{ input.id }}" label="{{ input.get_label() }}">
-            <inputExpression id="{{ input.id }}_{{ input.id }}" typeRef="string">
+        last_word = self.label[-1].text if self.label else ""
+        self.typeRef.append("string")
+        template = """
+        <input id="{{ input.id }}" label="{{ input.get_label() }}">
+            <inputExpression id="{{ input.id }}_{{ input.id }}" typeRef="{{ input.typeRef[-1] }}">
             </inputExpression>
-        </input>"""
+        </input>
+        """
         rtemplate = self.jinja_environment.from_string(template)
         data = rtemplate.render(input=self)
 
         return data
+
 
         
 class TableOutput(TableElement): 
@@ -144,11 +149,14 @@ class TableOutput(TableElement):
         return " ".join([text.text for text in self.label])
     
     def render_output(self):        
-        template = """<output id="{{ output.id }}" label="{{ output.get_label() }}" typeRef="string"/> """
+        last_word = self.label[-1].text if self.label else ""
+        self.typeRef.append("string")
+        template = """<output id="{{ output.id }}" label="{{ output.get_label() }}" typeRef="{{ output.typeRef[-1] }}"/> """
         rtemplate = self.jinja_environment.from_string(template)
         data = rtemplate.render(output=self)
 
         return data
+
 
 class TableRule(TableElement): 
     """Class for the rule of a Table. 
