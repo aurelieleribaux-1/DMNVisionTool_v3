@@ -31,10 +31,11 @@ def get_text_from_element(image_path: str, elements: List[Element]):
         cropped_image = image.crop(bbox)
     
         processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
-        #model = VisionEncoderDecoderModel.from_pretrained('microsoft/trocr-base-handwritten').to(device)
         pixel_values = processor(cropped_image, return_tensors="pt").pixel_values
-        generated_ids = model.generate(pixel_values)
-        generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]        
         
-        element.name.append(generated_text)
-    return elements
+        # Generate text line by line
+        generated_text_lines = []
+        for line_pixels in pixel_values.split(1, dim=1):
+            generated_ids = model.generate(line_pixels)
+            generated_text_line = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
+            generated_text_lines.appe

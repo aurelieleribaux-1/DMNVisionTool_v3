@@ -107,31 +107,6 @@ def render_diagram(dmn_diagram: Diagram):
 
     return output_text
 
-# TO DO: Only keep 1 render_diagram
-def render_diagram2(dmn_diagram: Diagram):
-    """Method that renders a Diagram class into the final dmn string
-
-    Parameters
-    ----------
-    dmn_diagram: Diagram
-        id + definition id + List of ObjectPrediction
-
-    Returns
-    -------
-    str
-        The string representing the final dmn model
-    """
-
-    template_loader = jinja2.FileSystemLoader(
-        searchpath=here("../../commons/templates/") 
-    )
-    template_env = jinja2.Environment(loader=template_loader)     
-    template_file = "dmntemplate2.jinja"
-    template = template_env.get_template(template_file)
-    output_text = template.render({"diagram": dmn_diagram})
-
-    return output_text
-
 def connect_requirements(requirements: List[Requirement], elements: List[Element]):
     """Method that connects each Requirement to the Element it is pointing to.
     Adds the requirements to the element.requirements list of the Element
@@ -182,18 +157,15 @@ def reference_requirements(requirements: List[Requirement], elements: List[Eleme
         
     return requirements
 
-# Text Annotations are a subclass of Element
-# Association are not a subclass of Requirement
-# Consider changing this for more clarity in the code
-def connect_textAnnotations(associations: List[Association], elements:List[Element]):
+def connect_textAnnotations(requirements: List[Requirement], elements:List[Element]):
     """Method that connects each text Annotation to the Element it is associated with.
     Adds a Text Annotation element to sourceRef 
     & Element to targetRef
     
     Parameters
     ----------
-    assocations: List[Association]
-        List of detected Associations
+    assocations: List[Requirement]
+        List of detected Requirements
     elements: List[Element]
         List of Element 
 
@@ -202,17 +174,20 @@ def connect_textAnnotations(associations: List[Association], elements:List[Eleme
     assocations: List[Association]
         List of detected Associations
     """
-    for association in associations:
-        tail = association.prediction.tail
-        head = association.prediction.head
+    for requirement in requirements:
+        if requirement is Association:
+            association = requirement
         
-        near_tail = get_nearest_element(tail, elements)
-        near_head = get_nearest_element(head, elements)
+            tail = association.prediction.tail
+            head = association.prediction.head
         
-        association.sourceRef = near_tail
-        association.targetRef = near_head
+            near_tail = get_nearest_element(tail, elements)
+            near_head = get_nearest_element(head, elements)
         
-    return associations
+            association.sourceRef = near_tail
+            association.targetRef = near_head
+        
+    return requirements
 
 # TO DO: I added prints to check the working of the function but we can delete those later
 def convert_table_predictions(predictions: List["TablePrediction"]):
