@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@bpmn-io/dmn-migrate": "^0.5.0",
-    "@vue/runtime-dom": "^3.4.21",
     "yarn": "^1.22.22"
   }
 }
