@@ -7,6 +7,7 @@ from DMNVisionTool_backend.api.services import (
     predict_service as ps,
     sketch_predict_service as sps,
     ocr_service as os,
+    htr_service as htr,
     convert_service as cs,
     sketch_convert_service as scs,
 )
