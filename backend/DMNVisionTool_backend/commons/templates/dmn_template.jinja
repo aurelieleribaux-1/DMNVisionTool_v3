@@ -73,11 +73,13 @@
     {{ element.render_element() | indent(4) }}
     {% endif %}
   {% endfor %}
+   <!-- THIS DOES NOT WORK YET , ERROR: NO ELEMENT FOUND THUS I THINK ITS SIMPLY IN A WRONG PLACE NOW 
   {% for requirements in element.requirements %}
     {% if requirements.predicted_label == 4 %}
       {{ requirements.render_association() | indent(4) }}
     {% endif %}
   {% endfor %}
+  -->
 
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
