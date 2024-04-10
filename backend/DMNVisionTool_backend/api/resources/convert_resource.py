@@ -16,7 +16,7 @@ from DMNVisionTool_backend.commons.utils import sample_dmn, here
 from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
 from DMNVisionTool_backend.tables.dmn_decisionLogic import Table
 from DMNVisionTool_backend.graphs.graph_elements import Decision
-#from DMNVisionTool_backend.api.services import htr_service as htr 
+from DMNVisionTool_backend.api.services import htr_service as htr 
 
 async def convert_images(request:Request):
     """Post method to manage the conversion of images to their corresponding
@@ -55,7 +55,7 @@ async def convert_images(request:Request):
     for idx, (ocr_img, predict_img, path, sketch_field, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
         [(ocr_img_left, predict_img_left, path_left, 'sketchLeft', 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
          (ocr_img_right, predict_img_right, path_right, 'sketchRight', 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
-         start=1):
+         start=0):
         
     # SKETCH + GRAPH  
       if sketch_field in form and form[sketch_field] == 'true': 
@@ -82,45 +82,45 @@ async def convert_images(request:Request):
             
             if elements_field  == 'true':
                     table_prediction = sps.PredictTable(predict_img) 
-                    converted_tables = cs.convert_table_predictions(table_prediction) 
+                    converted_tables = scs.convert_table_predictions(table_prediction) 
                     table_element_predictions = sps.PredictTableElement(predict_img)
-                    table_elements = cs.convert_tableElement_predictions(table_element_predictions)
+                    table_elements = scs.convert_tableElement_predictions(table_element_predictions)
             
             if ocr_field == 'true':
                 htr.get_text_from_element(table_elements, ocr_img)
             
-            tables = []
-            table = Table 
-            table_header = TableHeader
-            table_hitPolicy = TableHitPolicy
-            table_inputs = []
-            table_outputs = []
-            table_rules = []
-            input_entries = []
-            output_entries = []  
+                tables = []
+                table = Table 
+                table_header = TableHeader
+                table_hitPolicy = TableHitPolicy
+                table_inputs = []
+                table_outputs = []
+                table_rules = []
+                input_entries = []
+                output_entries = []  
 
-            for converted_table in converted_tables:
-                if isinstance(converted_table, Table):
-                    table = converted_table
-            for table_element in table_elements:
-                if isinstance(table_element, TableHeader):
-                    table_header = table_element
-                elif isinstance(table_element, TableHitPolicy):
-                    table_hitPolicy = table_element
-                elif isinstance(table_element, TableInput):
-                    table_inputs.append(table_element)
-                elif isinstance(table_element, TableOutput):
-                    table_outputs.append(table_element)
-                elif isinstance(table_element, TableRule):
-                    table_rules.append(table_element)
-                elif isinstance(table_element, InputEntry):
-                    input_entries.append(table_element)
-                elif isinstance(table_element, OutputEntry):
-                    output_entries.append(table_element)
+                for converted_table in converted_tables:
+                    if isinstance(converted_table, Table):
+                        table = converted_table
+                for table_element in table_elements:
+                    if isinstance(table_element, TableHeader):
+                        table_header = table_element
+                    elif isinstance(table_element, TableHitPolicy):
+                        table_hitPolicy = table_element
+                    elif isinstance(table_element, TableInput):
+                        table_inputs.append(table_element)
+                    elif isinstance(table_element, TableOutput):
+                        table_outputs.append(table_element)
+                    elif isinstance(table_element, TableRule):
+                        table_rules.append(table_element)
+                    elif isinstance(table_element, InputEntry):
+                        input_entries.append(table_element)
+                    elif isinstance(table_element, OutputEntry):
+                        output_entries.append(table_element)
             
-            table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)
-            table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
-            tables.append(table_connect)
+                table_rules = scs.connect_entries2rule(table_rules, input_entries, output_entries)#
+                table_connect = scs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)#
+                tables.append(table_connect)
             
     
     # GRAPH + PDF
@@ -134,14 +134,21 @@ async def convert_images(request:Request):
                 if flow_field in form and form[flow_field] == 'true':
                     kp_predictions = ps.PredictKeypoint(ocr_img)
                     requirements = cs.convert_keypoint_prediction(kp_predictions)
-                    cs.connect_requirements(requirements, drd_elements)
-                    cs.reference_requirements(requirements, drd_elements)
-                    cs.connect_textAnnotations(requirements, drd_elements)
+                    scs.connect_requirements(requirements, drd_elements)
+                    scs.reference_requirements(requirements, drd_elements)
+                    scs.connect_textAnnotations(requirements, drd_elements)
                     #drd_elements.extend(requirements)
 
                 if ocr_field in form and form[ocr_field] == 'true':
                     text = os.get_text_from_img(ocr_img)
                     os.link_text(text, drd_elements)
+
+                    elements_connect = scs.connect_graph2tables(drd_elements, tables)
+    
+                    dmn_diagram = DiagramFactorySketches.create_element(elements_connect) 
+                    rendered_dmn_model = scs.render_diagram(dmn_diagram)
+                    print("XML representation of the DMN model:")
+                    print(rendered_dmn_model)
 
     # TABLE + PDF
         elif decisionLogic_field in form and form[decisionLogic_field] == 'true':
@@ -189,18 +196,16 @@ async def convert_images(request:Request):
                     table_rules = cs.connect_entries2rule(table_rules, input_entries, output_entries)               
                     table_connect = cs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
                     tables.append(table_connect)
+                    
+                    elements_connect = cs.connect_graph2tables(drd_elements, tables)
     
+                    dmn_diagram = DiagramFactory.create_element(elements_connect) 
+                    rendered_dmn_model = cs.render_diagram(dmn_diagram)
+                    print("XML representation of the DMN model:")
+                    print(rendered_dmn_model)
     # OTHER     
-        else:
-            print('There is something wrong, image is neither a graph neither a table')
-
-
-        elements_connect = cs.connect_graph2tables(drd_elements, tables)
-    
-        dmn_diagram = DiagramFactory.create_element(elements_connect) 
-        rendered_dmn_model = cs.render_diagram(dmn_diagram)
-        print("XML representation of the DMN model:")
-        print(rendered_dmn_model)
+        #else:
+        #    print('There is something wrong, image is neither a graph neither a table')
     
     
     return PlainTextResponse(content=rendered_dmn_model, status_code=200)
