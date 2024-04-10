@@ -216,7 +216,7 @@ class TableElementPredictor:
     def __init__(self):
         cfg = get_cfg()
         cfg.merge_from_file(
-            model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
+            model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
         )
         cfg.OUTPUT_DIR = here("../../detectron_model") # Make sure to use right directory
         cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "SketchTableElement_model_final.pth")  # path to the trained model
