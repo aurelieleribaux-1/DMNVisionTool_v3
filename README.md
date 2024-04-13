@@ -29,13 +29,13 @@ At present the application is able to detect the following DMN elements with a f
 <table>
 <tr><td>
 #TO BE CHANGED
-| BPMN Nodes                            | AP
+| DMN DRD ELEMENTS                         | AP
 |---------------------------------------|-----
-| Start Event                           | 96.923
-| Start Message Event                   | 98.796
-| Start Timer Event                     | 100.0
-| Start Conditional Event               | 99.901
-| Start Signal Event                    | 98.713
+| Deicison                              | 
+| Input Data                            | 
+| Business knowledge model              | 
+| Business knowledge source             | 
+| Text Annotation                       | 
 | Intermediate Catch Message Event      | 94.489
 | Intermediate Catch Timer Event        | 98.811
 | Intermediate Catch Conditional Event  | 99.010
@@ -51,8 +51,8 @@ At present the application is able to detect the following DMN elements with a f
 
 </td><td>
 #TO BE CHANGED
-| BPMN Nodes              | AP
-|-------------------------|-----
+| DMN DECISION TABLES ELEMENTS      | AP
+|------------------------          -|-----
 | End Event               | 96.406
 | End Message Event       | 80.499
 | End Escalation Event    | 99.802
