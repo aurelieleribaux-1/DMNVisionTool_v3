@@ -14,6 +14,7 @@ from DMNVisionTool_backend.graphs.graph_predictions import (
 )
 
 from DMNVisionTool_backend.commons.utils import here
+import numpy as np 
 
 class ObjectPredictor:
     """Class used to represent a Detectron2 predictor trained with a faster_rcnn"""
@@ -44,6 +45,12 @@ class ObjectPredictor:
         dict
             The predictions of the elements
         """
+        # Handle grayscale images
+        if len(img.shape) == 2:
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
+        # Ensure image is in HWC format and float32 data type
+        img = img.astype(np.float32)
 
         outs = self._predictor(img)
 
@@ -89,6 +96,13 @@ class KeyPointPredictor:
         dict
             The predictions of the arrows
         """
+        # Handle grayscale images
+        if len(img.shape) == 2:
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
+        # Ensure image is in HWC format and float32 data type
+        img = img.astype(np.float32)
+
         outs = self._predictor(img)
 
         for kp in outs.get("instances").pred_keypoints.numpy():
@@ -192,6 +206,12 @@ class TablePredictor:
         dict
             The predictions of the tables
         """
+        # Handle grayscale images
+        if len(img.shape) == 2:
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
+        # Ensure image is in HWC format and float32 data type
+        img = img.astype(np.float32)
 
         outs = self._predictor(img)
         print(outs.get("instances").get_fields())
@@ -235,6 +255,12 @@ class TableElementPredictor:
         dict
             The predictions of the tables
         """
+        # Handle grayscale images
+        if len(img.shape) == 2:
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
+        # Ensure image is in HWC format and float32 data type
+        img = img.astype(np.float32)
 
         outs = self._predictor(img)
         print(outs.get("instances").get_fields())

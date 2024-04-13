@@ -66,7 +66,7 @@ async def convert_images(request:Request):
                 drd_elements = scs.convert_object_predictions(obj_predictions)
 
                 if flow_field in form and form[flow_field] == 'true':
-                    kp_predictions = sps.SketchPredictKeypoint(ocr_img)
+                    kp_predictions = sps.SketchPredictKeypoint(predict_img)
                     requirements = scs.convert_keypoint_prediction(kp_predictions)
                     scs.connect_requirements(requirements, drd_elements)
                     scs.reference_requirements(requirements, drd_elements)
