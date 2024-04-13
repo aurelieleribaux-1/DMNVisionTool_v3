@@ -18,12 +18,8 @@
             {% endfor %}
             {% if element.table %}
               {% for table in element.table %}
-                  {% set hit_policy_first_word = table.hitPolicy.get_label().split()[0]|upper %}
-                  {% if hit_policy_first_word in ['UNIQUE', 'FIRST', 'PRIORITY', 'COLLECT'] %}
-                            <decisionTable id="{{ table.id }}" hitPolicy="{{ hit_policy_first_word }}">
-                  {% else %}
-                            <decisionTable id="{{ table.id }}" hitPolicy="UNIQUE">
-                  {% endif %}
+                {% set hit_policy_first_word = table.hitPolicy.get_label().split()[0]|upper %}
+                <decisionTable id="{{ table.id }}" hitPolicy="{{ hit_policy_first_word }}">
                   {% for input in table.inputs %}
                     {{input.render_input()| indent(8)}}
                   {% endfor %}
@@ -51,9 +47,9 @@
       {% else %}
         {{ element.render_element() | indent(4) }}
       {% endif %}
-    {% elif element.prediction.predicted_label == 9 or element.prediction.predicted_label == 4  %}
+    {% elif element.prediction.predicted_label == 9 %}
       {{ element.render_element() | indent(2) }}
-    {% elif element.prediction.predicted_label == 7 or element.prediction.predicted_label == 2 %}
+    {% elif element.prediction.predicted_label == 7 %}
       {% if element.requirements %}
         <businessKnowledgeModel id="{{ element.id }}" name="{{ element.get_name() }}">
           {% for requirements in element.requirements %}
@@ -77,6 +73,13 @@
     {{ element.render_element() | indent(4) }}
     {% endif %}
   {% endfor %}
+   <!-- THIS DOES NOT WORK YET , ERROR: NO ELEMENT FOUND THUS I THINK ITS SIMPLY IN A WRONG PLACE NOW 
+  {% for requirements in element.requirements %}
+    {% if requirements.predicted_label == 4 %}
+      {{ requirements.render_association() | indent(4) }}
+    {% endif %}
+  {% endfor %}
+  -->
 
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
