@@ -1,7 +1,7 @@
 from typing import Tuple
 from typing import Type
 
-from DMNVisionTool_backend.tables.Sketches.table_elements import (
+from DMNVisionTool_backend.tables.table_elements import (
     TableElement,
     TableHeader,
     TableHitPolicy,
@@ -12,7 +12,7 @@ from DMNVisionTool_backend.tables.Sketches.table_elements import (
     OutputEntry,
 )
 
-from DMNVisionTool_backend.tables.Sketches.table_predictions import TableElementPrediction
+from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction
 from DMNVisionTool_backend.commons.Sketch_utils import generate_id
 
 def calculate_width_height(

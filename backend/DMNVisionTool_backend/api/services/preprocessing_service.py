@@ -4,7 +4,7 @@ import cv2
 
 
 def get_ocr_image(image_path: str):
-    """Service that reads and returns an image suitable for an OCR task, given its path
+    """Service that reads and enhances an image for OCR tasks, given its path
 
     Parameters
     ----------
@@ -14,7 +14,7 @@ def get_ocr_image(image_path: str):
     Returns
     -------
     ndarray
-        The image for the Object/KeyPoints detection
+        The enhanced image for OCR
     """
 
     img = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
@@ -29,8 +29,12 @@ def get_ocr_image(image_path: str):
         img = np.ndarray.clip(img, 0, 255)
         img = img[:, :, [0, 1, 2]]
         img = np.ascontiguousarray(img, dtype=np.uint8)
+
+    
     return img
 
+# Example usage:
+# enhanced_image = get_ocr_image("path_to_your_image.jpg")
 
 def get_predict_image(image_path: str):
     """Services that read and returns an image suitable for an Object/KeyPoints detection task, given its path

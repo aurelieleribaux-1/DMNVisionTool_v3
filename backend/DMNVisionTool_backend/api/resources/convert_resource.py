@@ -1,8 +1,7 @@
 import time
-from DMNVisionTool_backend.api.services import preprocessing_service as ss
+from DMNVisionTool_backend.api.services import preprocessing_service as pps
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse
-from DMNVisionTool_backend.tables.table_factories import TableElementFactory 
 from DMNVisionTool_backend.api.services import (
     predict_service as ps,
     sketch_predict_service as sps,
@@ -10,7 +9,7 @@ from DMNVisionTool_backend.api.services import (
     convert_service as cs,
     sketch_convert_service as scs,
 )
-from DMNVisionTool_backend.graphs.elements_factories import DiagramFactory
+from DMNVisionTool_backend.graphs.PDF.elements_factories import DiagramFactory
 from DMNVisionTool_backend.graphs.Sketches.elements_factories import DiagramFactorySketches
 from DMNVisionTool_backend.commons.utils import sample_dmn, here
 from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
@@ -44,8 +43,8 @@ async def convert_images(request:Request):
         disk_file_right.write(await image_right.read())
     
     # Perform preprocessing on both images    
-    ocr_img_left, predict_img_left = ss.get_ocr_and_predict_images(path_left)
-    ocr_img_right, predict_img_right = ss.get_ocr_and_predict_images(path_right)
+    ocr_img_left, predict_img_left = pps.get_ocr_and_predict_images(path_left)
+    ocr_img_right, predict_img_right = pps.get_ocr_and_predict_images(path_right)
 
     # Return predefined error if any of the image is none
     if ocr_img_left is None or predict_img_left is None or ocr_img_right is None or predict_img_right is None:
@@ -74,20 +73,31 @@ async def convert_images(request:Request):
                      
                 if ocr_field in form and form[ocr_field] == 'true':
                     text = os.get_text_from_img(ocr_img)
+                    print('text:',text)
                     os.link_text(text, drd_elements)
         
     # SKETCH + TABLE            
         elif decisionLogic_field in form and form[decisionLogic_field] == 'true':
-            print(f"Converting image {idx} as a table...")
+            print(f"Converting image {idx} as a sketch table...")
             
-            if elements_field  == 'true':
-                    table_prediction = sps.PredictTable(predict_img) 
+            if elements_field  in form and form[elements_field] == 'true':
+                    table_prediction = sps.SketchPredictTable(predict_img) 
                     converted_tables = scs.convert_table_predictions(table_prediction) 
-                    table_element_predictions = sps.PredictTableElement(predict_img)
+                    table_element_predictions = sps.SketchPredictTableElement(predict_img)
                     table_elements = scs.convert_tableElement_predictions(table_element_predictions)
             
-            if ocr_field == 'true':
-                htr.get_text_from_element(table_elements, ocr_img)
+            if ocr_field in form and form[ocr_field] == 'true':
+                # i get this error: File "/app/./DMNVisionTool_backend/api/services/htr_service.py", line 27, in get_text_from_element
+                       # image = Image.open(image_path).convert("RGB")
+                       #File "/usr/local/lib/python3.8/site-packages/PIL/Image.py", line 3283, in open
+                       # fp = io.BytesIO(fp.read())
+                    #AttributeError: 'numpy.ndarray' object has no attribute 'read'
+                #htr.get_text_from_element(ocr_img, table_elements)
+
+                #so for now i will still use this: 
+                text = os.get_text_from_table_img(ocr_img)
+                print('text', text)
+                os.link_text_table(text, table_elements)
             
                 tables = []
                 table = Table 
@@ -122,7 +132,14 @@ async def convert_images(request:Request):
                 table_connect = scs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)#
                 tables.append(table_connect)
             
+                elements_connect = scs.connect_graph2tables(drd_elements, tables)
+     
+                dmn_diagram = DiagramFactorySketches.create_element(elements_connect) 
+                rendered_dmn_model = scs.render_diagram(dmn_diagram)
+                print("XML representation of the DMN model:")
+                print(rendered_dmn_model)
     
+
     # GRAPH + PDF
       else: 
         if graph_field in form and form[graph_field] == 'true':
@@ -143,12 +160,7 @@ async def convert_images(request:Request):
                     text = os.get_text_from_img(ocr_img)
                     os.link_text(text, drd_elements)
 
-                    elements_connect = scs.connect_graph2tables(drd_elements, tables)
-    
-                    dmn_diagram = DiagramFactorySketches.create_element(elements_connect) 
-                    rendered_dmn_model = scs.render_diagram(dmn_diagram)
-                    print("XML representation of the DMN model:")
-                    print(rendered_dmn_model)
+                    
 
     # TABLE + PDF
         elif decisionLogic_field in form and form[decisionLogic_field] == 'true':

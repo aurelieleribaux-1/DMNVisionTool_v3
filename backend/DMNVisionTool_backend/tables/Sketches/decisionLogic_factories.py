@@ -1,6 +1,6 @@
 from typing import Tuple, List, Union, Set, Type
-from DMNVisionTool_backend.tables.Sketches.dmn_decisionLogic import Table, Decision_Logic
-from DMNVisionTool_backend.tables.Sketches.table_predictions import TablePrediction
+from DMNVisionTool_backend.tables.dmn_decisionLogic import Table, Decision_Logic
+from DMNVisionTool_backend.tables.table_predictions import TablePrediction
 from DMNVisionTool_backend.commons.Sketch_utils import generate_id
 
 class Factory:

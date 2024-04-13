@@ -8,7 +8,7 @@ import os
 import cv2
 
 from DMNVisionTool_backend.graphs.Sketches.elements_factories import CATEGORIES
-from DMNVisionTool_backend.graphs.Sketches.graph_predictions import (
+from DMNVisionTool_backend.graphs.graph_predictions import (
     ObjectPrediction,
     KeyPointPrediction,
 )
@@ -69,10 +69,10 @@ class SketchKeyPointPredictor:
         )
         cfg.OUTPUT_DIR = here("../../detectron_model")
         cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "Sketchkp_DRD_model_final.pth")
-        cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.8
+        cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.4
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4
         cfg.MODEL.RETINANET.NUM_CLASSES = 4
-        cfg.MODEL.ROI_KEYPOINT_HEAD.NUM_KEYPOINTS = 4
+        cfg.MODEL.ROI_KEYPOINT_HEAD.NUM_KEYPOINTS = 6
         cfg.MODEL.DEVICE = "cpu"
         self._predictor = DefaultPredictor(cfg)
         
@@ -158,17 +158,16 @@ def SketchPredictKeypoint(image: ndarray) -> List[KeyPointPrediction]:
     print('okpredictkeypoints')
 
     return [
-        KeyPointPrediction(clazz, *box, key[0], key[3]) # changed here 5/02
-        for clazz, box, key in predictions
+        KeyPointPrediction(clazz, *box, key[0], key[5]) for clazz, box, key in predictions
     ]
     
 ############## Tables #################### 
-from DMNVisionTool_backend.tables.table_factories import CATEGORIES 
-from DMNVisionTool_backend.tables.decisionLogic_factories import TABLE_CATEGORIES
+from DMNVisionTool_backend.tables.Sketches.table_factories import CATEGORIES 
+from DMNVisionTool_backend.tables.Sketches.decisionLogic_factories import TABLE_CATEGORIES
 from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, TablePrediction
-from DMNVisionTool_backend.commons.utils import here 
+from DMNVisionTool_backend.commons.Sketch_utils import here 
 
-class TablePredictor:
+class SketchTablePredictor:
     """Class used to represent a Detectron2 predictor trained with a faster_rcnn"""
 
     def __init__(self):
@@ -210,7 +209,7 @@ class TablePredictor:
 
         return outs
 
-class TableElementPredictor:
+class SketchTableElementPredictor:
     """Class used to represent a Detectron2 predictor trained with a faster_rcnn"""
 
     def __init__(self):
@@ -252,7 +251,7 @@ class TableElementPredictor:
 
         return outs
 
-def PredictTableElement(image: ndarray) -> List[TableElementPrediction]:
+def SketchPredictTableElement(image: ndarray) -> List[TableElementPrediction]:
     """Pass an image to a trained object detection neural network model that returns the detected instances with the
     associated labels
 
@@ -266,7 +265,7 @@ def PredictTableElement(image: ndarray) -> List[TableElementPrediction]:
     List[TableElementPrediction]
         The list of table's elements predictions
     """
-    table_predictor = TableElementPredictor()
+    table_predictor = SketchTableElementPredictor()
 
     predictions = table_predictor.predict(image)
 
@@ -277,7 +276,7 @@ def PredictTableElement(image: ndarray) -> List[TableElementPrediction]:
 
     return [TableElementPrediction(label, *box) for box, label in predictions]
 
-def PredictTable(image: ndarray) -> List[TablePrediction]:
+def SketchPredictTable(image: ndarray) -> List[TablePrediction]:
     """Pass an image to a trained object detection neural network model that returns the detected instances with the
     associated labels
 
@@ -291,7 +290,7 @@ def PredictTable(image: ndarray) -> List[TablePrediction]:
     List[TablePrediction]
         The list of ObjectPrediction
     """
-    table_predictor = TablePredictor()
+    table_predictor = SketchTablePredictor()
 
     predictions = table_predictor.predict(image)
 

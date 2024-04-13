@@ -5,7 +5,7 @@ import random
 import string
 from typing import List
 
-from DMNVisionTool_backend.graphs.Sketches.graph_elements import Element 
+from DMNVisionTool_backend.graphs.graph_elements import Element 
 from DMNVisionTool_backend.tables.table_elements import TableElement, TableRule #tba 
 
 def generate_id(prefix: str) -> str:

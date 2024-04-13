@@ -7,7 +7,7 @@ from numpy import ndarray
 import os
 import cv2
 
-from DMNVisionTool_backend.graphs.elements_factories import CATEGORIES
+from DMNVisionTool_backend.graphs.PDF.elements_factories import CATEGORIES
 from DMNVisionTool_backend.graphs.graph_predictions import (
     ObjectPrediction,
     KeyPointPrediction,
@@ -159,8 +159,8 @@ def PredictKeypoint(image: ndarray) -> List[KeyPointPrediction]:
     ]
     
 ############## Tables ####################
-from DMNVisionTool_backend.tables.table_factories import CATEGORIES 
-from DMNVisionTool_backend.tables.decisionLogic_factories import TABLE_CATEGORIES
+from DMNVisionTool_backend.tables.PDF.table_factories import CATEGORIES 
+from DMNVisionTool_backend.tables.PDF.decisionLogic_factories import TABLE_CATEGORIES
 from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, TablePrediction
 from DMNVisionTool_backend.commons.utils import here 
 

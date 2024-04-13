@@ -1,5 +1,5 @@
-from DMNVisionTool_backend.graphs.Sketches.graph_requirements import Requirement, Association, InformationRequirement, KnowledgeRequirement, AuthorityRequirement
-from DMNVisionTool_backend.graphs.Sketches.graph_predictions import KeyPointPrediction
+from DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association, InformationRequirement, KnowledgeRequirement, AuthorityRequirement
+from DMNVisionTool_backend.graphs.graph_predictions import KeyPointPrediction
 from DMNVisionTool_backend.commons.utils import generate_id
 from typing import Type
 

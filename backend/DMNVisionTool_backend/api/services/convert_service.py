@@ -4,16 +4,16 @@ from Levenshtein import distance
 
 from DMNVisionTool_backend.graphs.graph_elements import Element, Diagram, Decision
 from DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association
-from DMNVisionTool_backend.graphs.elements_factories import get_factory
-from DMNVisionTool_backend.graphs.requirements_factories import get_keypoint_factory
+from DMNVisionTool_backend.graphs.PDF.elements_factories import get_factory
+from DMNVisionTool_backend.graphs.PDF.requirements_factories import get_keypoint_factory
 from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry
 from DMNVisionTool_backend.tables.dmn_decisionLogic import Table 
 from DMNVisionTool_backend.commons.utils import get_nearest_element, here, get_envelope_element
 
-from DMNVisionTool_backend.graphs import elements_factories as ef
-from DMNVisionTool_backend.graphs import requirements_factories as rf
-from DMNVisionTool_backend.tables import table_factories as tf
-from DMNVisionTool_backend.tables import decisionLogic_factories as df
+from DMNVisionTool_backend.graphs.PDF import elements_factories as ef
+from DMNVisionTool_backend.graphs.PDF import requirements_factories as rf
+from DMNVisionTool_backend.tables.PDF import table_factories as tf
+from DMNVisionTool_backend.tables.PDF import decisionLogic_factories as df
 
 if TYPE_CHECKING:
     from graphs.graph_predictions import (

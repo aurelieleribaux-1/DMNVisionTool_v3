@@ -2,27 +2,27 @@ import jinja2
 from typing import List, TYPE_CHECKING
 from Levenshtein import distance
 
-from DMNVisionTool_backend.graphs.Sketches.graph_elements import Element, Diagram, Decision
-from DMNVisionTool_backend.graphs.Sketches.graph_requirements import Requirement, Association
+from DMNVisionTool_backend.graphs.graph_elements import Element, Diagram, Decision
+from DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association
 from DMNVisionTool_backend.graphs.Sketches.elements_factories import get_factory
 from DMNVisionTool_backend.graphs.Sketches.requirements_factories import get_keypoint_factory
-from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry #tba
-from DMNVisionTool_backend.tables.dmn_decisionLogic import Table #tba
+from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry 
+from DMNVisionTool_backend.tables.dmn_decisionLogic import Table 
 from DMNVisionTool_backend.commons.Sketch_utils import get_nearest_element, here, get_envelope_element
 
 from DMNVisionTool_backend.graphs.Sketches import elements_factories as ef
 from DMNVisionTool_backend.graphs.Sketches import requirements_factories as rf
-from DMNVisionTool_backend.tables import table_factories as tf #tba
-from DMNVisionTool_backend.tables import decisionLogic_factories as df #tba
+from DMNVisionTool_backend.tables.Sketches import table_factories as tf 
+from DMNVisionTool_backend.tables.Sketches import decisionLogic_factories as df 
 
 if TYPE_CHECKING:
-    from graphs.Sketches.graph_predictions import (
+    from graphs.graph_predictions import (
         ObjectPrediction,
         KeyPointPrediction,
     )
 
 if TYPE_CHECKING:
-    from tables.table_predictions import TableElementPrediction, TablePrediction #tba
+    from tables.table_predictions import TableElementPrediction, TablePrediction 
 
 # TO DO: I added prints to check the working of the function but we can delete those later
 def convert_object_predictions(predictions: List["ObjectPrediction"]):
@@ -68,7 +68,7 @@ def convert_keypoint_prediction(predictions: List["KeyPointPrediction"]):
     List[Requirement]
         The list of converted dmn requirements
     """
-
+    print("Number of predictions:", len(predictions))  # Debug message
     requirements = []
     for prediction in predictions:
         print("predictedLabel:", prediction.predicted_label)
@@ -359,7 +359,7 @@ def connect_graph2tables(elements: List[Element], tables: List[Table]):
                     header_lable = decision_table.header.get_label()
                     print("Header label:", header_lable)
                     
-                    if distance(decision_table.header.get_label(), decision_name) <= 6:
+                    if distance(decision_table.header.get_label(), decision_name) <= 12:
                     #if decision_table.header.get_label() == :
                         decision.table.append(decision_table)
                         print("Decision table added to the decision")
