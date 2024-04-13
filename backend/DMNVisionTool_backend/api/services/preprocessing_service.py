@@ -31,12 +31,22 @@ def get_ocr_image(image_path: str):
         img = img[:, :, [0, 1, 2]]
         img = np.ascontiguousarray(img, dtype=np.uint8)
 
-    
-    return img
+    # Apply similar preprocessing as in get_predict_image
+    upscale_ratio = 600.0 / min(img.shape[0], img.shape[1]) # Calculate scaling ratio
+    new_width = int(img.shape[1] * upscale_ratio) # New width after scaling
+    new_height = int(img.shape[0] * upscale_ratio) # New height after scaling
+    img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
 
+    kernel_sharpening = np.array([[-1, -1, -1],
+                                  [-1, 9, -1],
+                                  [-1, -1, -1]])
+    img = cv2.filter2D(img, -1, kernel_sharpening)
 
-import cv2
-import numpy as np
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    _, threshold_img = cv2.threshold(gray_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+    return threshold_img
 
 def get_predict_image(image_path: str):
     """Service that reads and returns an image suitable for an Object/KeyPoints detection task, given its path
