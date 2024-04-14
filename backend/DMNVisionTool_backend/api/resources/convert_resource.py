@@ -43,17 +43,17 @@ async def convert_images(request:Request):
         disk_file_right.write(await image_right.read())
     
     # Perform preprocessing on both images    
-    ocr_img_left, predict_img_left = pps.get_ocr_and_predict_images(path_left)
-    ocr_img_right, predict_img_right = pps.get_ocr_and_predict_images(path_right)
+    ocr_img_sketch_left, ocr_img_pdf_left, predict_img_left = pps.get_ocr_and_predict_images(path_left)
+    ocr_img_sketch_right, ocr_img_pdf_right, predict_img_right = pps.get_ocr_and_predict_images(path_right)
 
     # Return predefined error if any of the image is none
-    if ocr_img_left is None or predict_img_left is None or ocr_img_right is None or predict_img_right is None:
+    if ocr_img_sketch_left is None or predict_img_left is None or ocr_img_sketch_right is None or predict_img_right is None or ocr_img_pdf_left is None  or ocr_img_pdf_right is None:
         return PlainTextResponse(content=sample_dmn, status_code=200)
 
     # Classification
-    for idx, (ocr_img, predict_img, path, sketch_field, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
-        [(ocr_img_left, predict_img_left, path_left, 'sketchLeft', 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
-         (ocr_img_right, predict_img_right, path_right, 'sketchRight', 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
+    for idx, (ocr_img_sketch, ocr_img_pdf, predict_img, path, sketch_field, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
+        [(ocr_img_sketch_left, ocr_img_pdf_left, predict_img_left, path_left, 'sketchLeft', 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
+         (ocr_img_sketch_right, ocr_img_pdf_right, predict_img_right, path_right, 'sketchRight', 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
          start=0):
         
     # SKETCH + GRAPH  
@@ -72,7 +72,7 @@ async def convert_images(request:Request):
                     scs.reference_requirements(requirements, drd_elements)
                      
                 if ocr_field in form and form[ocr_field] == 'true':
-                    text = os.get_text_from_img(ocr_img)
+                    text = os.get_text_from_img(ocr_img_sketch)
                     print('text:',text)
                     os.link_text(text, drd_elements)
         
@@ -95,7 +95,7 @@ async def convert_images(request:Request):
                 #htr.get_text_from_element(ocr_img, table_elements)
 
                 #so for now i will still use this: 
-                text = os.get_text_from_table_img(ocr_img)
+                text = os.get_text_from_table_img(ocr_img_sketch)
                 print('text', text)
                 os.link_text_table(text, table_elements)
             
@@ -149,7 +149,7 @@ async def convert_images(request:Request):
                 drd_elements = cs.convert_object_predictions(obj_predictions)
 
                 if flow_field in form and form[flow_field] == 'true':
-                    kp_predictions = ps.PredictKeypoint(ocr_img)
+                    kp_predictions = ps.PredictKeypoint(ocr_img_pdf)
                     requirements = cs.convert_keypoint_prediction(kp_predictions)
                     scs.connect_requirements(requirements, drd_elements)
                     scs.reference_requirements(requirements, drd_elements)
@@ -173,7 +173,7 @@ async def convert_images(request:Request):
 
                 
                 if ocr_field in form and form[ocr_field] == 'true':
-                    text = os.get_text_from_table_img(ocr_img)
+                    text = os.get_text_from_table_img(ocr_img_pdf)
                     os.link_text_table(text, table_elements) 
 
                     tables = []
