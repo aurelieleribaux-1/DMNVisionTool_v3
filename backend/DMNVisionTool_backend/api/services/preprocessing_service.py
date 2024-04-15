@@ -76,7 +76,25 @@ def get_ocr_image_sketch(image_path: str):
 
     return threshold_img
 
-def get_predict_image(image_path: str):
+def get_predict_image_pdf(image_path: str):
+    """Service that reads and returns an image suitable for an Object/KeyPoints detection task, given its path
+
+    Parameters
+    ----------
+    image_path: str
+        The path where to read the image
+
+    Returns
+    -------
+    ndarray
+        The image for the Object/KeyPoints detection
+    """
+    # Read the image
+    img = cv2.imread(image_path)
+
+    return img
+
+def get_predict_image_sketch(image_path: str):
     """Service that reads and returns an image suitable for an Object/KeyPoints detection task, given its path
 
     Parameters
@@ -131,7 +149,8 @@ def get_ocr_and_predict_images(path: str):
     """
     ocr_img_pdf = get_ocr_image_pdf(path)
     ocr_img_sketch = get_ocr_image_sketch(path)
-    predict_img = get_predict_image(path)
+    predict_img_pdf = get_predict_image_pdf(path)
+    predict_img_sketch = get_predict_image_sketch(path)
     #if ocr_img is not None and predict_img is not None:
     #    os.remove(path)
-    return ocr_img_sketch, ocr_img_pdf , predict_img
+    return ocr_img_pdf, ocr_img_sketch , predict_img_pdf, predict_img_sketch

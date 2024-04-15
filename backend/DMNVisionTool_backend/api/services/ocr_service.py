@@ -73,6 +73,7 @@ def get_text_from_table_img(img: ndarray) -> List[TableText]:
         text = d["text"][i]
         if (
             len(text) == 0
+            or any(not c.isalnum() for c in text[:-1])
             or len(text) > 1
             and not (text[-1].isalnum() or text[-1] in "-?")
             or text.lower().count(text[0].lower()) == len(text)

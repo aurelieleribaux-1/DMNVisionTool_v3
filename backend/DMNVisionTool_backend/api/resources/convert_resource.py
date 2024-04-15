@@ -43,17 +43,17 @@ async def convert_images(request:Request):
         disk_file_right.write(await image_right.read())
     
     # Perform preprocessing on both images    
-    ocr_img_sketch_left, ocr_img_pdf_left, predict_img_left = pps.get_ocr_and_predict_images(path_left)
-    ocr_img_sketch_right, ocr_img_pdf_right, predict_img_right = pps.get_ocr_and_predict_images(path_right)
+    ocr_img_pdf_left, ocr_img_sketch_left, predict_img_pdf_left, predict_img_sketch_left = pps.get_ocr_and_predict_images(path_left)
+    ocr_img_pdf_right, ocr_img_sketch_right, predict_img_pdf_right, predict_img_sketch_right = pps.get_ocr_and_predict_images(path_right)
 
     # Return predefined error if any of the image is none
-    if ocr_img_sketch_left is None or predict_img_left is None or ocr_img_sketch_right is None or predict_img_right is None or ocr_img_pdf_left is None  or ocr_img_pdf_right is None:
+    if ocr_img_sketch_left is None or predict_img_pdf_left is None or ocr_img_sketch_right is None or predict_img_pdf_right is None or ocr_img_pdf_left is None or ocr_img_pdf_right is None or predict_img_sketch_left is None or predict_img_sketch_right is None:
         return PlainTextResponse(content=sample_dmn, status_code=200)
 
     # Classification
-    for idx, (ocr_img_sketch, ocr_img_pdf, predict_img, path, sketch_field, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
-        [(ocr_img_sketch_left, ocr_img_pdf_left, predict_img_left, path_left, 'sketchLeft', 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
-         (ocr_img_sketch_right, ocr_img_pdf_right, predict_img_right, path_right, 'sketchRight', 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
+    for idx, (ocr_img_pdf, ocr_img_sketch, predict_img_pdf, predict_img_sketch, path, sketch_field, graph_field, elements_field, ocr_field, flow_field, decisionLogic_field) in enumerate(
+        [(ocr_img_pdf_left, ocr_img_sketch_left, predict_img_pdf_left, predict_img_sketch_left, path_left, 'sketchLeft', 'graphLeft', 'elementsLeft', 'ocrLeft', 'flowsLeft','decisionLogicLeft'), 
+         (ocr_img_pdf_right, ocr_img_sketch_right, predict_img_pdf_right, predict_img_sketch_right, path_right, 'sketchRight', 'graphRight', 'elementsRight', 'ocrRight', 'flowsRight','decisionLogicRight')], 
          start=0):
         
     # SKETCH + GRAPH  
@@ -62,11 +62,11 @@ async def convert_images(request:Request):
             print(f"Converting image {idx} as a graph sketch...")
             #drd_elements = None
             if elements_field in form and form[elements_field] == 'true':
-                obj_predictions = sps.SketchPredictObject(predict_img)
+                obj_predictions = sps.SketchPredictObject(predict_img_sketch)
                 drd_elements = scs.convert_object_predictions(obj_predictions)
 
                 if flow_field in form and form[flow_field] == 'true':
-                    kp_predictions = sps.SketchPredictKeypoint(predict_img)
+                    kp_predictions = sps.SketchPredictKeypoint(predict_img_sketch)
                     requirements = scs.convert_keypoint_prediction(kp_predictions)
                     scs.connect_requirements(requirements, drd_elements)
                     scs.reference_requirements(requirements, drd_elements)
@@ -81,9 +81,9 @@ async def convert_images(request:Request):
             print(f"Converting image {idx} as a sketch table...")
             
             if elements_field  in form and form[elements_field] == 'true':
-                    table_prediction = sps.SketchPredictTable(predict_img) 
+                    table_prediction = sps.SketchPredictTable(predict_img_sketch) 
                     converted_tables = scs.convert_table_predictions(table_prediction) 
-                    table_element_predictions = sps.SketchPredictTableElement(predict_img)
+                    table_element_predictions = sps.SketchPredictTableElement(predict_img_sketch)
                     table_elements = scs.convert_tableElement_predictions(table_element_predictions)
             
             if ocr_field in form and form[ocr_field] == 'true':
@@ -145,7 +145,7 @@ async def convert_images(request:Request):
         if graph_field in form and form[graph_field] == 'true':
             print(f"Converting image {idx} as a graph...")
             if elements_field in form and form[elements_field] == 'true':
-                obj_predictions = ps.PredictObject(predict_img)
+                obj_predictions = ps.PredictObject(predict_img_pdf)
                 drd_elements = cs.convert_object_predictions(obj_predictions)
 
                 if flow_field in form and form[flow_field] == 'true':
@@ -166,9 +166,9 @@ async def convert_images(request:Request):
         elif decisionLogic_field in form and form[decisionLogic_field] == 'true':
             print(f"Converting image {idx} as a table...")
             if elements_field in form and form[elements_field] == 'true':
-                table_predictions = ps.PredictTable(predict_img)
+                table_predictions = ps.PredictTable(predict_img_pdf)
                 converted_tables = cs.convert_table_predictions(table_predictions)
-                ts_predictions = ps.PredictTableElement(predict_img)
+                ts_predictions = ps.PredictTableElement(predict_img_pdf)
                 table_elements = cs.convert_tableElement_predictions(ts_predictions)
 
                 
