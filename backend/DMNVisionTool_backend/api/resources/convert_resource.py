@@ -157,7 +157,7 @@ async def convert_images(request:Request):
                     #drd_elements.extend(requirements)
 
                 if ocr_field in form and form[ocr_field] == 'true':
-                    text = os.get_text_from_img(ocr_img)
+                    text = os.get_text_from_img(ocr_img_pdf)
                     os.link_text(text, drd_elements)
 
                     
