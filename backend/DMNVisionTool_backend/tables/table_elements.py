@@ -103,7 +103,10 @@ class TableInput(TableElement):
         
     def get_label(self):
         """Returns the text of the input label as a string """
-        return " ".join([text.text for text in self.label])
+        if not self.label:
+            return "NaN"
+        else:
+            return " ".join([text.text for text in self.label])
     
     def render_input(self):
         last_word = self.label[-1].text if self.label else ""
@@ -146,7 +149,10 @@ class TableOutput(TableElement):
         
     def get_label(self):
         """Returns the text of the output label as a string """
-        return " ".join([text.text for text in self.label])
+        if not self.label:
+            return "NaN"
+        else:
+            return " ".join([text.text for text in self.label])
     
     def render_output(self):        
         last_word = self.label[-1].text if self.label else ""
@@ -205,7 +211,10 @@ class InputEntry(TableElement):
         
     def get_label(self):
         """Returns the text of the input label as a string """
-        return " ".join([text.text for text in self.label])
+        if not self.label:
+            return "NaN"
+        else:
+            return " ".join([text.text for text in self.label])
     
     def render_inputEntry(self):        
         template = """<inputEntry id="{{ input_entry.id }}"> 
@@ -239,7 +248,10 @@ class OutputEntry(TableElement):
         
     def get_label(self):
         """Returns the text of the input label as a string """
-        return " ".join([text.text for text in self.label])
+        if not self.label:
+            return "NaN"
+        else:
+            return " ".join([text.text for text in self.label])
     
     def render_outputEntry(self):        
         template = """<outputEntry id="{{ output_entry.id }}"> 
