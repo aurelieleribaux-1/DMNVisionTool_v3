@@ -95,7 +95,7 @@ async def convert_images(request:Request):
                 #htr.get_text_from_element(ocr_img, table_elements)
 
                 #so for now i will still use this: 
-                text = os.get_text_from_table_img(ocr_img_sketch)
+                text = os.get_text_from_table_img_sketch(ocr_img_sketch)
                 print('text', text)
                 os.link_text_table(text, table_elements)
             
@@ -157,7 +157,7 @@ async def convert_images(request:Request):
                     #drd_elements.extend(requirements)
 
                 if ocr_field in form and form[ocr_field] == 'true':
-                    text = os.get_text_from_img(ocr_img_pdf)
+                    text = os.get_text_from_img(ocr_img_pdf,obj_predictions)
                     os.link_text(text, drd_elements)
 
                     
@@ -171,9 +171,8 @@ async def convert_images(request:Request):
                 ts_predictions = ps.PredictTableElement(predict_img_pdf)
                 table_elements = cs.convert_tableElement_predictions(ts_predictions)
 
-                
                 if ocr_field in form and form[ocr_field] == 'true':
-                    text = os.get_text_from_table_img(ocr_img_pdf)
+                    text = os.get_text_from_table_img_pdf(ocr_img_pdf)
                     os.link_text_table(text, table_elements) 
 
                     tables = []
