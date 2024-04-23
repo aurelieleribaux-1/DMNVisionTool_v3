@@ -31,6 +31,7 @@
                     {{output.render_output()| indent(8)}}
                   {% endfor %}
                   {% for rule in table.rules %}
+                   {% if rule.inputEntries|length == table.inputs|length and rule.outputEntries|length == table.outputs|length %}
                     <rule id="{{ rule.id }}">
                       {% if rule.inputEntries %}
                         {% for input_entry in rule.inputEntries %}
@@ -43,6 +44,7 @@
                         {% endfor %}
                       {% endif %}
                     </rule>
+                   {% endif %}
                   {% endfor %}
                 </decisionTable>
               {% endfor %}
