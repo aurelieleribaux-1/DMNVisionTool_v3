@@ -7,7 +7,6 @@ from DMNVisionTool_backend.graphs.graph_predictions import ObjectPrediction
 from DMNVisionTool_backend.tables.table_elements import TableElement
 from DMNVisionTool_backend.tables.table_predictions import Text as TableText
 from DMNVisionTool_backend.commons.utils import get_nearest_element
-from DMNVisionTool_backend.api.services.ROI_selection_service import detect_lines
 from textblob import TextBlob
 import numpy as np
 
