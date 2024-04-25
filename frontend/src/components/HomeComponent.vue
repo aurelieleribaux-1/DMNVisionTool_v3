@@ -12,12 +12,12 @@
       </div>
     </header>
 
-    <!-- Main Content Section -->
+    <!-- Left Content Section -->
     <main class="main-content">
       <div class="upload-container">
         <!-- Left Section -->
         <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'left')">
-          <h2>Upload Image 1</h2>
+          <h2>Upload Your DRD Image Here</h2>
           <q-btn
             color="accent"
             icon="upload_file"
@@ -58,42 +58,26 @@
               </q-dialog>
           <div class="options">
             <q-checkbox
-              class="q-pr-md"
-              v-model="elementsEnabledLeft"
-              :label="$t('home.show_elements')"
-            ></q-checkbox>
-            <q-checkbox
-              :disable="isTableLeft"
-              class="q-pr-md"
-              v-model="flowsEnabledLeft"
-              :label="$t('home.show_flows')"
-            ></q-checkbox>
-            <q-checkbox
-              :disable="!elementsEnabledLeft"
-              class="q-pr-md"
-              v-model="ocrEnabledLeft"
-              label="Enable OCR"
-            ></q-checkbox>
-            <q-checkbox
               :disable="isTableLeft"
               class="q-pr-md"
               v-model="isGraphLeft"
-              label="Graph"
+              label="DRD"
             ></q-checkbox>
             <q-checkbox
-              :disable="isGraphLeft"
+              :disable="SketchLeft"
               class="q-pr-md"
-              v-model="isTableLeft"
-              label="Table"
+              v-model="DigitalLeft"
+              label="Digital file"
             ></q-checkbox>
             <q-checkbox
+              :disable="DigitalLeft"
               class="q-pr-md"
               v-model="SketchLeft"
               label="Handwritten file"
             ></q-checkbox>
           </div>
           <div class="image-display">
-            <h2>Your Uploaded Image 1</h2>
+            <h2>Your Uploaded DRD Image </h2>
             <div class="image-container">
               <q-img
                 :style="'border: 2px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
@@ -126,7 +110,7 @@
 
         <!-- Right Section -->
         <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'right')">
-          <h2>Upload Image 2</h2>
+          <h2>Upload Your Decision Table Image Here</h2>
           <q-btn
             color="accent"
             icon="upload_file"
@@ -161,34 +145,17 @@
           <div class="options">
             <q-checkbox
               class="q-pr-md"
-              v-model="elementsEnabledRight"
-              :label="$t('home.show_elements')"
-            ></q-checkbox>
-            <q-checkbox
-              :disable="isTableRight"
-              class="q-pr-md"
-              v-model="flowsEnabledRight"
-              :label="$t('home.show_flows')"
-            ></q-checkbox>
-            <q-checkbox
-              :disable="!elementsEnabledRight"
-              class="q-pr-md"
-              v-model="ocrEnabledRight"
-              label="Enable OCR"
-            ></q-checkbox>
-            <q-checkbox
-              :disable="isTableRight"
-              class="q-pr-md"
-              v-model="isGraphRight"
-              label="Graph"
-            ></q-checkbox>
-            <q-checkbox
-              :disable="isGraphRight"
-              class="q-pr-md"
               v-model="isTableRight"
               label="Table"
             ></q-checkbox>
             <q-checkbox
+              :disable="SketchRight"
+              class="q-pr-md"
+              v-model="DigitalRight"
+              label="Digital file"
+            ></q-checkbox>
+            <q-checkbox
+              :disable="DigitalRight"
               class="q-pr-md"
               v-model="SketchRight"
               label="Handwritten file"
@@ -292,16 +259,10 @@ export default defineComponent({
     const conversionResultRight: Ref<string | null> = ref(null);
     const imageLoadedLeft = ref(false);
     const imageLoadedRight = ref(false);
-    const elementsEnabledLeft = ref(false);
-    const elementsEnabledRight = ref(false);
-    const flowsEnabledRight = ref(false);
-    const flowsEnabledLeft = ref(false);
-    const ocrEnabledLeft = ref(false);
-    const ocrEnabledRight = ref(false);
     const isGraphLeft = ref(false);
-    const isGraphRight = ref(false);
-    const isTableLeft = ref(false);
     const isTableRight = ref(false);
+    const DigitalLeft = ref(false);
+    const DigitalRight = ref(false);
     const SketchLeft = ref(false);
     const SketchRight = ref(false);
 
@@ -449,24 +410,20 @@ export default defineComponent({
     const prepareFormDataLeft =  () => {
       const formData = new FormData();
       formData.append('imageLeft', imageFileLeft.value as File);
-      formData.append('elementsLeft', String(elementsEnabledLeft.value));
-      formData.append('flowsLeft', String(flowsEnabledLeft.value));
-      formData.append('ocrLeft', String(ocrEnabledLeft.value));
       formData.append('graphLeft', String(isGraphLeft.value));
-      formData.append('decisionLogicLeft', String(isTableLeft.value));
       formData.append('sketchLeft', String(SketchLeft.value));
+      formData.append('DigitalLeft', String(DigitalLeft.value));
+
       return formData;
     };
 
     const prepareFormDataRight =  () => {
       const formData = new FormData();
       formData.append('imageRight', imageFileRight.value as File);
-      formData.append('elementsRight', String(elementsEnabledRight.value));
-      formData.append('flowsRight', String(flowsEnabledRight.value));
-      formData.append('ocrRight', String(ocrEnabledRight.value));
-      formData.append('graphRight', String(isGraphRight.value));
       formData.append('decisionLogicRight', String(isTableRight.value));
       formData.append('sketchRight', String(SketchRight.value));
+      formData.append('DigitalRight', String(DigitalRight.value));
+
       return formData;
     };
 
@@ -541,18 +498,12 @@ export default defineComponent({
       convertImages,
       conversionDialogLeft,
       conversionDialogRight,
-      elementsEnabledLeft,
-      elementsEnabledRight,
-      flowsEnabledLeft,
-      flowsEnabledRight,
-      ocrEnabledLeft,
-      ocrEnabledRight,
-      isTableLeft,
       isTableRight,
       isGraphLeft,
-      isGraphRight,
       SketchLeft,
       SketchRight,
+      DigitalLeft,
+      DigitalRight,
     };
   },
 });
