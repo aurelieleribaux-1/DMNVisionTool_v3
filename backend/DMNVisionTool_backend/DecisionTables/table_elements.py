@@ -3,7 +3,32 @@ from typing import List
 
 from jinja2 import Environment, BaseLoader
 
-from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction, Text
+from DMNVisionTool_backend.DecisionTables.table_predictions import TablePrediction, Text
+
+class Table:
+    """Class for a table
+
+    Parameters
+    ----------
+    id : str
+        Unique identifier of the DMN Table.
+    prediction : TablePrediction
+        The prediction given by the table detection predictor.
+    """
+    def __init__(
+        self,
+        id: str,
+        prediction: TablePrediction,
+    ):
+        self.id = id
+        self.prediction = prediction
+        self.header = TableHeader
+        self.hitPolicy = TableHitPolicy
+        self.inputs = []
+        self.outputs = []
+        self.rules = []
+        self.label = []
+        self.jinja_environment = Environment(loader=BaseLoader())
 
 class TableElement:
     """Parent class for all the elements that can be put within a DMN Table.
@@ -19,7 +44,7 @@ class TableElement:
     def __init__(
         self,
         id: str,
-        prediction: TableElementPrediction,
+        prediction: TablePrediction,
     ):
         self.id = id
         self.prediction = prediction
@@ -41,7 +66,7 @@ class TableHeader(TableElement):
     def __init__(
         self,
         id: str,
-        prediction: TableElementPrediction,
+        prediction: TablePrediction,
     ):        
         self.id = id
         self.prediction = prediction
@@ -66,7 +91,7 @@ class TableHitPolicy(TableElement):
     def __init__(
         self,
         id: str,
-        prediction: TableElementPrediction,
+        prediction: TablePrediction,
     ):        
         self.id = id
         self.label = []
@@ -92,7 +117,7 @@ class TableInput(TableElement):
     def __init__(
         self,
         id: str,
-        prediction: TableElementPrediction,
+        prediction: TablePrediction,
     ):
         self.id = id
         self.prediction = prediction
@@ -139,7 +164,7 @@ class TableOutput(TableElement):
     def __init__(
         self,
         id: str,
-        prediction: TableElementPrediction,
+        prediction: TablePrediction,
     ):
         self.id = id
         self.prediction = prediction
@@ -179,7 +204,7 @@ class TableRule(TableElement):
     def __init__(
         self,
         id: str,
-        prediction: TableElementPrediction,
+        prediction: TablePrediction,
     ):
         self.id = id
         self.prediction = prediction
@@ -202,7 +227,7 @@ class InputEntry(TableElement):
     def __init__(
         self,
         id: str,
-        prediction: TableElementPrediction,
+        prediction: TablePrediction,
     ):
         self.id = id
         self.prediction = prediction
@@ -239,7 +264,7 @@ class OutputEntry(TableElement):
     def __init__(
         self,
         id: str,
-        prediction: TableElementPrediction,
+        prediction: TablePrediction,
     ):
         self.id = id
         self.prediction = prediction

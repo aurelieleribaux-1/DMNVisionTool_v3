@@ -3,7 +3,7 @@ from typing import List
 
 from jinja2 import Environment, BaseLoader
 
-from DMNVisionTool_backend.graphs.graph_predictions import ObjectPrediction, Text
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_predictions import ObjectPrediction, Text
 
 class Element:
     """Parent class for all the elements that can be put within a DMN Model.
@@ -152,30 +152,6 @@ class KnowledgeSource(Element):
 
         return data
 
-class TextAnnotation(Element):
-    """Represents a DMN Text Association.
-
-        Parameters
-        ----------
-        id : str
-            Unique identifier of the BPMN Element.
-        prediction : ObjectPrediction
-            The prediction given by the object detection predictor.
-    """
-    def __init__(self, id: str, prediction: ObjectPrediction, type: str):
-        super(TextAnnotation, self).__init__(id, prediction)
-        self.type = type
-
-    def render_element(self):
-        template = """<textAnnotation id="{{ text_annotation.id }}"> 
-        <text> {{ text_annotation.get_name() }} </text>
-        </textAnnotation>
-        """
-
-        rtemplate = self.jinja_environment.from_string(template)
-        data = rtemplate.render(text_annotation=self)
-
-        return data
 
 
 @dataclass()

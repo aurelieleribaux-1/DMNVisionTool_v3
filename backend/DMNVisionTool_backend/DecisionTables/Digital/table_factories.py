@@ -1,7 +1,8 @@
 from typing import Tuple
 from typing import Type
 
-from DMNVisionTool_backend.tables.table_elements import (
+from DMNVisionTool_backend.DecisionTables.table_elements import (
+    Table,
     TableElement,
     TableHeader,
     TableHitPolicy,
@@ -12,7 +13,7 @@ from DMNVisionTool_backend.tables.table_elements import (
     OutputEntry,
 )
 
-from DMNVisionTool_backend.tables.table_predictions import TableElementPrediction
+from DMNVisionTool_backend.DecisionTables.table_predictions import TablePrediction
 from DMNVisionTool_backend.commons.utils import generate_id
 
 def calculate_width_height(
@@ -25,7 +26,7 @@ class TableElementFactory:
     """Parent class for the factories used to create the Table Elements. """
     generated_ids = []
 
-    def create_element(self, prediction: TableElementPrediction):
+    def create_element(self, prediction: TablePrediction):
         """Returns the corresponding element associated to the factory"""
 
 class GenericTableElementFactory(TableElementFactory):
@@ -42,7 +43,7 @@ class GenericTableElementFactory(TableElementFactory):
     def __init__(self, element_class: Type[TableElement]):
         self.element_class = element_class
 
-    def create_element(self, prediction: TableElementPrediction) -> TableElement:
+    def create_element(self, prediction: TablePrediction) -> TableElement:
         """Returns the chosen DMN Element created by the factory"""
         while(True):
             id = generate_id(self.element_class.__name__)
@@ -54,15 +55,16 @@ class GenericTableElementFactory(TableElementFactory):
 
         return self.element_class(id, prediction)
 
-# TO DO: Change categories in the model to have 0-1-2-3-4
+# categories in the trained model 
 CATEGORIES = {
-    0: "TableRule",
-    1: "TableHeader",
-    2: "OutputEntry",
-    3: "InputEntry",
-    4: "TableHitPolicy",
-    5: "TableOutput",
-    6: "TableInput",
+    0: "OutputEntry",
+    1: "InputEntry",
+    2: "TableOutput",
+    3: "TableInput",
+    4: "TableHeader",
+    5: "TableRule",
+    6: "TableHitPolicy",
+    7: "Table"
 }
 
 FACTORIES = {
@@ -73,9 +75,11 @@ FACTORIES = {
     "TableRule": GenericTableElementFactory(TableRule),
     "InputEntry": GenericTableElementFactory(InputEntry),
     "OutputEntry": GenericTableElementFactory(OutputEntry),
+    "Table": GenericTableElementFactory(Table)
+
     }
 
-def get_factory(category_id: int) -> TableElementFactory:
+def get_table_factory(category_id: int) -> TableElementFactory:
     """Return the factory useful to create the element, None if the category is not available."""
     category = CATEGORIES.get(category_id)
     return FACTORIES.get(category)

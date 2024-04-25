@@ -1,5 +1,5 @@
-from DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association, InformationRequirement, KnowledgeRequirement, AuthorityRequirement
-from DMNVisionTool_backend.graphs.graph_predictions import KeyPointPrediction
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_requirements import Requirement,  InformationRequirement, KnowledgeRequirement, AuthorityRequirement
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_predictions import KeyPointPrediction
 from DMNVisionTool_backend.commons.utils import generate_id
 from typing import Type
 
@@ -33,19 +33,17 @@ class GenericRequirementFactory(RequirementFactory):
 
         return self.requirement_class(id, prediction)
 
-# TO DO: Change keypoint categories numbers according to model
+# keypoint categories numbers according to the trained model
 KEYPOINT_CATEGORIES = {
-    1: "KnowledgeRequirement",
+    1: "InformationRequirement",
     2: "AuthorityRequirement",
-    3: "InformationRequirement",
-    4: "Association"
+    3: "KnowledgeRequirement"
 }
 
 KEYPOINT_FACTORIES = {
     "InformationRequirement": GenericRequirementFactory(InformationRequirement),
     "KnowledgeRequirement": GenericRequirementFactory(KnowledgeRequirement),
-    "AuthorityRequirement": GenericRequirementFactory(AuthorityRequirement),
-    "Association": GenericRequirementFactory(Association)
+    "AuthorityRequirement": GenericRequirementFactory(AuthorityRequirement)
 }
 
 

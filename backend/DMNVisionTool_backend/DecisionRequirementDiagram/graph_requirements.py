@@ -1,6 +1,6 @@
 from jinja2 import Environment, BaseLoader
 
-from DMNVisionTool_backend.graphs.graph_predictions import KeyPointPrediction
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_predictions import KeyPointPrediction
 
 class Requirement:
     """Parent class for all the requirements that can be put within a DMN Diagram.
@@ -122,47 +122,3 @@ class AuthorityRequirement(Requirement):
 
         return data
     
-class Association(Requirement):
-    """Class for the associations (between textAnnotation and DMN Elements) that can be put within a DMN Diagram.
-
-    Parameters
-    ----------
-    id : str
-        Unique identifier of the Association.
-    prediction : KeyPointPrediction
-        The prediction given by the keypoint detection predictor.
-    """
-    def __init__(
-        self,
-        id: str,
-        prediction: KeyPointPrediction,
-    ):
-        self.id = id
-        self.prediction = prediction
-        self.jinja_environment = Environment(loader=BaseLoader())
-        self.sourceRef = None
-        self.targetRef = None
-
-    def render_association(self):
-        """Returns the xml string associated to this Association"""
-
-        template = """<association id="{{ association.id }}" >
-        <sourceRef href="#{{ association.sourceRef}}" /> <targetRef href="#{{association.targetRef}}" /> 
-        </association>
-         
-           requiredKnowledge href="#{{ flow.Ref }}" /> <knowledgeRequirement>" """
-        render_template = self.jinja_environment.from_string(template)
-        data = render_template.render(association=self)
-        
-        return data
-    def render_shape(self):
-        """Returns the xml string containing the shape information of this kind of flow"""
-        template = """<dmndi:DMNEdge id="{{ association.id }}_di" dmnElementRef="{{ association.sourceRef }}" >
-        <di:waypoint x="{{ association.prediction.tail[0] }}" y="{{ association.prediction.tail[1] }}" />
-        <di:waypoint x="{{ association.prediction.head[0] }}" y="{{ association.prediction.head[1] }}" />
-      </bpmndi:BPMNEdge>
-        """
-        rtemplate = self.jinja_environment.from_string(template)
-        data = rtemplate.render(association=self)
-
-        return data

@@ -2,27 +2,25 @@ import jinja2
 from typing import List, TYPE_CHECKING
 from Levenshtein import distance
 
-from DMNVisionTool_backend.graphs.graph_elements import Element, Diagram, Decision
-from DMNVisionTool_backend.graphs.graph_requirements import Requirement, Association
-from DMNVisionTool_backend.graphs.Sketches.elements_factories import get_factory
-from DMNVisionTool_backend.graphs.Sketches.requirements_factories import get_keypoint_factory
-from DMNVisionTool_backend.tables.table_elements import TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry 
-from DMNVisionTool_backend.tables.dmn_decisionLogic import Table 
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_elements import Element, Diagram, Decision
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_requirements import Requirement
+from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten.elements_factories import get_factory
+from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten.requirements_factories import get_keypoint_factory
+from DMNVisionTool_backend.DecisionTables.table_elements import Table, TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry 
 from DMNVisionTool_backend.commons.Sketch_utils import get_nearest_element, here, get_envelope_element
 
-from DMNVisionTool_backend.graphs.Sketches import elements_factories as ef
-from DMNVisionTool_backend.graphs.Sketches import requirements_factories as rf
-from DMNVisionTool_backend.tables.Sketches import table_factories as tf 
-from DMNVisionTool_backend.tables.Sketches import decisionLogic_factories as df 
+from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten import elements_factories as ef
+from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten import requirements_factories as rf
+from DMNVisionTool_backend.DecisionTables.Handwritten import table_factories as tf 
 
 if TYPE_CHECKING:
-    from graphs.graph_predictions import (
+    from DecisionRequirementDiagram.graph_predictions import (
         ObjectPrediction,
         KeyPointPrediction,
     )
 
 if TYPE_CHECKING:
-    from tables.table_predictions import TableElementPrediction, TablePrediction 
+    from DecisionTables.table_predictions import TableElementPrediction, TablePrediction 
 
 # TO DO: I added prints to check the working of the function but we can delete those later
 def convert_object_predictions(predictions: List["ObjectPrediction"]):
@@ -107,30 +105,6 @@ def render_diagram(dmn_diagram: Diagram):
 
     return output_text
 
-# TO DO: Only keep 1 render_diagram
-def render_diagram2(dmn_diagram: Diagram):
-    """Method that renders a Diagram class into the final dmn string
-
-    Parameters
-    ----------
-    dmn_diagram: Diagram
-        id + definition id + List of ObjectPrediction
-
-    Returns
-    -------
-    str
-        The string representing the final dmn model
-    """
-
-    template_loader = jinja2.FileSystemLoader(
-        searchpath=here("../../commons/templates/") 
-    )
-    template_env = jinja2.Environment(loader=template_loader)     
-    template_file = "dmntemplate2.jinja"
-    template = template_env.get_template(template_file)
-    output_text = template.render({"diagram": dmn_diagram})
-
-    return output_text
 
 def connect_requirements(requirements: List[Requirement], elements: List[Element]):
     """Method that connects each Requirement to the Element it is pointing to.
@@ -182,40 +156,9 @@ def reference_requirements(requirements: List[Requirement], elements: List[Eleme
         
     return requirements
 
-# Text Annotations are a subclass of Element
-# Association are not a subclass of Requirement
-# Consider changing this for more clarity in the code
-def connect_textAnnotations(associations: List[Association], elements:List[Element]):
-    """Method that connects each text Annotation to the Element it is associated with.
-    Adds a Text Annotation element to sourceRef 
-    & Element to targetRef
-    
-    Parameters
-    ----------
-    assocations: List[Association]
-        List of detected Associations
-    elements: List[Element]
-        List of Element 
-
-    Returns
-    -------
-    assocations: List[Association]
-        List of detected Associations
-    """
-    for association in associations:
-        tail = association.prediction.tail
-        head = association.prediction.head
-        
-        near_tail = get_nearest_element(tail, elements)
-        near_head = get_nearest_element(head, elements)
-        
-        association.sourceRef = near_tail
-        association.targetRef = near_head
-        
-    return associations
 
 # TO DO: I added prints to check the working of the function but we can delete those later
-def convert_table_predictions(predictions: List["TablePrediction"]):
+def convert_table_object_predictions(predictions: List["TablePrediction"]):
     """Method that converts the prediction of the detected table into a Table Element
 
     Parameters
@@ -232,45 +175,17 @@ def convert_table_predictions(predictions: List["TablePrediction"]):
     converted_tables = []
     for prediction in predictions:
         print("predictedLabel:", prediction.predicted_label)
-        factory = df.get_table_factory(prediction.predicted_label)
+        factory = tf.get_table_factory(prediction.predicted_label)
         print("Factory:" , factory)
         if factory is not None:
             print("factory is not none")
-            dmn_table = factory.create_table(prediction)
+            dmn_table = factory.create_element(prediction)
             print("dmn table:", dmn_table)
             if dmn_table is not None:
                 print("dmn table is not none")
                 converted_tables.append(dmn_table)
 
     return converted_tables
-
-def convert_tableElement_predictions(predictions: List["TableElementPrediction"]):
-    """Method that converts the prediction of the detected table element into TableElements
-
-    Parameters
-    ----------
-    predictions: List[TableElementPrediction]
-        List of TableElementPrediction
-
-    Returns
-    -------
-    List[TableElement]
-        The list of converted Table Element
-    """
-    tableElements = []
-    for prediction in predictions:
-        print("predictedLabel:", prediction.predicted_label)
-        factory = tf.get_factory(prediction.predicted_label)
-        print("Factory:" , factory)
-        if factory is not None:
-            print("factory is not none")
-            table_element = factory.create_element(prediction)
-            print("table element:", table_element)
-            if table_element is not None:
-                print("dmn element is not none")
-                tableElements.append(table_element)
-
-    return tableElements
 
 # Assumption: We only predict one table at a time, not multiple tables on the same picture
 def connect_components2table(table: Table, header: TableHeader, hitPolicy: TableHitPolicy, inputs:List[TableInput]=[], outputs: List[TableOutput]=[], rules: List[TableRule]=[]):

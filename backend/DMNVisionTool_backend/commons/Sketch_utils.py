@@ -5,8 +5,8 @@ import random
 import string
 from typing import List
 
-from DMNVisionTool_backend.graphs.graph_elements import Element 
-from DMNVisionTool_backend.tables.table_elements import TableElement, TableRule #tba 
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_elements import Element 
+from DMNVisionTool_backend.DecisionTables.table_elements import TableElement, TableRule #tba 
 
 def generate_id(prefix: str) -> str:
     """Utils that generate a random id given a string prefix

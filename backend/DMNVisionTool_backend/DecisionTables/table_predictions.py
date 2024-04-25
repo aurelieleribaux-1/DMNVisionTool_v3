@@ -55,60 +55,6 @@ class TablePrediction:
             self.bottom_right_y,
         ]
 
-class TableElementPrediction:
-    """Represents a table's element prediction made by the model.
-    A table's element can be the header, output entry, input entry, hit policy, output, input, rule or whole table
-    It contains information on the predicted box and its position.
-
-    Parameters
-    ----------
-    predicted_label : int
-        The predicted label of the box.
-    top_left_x : float
-        The x coordinate of the top left corner.
-    top_left_y : float
-        The y coordinate of the top left corner.
-    bottom_right_x : float
-        The x coordinate of the bottom right corner.
-    bottom_right_y : float
-        The y coordinate of the bottom right corner.
-    """
-    def __init__(
-        self,
-        predicted_label: int,
-        top_left_x: float,
-        top_left_y: float,
-        bottom_right_x: float,
-        bottom_right_y: float,
-    ):
-        self.center = None
-        self.height = None
-        self.width = None
-        self.predicted_label = predicted_label
-        self.top_left_x = top_left_x
-        self.top_left_y = top_left_y
-        self.bottom_right_x = bottom_right_x
-        self.bottom_right_y = bottom_right_y
-        self.calculate_box()
-
-    def calculate_box(self):
-        """Calculate additional information on the box: the width, the height and the center. """
-        self.width = abs(self.bottom_right_x - self.top_left_x)
-        self.height = abs(self.bottom_right_y - self.top_left_y)
-        self.center = (
-            self.top_left_x + self.width / 2,
-            self.top_left_y + self.height / 2,
-        )
-
-    def get_box_coordinates(self) -> List[float]:
-        """Returns the box coordinates as a list. """
-        return [
-            self.top_left_x,
-            self.top_left_y,
-            self.bottom_right_x,
-            self.bottom_right_y,
-        ]
-
 class Text:
     """Represents a Text recognized by the ocr.
 

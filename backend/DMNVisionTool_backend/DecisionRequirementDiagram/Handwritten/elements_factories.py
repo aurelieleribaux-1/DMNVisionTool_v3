@@ -1,16 +1,15 @@
 from typing import Tuple, List, Union, Set, Type
 
-from DMNVisionTool_backend.graphs.graph_elements import (
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_elements import (
     Element,
     InputData,
     Decision,
     BusinessKnowledge,
     KnowledgeSource,
-    TextAnnotation,
     Diagram,
 )
 
-from DMNVisionTool_backend.graphs.graph_predictions import ObjectPrediction
+from DMNVisionTool_backend.DecisionRequirementDiagram.graph_predictions import ObjectPrediction
 from DMNVisionTool_backend.commons.Sketch_utils import generate_id
 
 def calculate_width_height(
@@ -70,29 +69,20 @@ class GenericElementFactory(ElementFactory):
 
         return self.element_class(id, prediction)
 
-# TO DO: Change categories in the model to have 0-1-2-3-4
+# categories in the trained model 
 CATEGORIES = {
     1: "KnowledgeSource",
     2: "BusinessKnowledge",
     3: "Decision",
-    4: "InputData",
-    5: "TextAnnotation"
+    4: "InputData"
     }
 
-#FACTORIES = {
-#    "Decision": GenericElementFactory(Decision, "DecisionDefinition"),
-#    "InputData": GenericElementFactory(InputData, "InputDataDefinition"),
-#    "BusinessKnowledge": GenericElementFactory(BusinessKnowledge, "BusinessKnowledgeDefinition"),
-#    "KnowledgeSource": GenericElementFactory(KnowledgeSource, "KnowledgeSourceDefinition"), 
-#    "TextAnnotation": GenericElementFactory(TextAnnotation, "TextAnnotationDefinition")
-#    }
 
 FACTORIES = {
     "KnowledgeSource": GenericElementFactory(KnowledgeSource), 
     "BusinessKnowledge": GenericElementFactory(BusinessKnowledge),
     "Decision": GenericElementFactory(Decision),
-    "InputData": GenericElementFactory(InputData),
-    "TextAnnotation": GenericElementFactory(TextAnnotation)
+    "InputData": GenericElementFactory(InputData)
     }
 
 def get_factory(category_id: int) -> ElementFactory:
