@@ -8,12 +8,18 @@ RUN yarn build
 # Use Python 3.8 base image
 FROM python:3.8 AS backend
 
-# Print Python version
-RUN python --version
+# Update package lists and install necessary packages
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Git LFS
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+RUN apt-get install -y git-lfs
 
 RUN mkdir /app
 WORKDIR /app
-
 
 ARG BACKEND_MODE=production
 ARG BACKEND_PORT=5000
