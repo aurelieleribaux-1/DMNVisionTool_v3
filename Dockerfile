@@ -56,6 +56,7 @@ COPY backend/requirements.txt ./
 RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/facebookresearch/detectron2.git@ff53992b1985b63bd3262b5a36167098e3dada02
 
+RUN pip show numpy
 
 # Copy frontend static files
 COPY --from=frontend /app/dist/spa /app/DMNVisionTool_backend/static
