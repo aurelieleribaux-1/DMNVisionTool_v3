@@ -27,7 +27,7 @@ def get_text_from_img(img,predictions: List[ObjectPrediction]):
         The list of detected text with bounding boxes
     """
     # Convert the image to grayscale
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Initialize list to store extracted text with bounding boxes
     text_list = []
@@ -36,9 +36,9 @@ def get_text_from_img(img,predictions: List[ObjectPrediction]):
     for prediction in predictions:
         x1, y1, x2, y2 = prediction.get_box_coordinates()
         # Extract the ROI from the grayscale image
-        roi = gray_img[int(y1):int(y2), int(x1):int(x2)]
+        roi = img[int(y1):int(y2), int(x1):int(x2)]
         # Resize the ROI if needed
-        roi_resized = cv2.resize(roi, None, fx=6, fy=6, interpolation=cv2.INTER_CUBIC)
+        roi_resized = cv2.resize(roi, None, fx=10, fy=10, interpolation=cv2.INTER_CUBIC)
         # Perform OCR on the ROI
         text = pytesseract.image_to_string(roi_resized, config="--psm 12")
         # Spell-check the extracted text using TextBlob
@@ -67,7 +67,7 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
         The list of detected Text with their bounding boxes
     """
     # Convert the image to grayscale
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Initialize list to store extracted text with bounding boxes
     text_list = []
@@ -76,9 +76,9 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
     for prediction in predictions:
         x1, y1, x2, y2 = prediction.get_box_coordinates()
         # Extract the ROI from the grayscale image
-        roi = gray_img[int(y1):int(y2), int(x1):int(x2)]
+        roi = img[int(y1):int(y2), int(x1):int(x2)]
         # Resize the ROI if needed
-        roi_resized = cv2.resize(roi, None, fx=6, fy=6, interpolation=cv2.INTER_CUBIC)
+        roi_resized = cv2.resize(roi, None, fx=10, fy=10, interpolation=cv2.INTER_CUBIC)
         # Perform OCR on the ROI
         text = pytesseract.image_to_string(roi_resized, config="--psm 12")
         # Spell-check the extracted text using TextBlob
@@ -105,7 +105,7 @@ def get_text_from_table_img_sketch(img: ndarray,predictions: List[TablePredictio
     """
 
     # Convert the image to grayscale
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Initialize list to store extracted text with bounding boxes
     text_list = []
@@ -114,7 +114,7 @@ def get_text_from_table_img_sketch(img: ndarray,predictions: List[TablePredictio
     for prediction in predictions:
         x1, y1, x2, y2 = prediction.get_box_coordinates()
         # Extract the ROI from the grayscale image
-        roi = gray_img[int(y1):int(y2), int(x1):int(x2)]
+        roi = img[int(y1):int(y2), int(x1):int(x2)]
         # Resize the ROI if needed
         roi_resized = cv2.resize(roi, None, fx=6, fy=6, interpolation=cv2.INTER_CUBIC)
         # Perform OCR on the ROI
@@ -126,7 +126,7 @@ def get_text_from_table_img_sketch(img: ndarray,predictions: List[TablePredictio
         # Append the GraphText object to the list
         text_list.append(table_text)
 
-    return [TableText(txt, *box) for box, txt in text_list]
+    return  text_list
 
 
     
