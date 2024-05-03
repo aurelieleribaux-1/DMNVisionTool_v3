@@ -31,11 +31,9 @@ COPY backend/DMNVisionTool_backend DMNVisionTool_backend/
 RUN [ -f DMNVisionTool_backend/detectron_model/DRD_model_final.pth ] && echo "Object Detection model found" || { echo "Object Detection model not found!"; wget -O DMNVisionTool_backend/detectron_model/DRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/DRD_model_final.pth; }
 RUN [ -f DMNVisionTool_backend/detectron_model/kp_DRD_model_final.pth ] && echo "KeyPoint Prediction model found" || { echo "KeyPoint Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/kp_DRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/kp_DRD_model_final.pth; }
 RUN [ -f DMNVisionTool_backend/detectron_model/Table_model_final.pth ] && echo "Object Detection model found" || { echo "Object Detection model not found!"; wget -O DMNVisionTool_backend/detectron_model/Table_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/Table_model_final.pth; }
-RUN [ -f DMNVisionTool_backend/detectron_model/TableStructure_model_final.pth ] && echo "Object Detection model found" || { echo "KeyPoint Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/TableStructure_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/TableStructure_model_final.pth; }
 RUN [ -f DMNVisionTool_backend/detectron_model/SketchDRD_model_final.pth ] && echo "Object Detection model found" || { echo "KeyPoint Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/SketchDRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/SketchDRD_model_final.pth; }
 RUN [ -f DMNVisionTool_backend/detectron_model/Sketchkp_DRD_model_final.pth ] && echo "KeyPoint Detection model found" || { echo "Object Prediction model not found!"; wget -O DMNVisionTool_backend/detectron_model/Sketchkp_DRD_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/Sketchkp_DRD_model_final.pth; }
 RUN [ -f DMNVisionTool_backend/detectron_model/SketchTable_model_final.pth ] && echo "Sketch Table Detection model found" || { echo "Sketch Table Detection model not found!"; wget -O DMNVisionTool_backend/detectron_model/SketchTable_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/SketchTable_model_final.pth; }
-RUN [ -f DMNVisionTool_backend/detectron_model/SketchTableElement_model_final.pth ] && echo "Sketch Table Element Detection model found" || { echo "Sketch Table Element Detection model not found!"; wget -O DMNVisionTool_backend/detectron_model/SketchTableElement_model_final.pth https://huggingface.co/aurelieleribaux/DMNComputerVisionTool_Models/blob/main/SketchTableElement_model_final.pth; }
  
 
 # Install/update Pillow
@@ -48,8 +46,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 RUN apt-get install -y apt-transport-https
 RUN echo 'deb https://notesalexp.org/tesseract-ocr-dev/bullseye/ bullseye main' >> /etc/apt/sources.list
-RUN wget -O - https://notesalexp.org/debian/alexp_key.asc | apt-key add -
-RUN apt-get update
+#RUN apt-get update
 
 # Install Python dependencies
 COPY backend/requirements.txt ./
