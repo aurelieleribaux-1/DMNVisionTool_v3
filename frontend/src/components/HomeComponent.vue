@@ -27,7 +27,7 @@
           <q-file
             ref="filePickerLeft"
             style="display: none"
-            accept=".png, .jpeg, .jpg, .bmp"
+            accept=".png, .jpeg, .jpg, .bmp, .tiff, .tif"
             v-model="fileLeft"
             @update:model-value="loadImageLeft(fileLeft as File)"
           ></q-file>
@@ -67,13 +67,13 @@
               :disable="SketchLeft"
               class="q-pr-md"
               v-model="DigitalLeft"
-              label="Digital file"
+              label="Digitally drawn DRD file"
             ></q-checkbox>
             <q-checkbox
               :disable="DigitalLeft"
               class="q-pr-md"
               v-model="SketchLeft"
-              label="Handwritten file"
+              label="Hand-written DMN file"
             ></q-checkbox>
           </div>
           <div class="image-display">
@@ -120,7 +120,7 @@
           <q-file
             ref="filePickerRight"
             style="display: none"
-            accept=".png, .jpeg, .jpg, .bmp"
+            accept=".png, .jpeg, .jpg, .bmp, .tiff, .tif"
             v-model="fileRight"
             @update:model-value="loadImageRight(fileRight as File)"
           ></q-file>
@@ -146,19 +146,19 @@
             <q-checkbox
               class="q-pr-md"
               v-model="isTableRight"
-              label="Table"
+              label="Decision Table"
             ></q-checkbox>
             <q-checkbox
               :disable="SketchRight"
               class="q-pr-md"
               v-model="DigitalRight"
-              label="Digital file"
+              label="Digitally drawn file"
             ></q-checkbox>
             <q-checkbox
               :disable="DigitalRight"
               class="q-pr-md"
               v-model="SketchRight"
-              label="Handwritten file"
+              label="Hand-written file"
             ></q-checkbox>
           </div>
           <div class="image-display">
