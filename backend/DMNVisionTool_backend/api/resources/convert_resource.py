@@ -131,7 +131,7 @@ async def convert_images(request:Request):
             obj_predictions = ps.PredictObject(predict_img_pdf)
             drd_elements = cs.convert_object_predictions(obj_predictions)
 
-            kp_predictions = ps.PredictKeypoint(ocr_img_pdf)
+            kp_predictions = ps.PredictKeypoint(predict_img_pdf)
             requirements = cs.convert_keypoint_prediction(kp_predictions)
             scs.connect_requirements(requirements, drd_elements)
             scs.reference_requirements(requirements, drd_elements)

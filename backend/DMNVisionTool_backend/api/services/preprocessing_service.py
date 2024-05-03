@@ -19,13 +19,6 @@ def get_ocr_image_pdf(image_path: str):
     # Read the sharpened image using OpenCV
     img = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
 
-    # Upscale the resolution to 600 DPI
-    upscale_ratio = 600.0 / min(img.shape[0], img.shape[1]) # Calculate scaling ratio
-    new_width = int(img.shape[1] * upscale_ratio) # New width after scaling
-    new_height = int(img.shape[0] * upscale_ratio) # New height after scaling
-    img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-
-
     if img is not None and img.shape[2] == 4:
         print('image will be enhanced')
         trans_mask = img[:, :, 3] == 0
@@ -102,6 +95,7 @@ def get_predict_image_pdf(image_path: str):
     img = cv2.imread(image_path)
 
     return img
+
 
 def get_predict_image_sketch(image_path: str):
     """Service that reads and returns an image suitable for an Object/KeyPoints detection task, given its path

@@ -35,15 +35,23 @@ class Element:
         return " ".join([text.text for text in self.name])
 
     def render_shape(self):
-        """Returns the xml string containing the shape information of this kind of element"""
-        template = """<dmndi:DMNShape dmnElementRef="{{ element.id }}" >
-        <dc:Bounds height="{{ element.prediction.height }}" width="{{ element.prediction.width }}" x="{{ element.prediction.top_left_x }}" y="{{ element.prediction.top_left_y }}" />
-      </dmndi:DMNShape>
-        """
-        rtemplate = self.jinja_environment.from_string(template)
-        data = rtemplate.render(element=self)
+       """Returns the xml string containing the shape information of this kind of element"""
+       # Adjust the height, width, top left x, and top left y to make the element smaller
+       scale_factor = 0.5  # Adjust this scale factor as needed
+       height = self.prediction.height * scale_factor
+       width = self.prediction.width * scale_factor
+       top_left_x = self.prediction.top_left_x * scale_factor
+       top_left_y = self.prediction.top_left_y * scale_factor
 
-        return data
+       template = """<dmndi:DMNShape dmnElementRef="{{ element.id }}" >
+       <dc:Bounds height="{{ height }}" width="{{ width }}" x="{{ top_left_x }}" y="{{ top_left_y }}" />
+       </dmndi:DMNShape>
+       """
+       rtemplate = self.jinja_environment.from_string(template)
+       data = rtemplate.render(element=self, height=height, width=width, top_left_x=top_left_x, top_left_y=top_left_y)
+
+       return data
+
     
 class Decision(Element):
     """Represents a DMN Decision element.

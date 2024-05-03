@@ -28,16 +28,24 @@ class Requirement:
         """Returns the xml string associated to this kind of requirement"""
 
     def render_shape(self):
-        """Returns the xml string containing the shape information of this kind of requirement"""
-        template = """<dmndi:DMNEdge dmnElementRef="{{ requirement.id }}" >
-        <di:waypoint x="{{ requirement.prediction.tail[0] }}" y="{{ requirement.prediction.tail[1] }}" />
-        <di:waypoint x="{{ requirement.prediction.head[0] }}" y="{{ requirement.prediction.head[1] }}" />
-      </dmndi:DMNEdge>
-        """
-        rtemplate = self.jinja_environment.from_string(template)
-        data = rtemplate.render(requirement=self)
+       """Returns the xml string containing the shape information of this kind of requirement"""
+       # Adjust the tail and head coordinates to match the scaled elements
+       scale_factor = 0.5  # Adjust this scale factor to match the one used for scaling the elements
+       tail_x = self.prediction.tail[0] * scale_factor
+       tail_y = self.prediction.tail[1] * scale_factor
+       head_x = self.prediction.head[0] * scale_factor
+       head_y = self.prediction.head[1] * scale_factor
 
-        return data
+       template = """<dmndi:DMNEdge dmnElementRef="{{ requirement.id }}" >
+       <di:waypoint x="{{ tail_x }}" y="{{ tail_y }}" />
+       <di:waypoint x="{{ head_x }}" y="{{ head_y }}" />
+       </dmndi:DMNEdge>
+       """
+       rtemplate = self.jinja_environment.from_string(template)
+       data = rtemplate.render(requirement=self, tail_x=tail_x, tail_y=tail_y, head_x=head_x, head_y=head_y)
+
+       return data
+
     
 class InformationRequirement(Requirement):
     """Represents a DMN Information Requirement
@@ -62,7 +70,7 @@ class InformationRequirement(Requirement):
         if self.hRef is not None and "Decision" in self.hRef:
             template = """<informationRequirement id="{{ requirement.id }}"> <requiredDecision href="#{{ requirement.hRef }}" /> </informationRequirement>"""
 
-        elif self.hRef is not None and "Input" in self.hRef: 
+        else: 
             template = """<informationRequirement id="{{ requirement.id }}"> <requiredInput href="#{{ requirement.hRef }}" /> </informationRequirement>"""
 
         render_template = self.jinja_environment.from_string(template)

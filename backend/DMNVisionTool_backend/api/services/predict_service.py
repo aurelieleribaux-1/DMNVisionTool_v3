@@ -56,7 +56,7 @@ class ObjectPredictor:
         outs = self._predictor(img)
 
         v = Visualizer(img[:, :, ::-1],
-                       scale=1.5,
+                       scale=5,
                        instance_mode=ColorMode.IMAGE_BW
                        )
         out = v.draw_instance_predictions(outs["instances"].to("cpu"))
@@ -76,7 +76,7 @@ class KeyPointPredictor:
         )
         cfg.OUTPUT_DIR = here("../../detectron_model")
         cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "kp_DRD_model_final.pth")
-        cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.6
+        cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 4
         cfg.MODEL.RETINANET.NUM_CLASSES = 4
         cfg.MODEL.ROI_KEYPOINT_HEAD.NUM_KEYPOINTS = 4

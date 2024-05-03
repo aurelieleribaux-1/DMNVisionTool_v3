@@ -269,14 +269,21 @@ def connect_graph2tables(elements: List[Element], tables: List[Table]):
                 print("table recognised is an instance of a table")
                 if isinstance(decision_table.header, TableHeader):
                     print("There is a decision table header of the class TableHeader")
-                    header_lable = decision_table.header.get_label()
-                    print("Header label:", header_lable)
+                    header_label = decision_table.header.get_label()
+                    print("Header label:", header_label)
                     
-                    if distance(decision_table.header.get_label(), decision_name) <= 6:
-                    #if decision_table.header.get_label() == :
+                    if not header_label or (distance(decision_table.header.get_label(), decision_name)) <= 20:
                         decision.table.append(decision_table)
                         print("Decision table added to the decision")
-                    
+                    else:
+                        for output in decision_table.outputs:
+                            if isinstance(output, TableOutput):
+                               print("There is a decision table output of the class TableOutput")
+                               output_label = output.get_label()
+                               print("Output label:", output_label)
+                               if not output_label or (distance(output.get_label(), decision_name)) <= 20:
+                                  decision.table.append(decision_table)
+                                  print("Decision table added to the decision")
                 else: 
                     print("There is no decision table's header or it is not of the class TableHeader")
                 

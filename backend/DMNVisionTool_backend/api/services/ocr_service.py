@@ -37,8 +37,8 @@ def get_text_from_img(img,predictions: List[ObjectPrediction]):
         x1, y1, x2, y2 = prediction.get_box_coordinates()
         # Extract the ROI from the grayscale image
         roi = img[int(y1):int(y2), int(x1):int(x2)]
-        # Resize the ROI if needed
-        roi_resized = cv2.resize(roi, None, fx=10, fy=10, interpolation=cv2.INTER_CUBIC)
+        # Resize the ROI based on the resizing factor
+        roi_resized = cv2.resize(roi, None, fx=20 if len(predictions) > 7 else 10, fy=20 if len(predictions) > 7 else 10, interpolation=cv2.INTER_CUBIC)
         # Perform OCR on the ROI
         text = pytesseract.image_to_string(roi_resized, config="--psm 12")
         # Spell-check the extracted text using TextBlob
@@ -78,7 +78,7 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
         # Extract the ROI from the grayscale image
         roi = img[int(y1):int(y2), int(x1):int(x2)]
         # Resize the ROI if needed
-        roi_resized = cv2.resize(roi, None, fx=10, fy=10, interpolation=cv2.INTER_CUBIC)
+        roi_resized = cv2.resize(roi, None, fx=15, fy=15, interpolation=cv2.INTER_CUBIC)
         # Perform OCR on the ROI
         text = pytesseract.image_to_string(roi_resized, config="--psm 12")
         # Spell-check the extracted text using TextBlob
