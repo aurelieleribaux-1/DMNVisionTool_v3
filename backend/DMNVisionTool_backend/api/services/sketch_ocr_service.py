@@ -15,6 +15,7 @@ import cv2
 
 def get_text_from_img(img,predictions: List[ObjectPrediction]):
     """Extract text from an image using OCR with Tesseract after ROI selection.
+
     Parameters
     ----------
     img: ndarray
@@ -51,8 +52,7 @@ def get_text_from_img(img,predictions: List[ObjectPrediction]):
 
     return text_list
 
-
-def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePrediction]) -> List[TableText]:
+def get_text_from_table_img_sketch(img: ndarray,predictions: List[TablePrediction]) -> List[TableText]:
     """Extract all the text from an image using OCR with pytesseract
 
     Parameters
@@ -62,9 +62,10 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
 
     Returns
     -------
-    List[TableText]
-        The list of detected Text with their bounding boxes
+    List[Text]
+        The list of detected Text
     """
+
     # Convert the image to grayscale
     #gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -77,7 +78,7 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
         # Extract the ROI from the grayscale image
         roi = img[int(y1):int(y2), int(x1):int(x2)]
         # Resize the ROI if needed
-        roi_resized = cv2.resize(roi, None, fx=15, fy=15, interpolation=cv2.INTER_CUBIC)
+        roi_resized = cv2.resize(roi, None, fx=6, fy=6, interpolation=cv2.INTER_CUBIC)
         # Perform OCR on the ROI
         text = pytesseract.image_to_string(roi_resized, config="--psm 12")
         # Spell-check the extracted text using TextBlob
@@ -86,9 +87,9 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
         table_text = TableText(corrected_text, x1, y1, x2 - x1, y2 - y1)
         # Append the GraphText object to the list
         text_list.append(table_text)
-            
-    return text_list
-    
+
+    return  text_list
+
 def link_text(texts: List[GraphText], elements: List[Element]):
     """Method that links the Text to the corresponding Elements
 
