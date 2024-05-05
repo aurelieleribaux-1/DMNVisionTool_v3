@@ -7,7 +7,9 @@ from DMNVisionTool_backend.DecisionRequirementDiagram.graph_requirements import 
 from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten.elements_factories import get_factory
 from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten.requirements_factories import get_keypoint_factory
 from DMNVisionTool_backend.DecisionTables.table_elements import Table, TableElement, TableHeader, TableHitPolicy, TableInput, TableOutput, TableRule, InputEntry, OutputEntry 
-from DMNVisionTool_backend.commons.Sketch_utils import get_nearest_element, here, get_envelope_element
+from DMNVisionTool_backend.commons.Sketch_utils import get_nearest_element, here
+from DMNVisionTool_backend.commons.sketch_utils_2 import get_envelope_element
+
 
 from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten import elements_factories as ef
 from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten import requirements_factories as rf

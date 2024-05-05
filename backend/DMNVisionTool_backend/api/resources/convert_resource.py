@@ -51,6 +51,7 @@ async def convert_images(request:Request):
                 
                 # HANDWRITTEN 
                 if sketch_field in form and form[sketch_field] == 'true':
+                        print('Processing image as a sketch')
                         # HANDWRITTEN DRD
                         if graph_field in form and form[graph_field] == 'true':
                                 ocr_img_sketch, predict_img_sketch = spps.get_ocr_and_predict_images(path)
@@ -64,9 +65,7 @@ async def convert_images(request:Request):
                                 scs.connect_requirements(requirements, drd_elements)
                                 scs.reference_requirements(requirements, drd_elements)
                      
-                                text = sos.get_text_from_img(ocr_img_sketch,obj_predictions)
-                                print('text:',text)
-                                sos.link_text(text, drd_elements)
+                                drd_elements = sos.get_text_from_img(ocr_img_sketch,drd_elements)
              
                         # HANDWRITTEN + DECISION TABLE
                         elif decisionLogic_field in form and form[decisionLogic_field] == 'true':
@@ -77,9 +76,7 @@ async def convert_images(request:Request):
                                 table_element_predictions = sps.SketchPredictTable(predict_img_sketch)
                                 table_elements = scs.convert_table_object_predictions(table_element_predictions)
             
-                                text = sos.get_text_from_table_img_sketch(ocr_img_sketch,table_element_predictions)
-                                print('text', text)
-                                sos.link_text_table(text, table_elements)
+                                table_elements = sos.get_text_from_table_img_sketch(ocr_img_sketch,table_elements)
             
                                 tables = []
                                 table = Table 
