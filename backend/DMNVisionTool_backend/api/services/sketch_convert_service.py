@@ -276,7 +276,7 @@ def connect_graph2tables(elements: List[Element], tables: List[Table]):
                     header_lable = decision_table.header.get_label()
                     print("Header label:", header_lable)
                     
-                    if distance(decision_table.header.get_label(), decision_name) <= 12:
+                    if distance(decision_table.header.get_label(), decision_name) <= 20:
                     #if decision_table.header.get_label() == :
                         decision.table.append(decision_table)
                         print("Decision table added to the decision")
