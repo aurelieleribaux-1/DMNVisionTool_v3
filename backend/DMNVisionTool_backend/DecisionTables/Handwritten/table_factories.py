@@ -10,6 +10,7 @@ from DMNVisionTool_backend.DecisionTables.table_elements import (
     TableRule,
     InputEntry,
     OutputEntry,
+    Table,
 )
 
 from DMNVisionTool_backend.DecisionTables.table_predictions import TablePrediction
@@ -63,6 +64,7 @@ CATEGORIES = {
     4: "TableHeader",
     5: "TableRule",
     6: "TableHitPolicy",
+    7: "Table"
 }
 
 FACTORIES = {
@@ -73,6 +75,7 @@ FACTORIES = {
     "TableRule": GenericTableElementFactory(TableRule),
     "InputEntry": GenericTableElementFactory(InputEntry),
     "OutputEntry": GenericTableElementFactory(OutputEntry),
+    "Table": GenericTableElementFactory(Table)
     }
 
 def get_table_factory(category_id: int) -> TableElementFactory:

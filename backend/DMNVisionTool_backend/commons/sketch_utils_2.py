@@ -1,12 +1,13 @@
 from DMNVisionTool_backend.DecisionTables.Handwritten import table_factories as tf
 from DMNVisionTool_backend.DecisionTables.table_predictions import TablePrediction
 from typing import List 
-
 import math
 
 from typing import List
 
 from DMNVisionTool_backend.DecisionTables.table_elements import TableElement, TableRule #tba 
+
+## To delete tomorrow, still want to check something here ! (Caroline)
 
 def get_envelope_element(center: List[int], table_elements: List[TableElement]) -> TableElement:
     """Utils taht given oa list of Table elements and the desired center, return the element enveloping the element (of which the center is given)

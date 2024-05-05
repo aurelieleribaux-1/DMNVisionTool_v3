@@ -128,23 +128,3 @@ def get_text_from_table_img_sketch(img, table_elements: List[TableElement]) -> L
         table_element.label.append(table_text)
             
     return table_elements
-
-#def link_text_table(texts: List[TableText], elements: List[TableElement]):
-#    """Method that links the Text to the corresponding Elements
-
-#    Parameters
-#    ----------
-#    texts: List[TableText]
-#        List of detected Text
-#    elements: List[TableElement]
-#        List of Element to be linked
-
-#   Returns
-#    -------
-#    List[TableElement]
-#        The list of updated Element
-#    """
-#    for text in texts:
-#        nearest = get_nearest_element(text.center, elements)
-#        nearest.label.append(text)
-#    return elements

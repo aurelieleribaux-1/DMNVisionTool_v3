@@ -87,24 +87,33 @@ async def convert_images(request:Request):
                                 table_rules = []
                                 input_entries = []
                                 output_entries = []
-
+                                
+                                # OR add here empty elements if there is none? 
                                 for table_element in table_elements:
                                         if isinstance(table_element, Table):
                                                 table = table_element
+                                                print("CR - There is a table")
                                         elif isinstance(table_element, TableHeader):
                                                 table_header = table_element
+                                                print("CR - There is a header")
                                         elif isinstance(table_element, TableHitPolicy):
                                                 table_hitPolicy = table_element
+                                                print("CR - There is a hitpolicy")
                                         elif isinstance(table_element, TableInput):
                                                 table_inputs.append(table_element)
+                                                print("CR - There is a input")
                                         elif isinstance(table_element, TableOutput):
                                                 table_outputs.append(table_element)
+                                                print("CR - There is a output")
                                         elif isinstance(table_element, TableRule):
                                                 table_rules.append(table_element)
+                                                print("CR - There is a rule")
                                         elif isinstance(table_element, InputEntry):
                                                 input_entries.append(table_element)
+                                                print("CR - There is a input entry")
                                         elif isinstance(table_element, OutputEntry):
                                                 output_entries.append(table_element)
+                                                print("CR - There is a output entry")
             
                                 table_rules = scs.connect_entries2rule(table_rules, input_entries, output_entries)
                                 table_connect = scs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)

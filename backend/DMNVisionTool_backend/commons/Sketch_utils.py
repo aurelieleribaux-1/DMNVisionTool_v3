@@ -27,6 +27,35 @@ def generate_id(prefix: str) -> str:
     )
     return f"{prefix}_{alphanumeric_str}"
 
+def get_envelope_element(center: List[int], table_elements: List[TableElement]) -> TableElement:
+    """Utils taht given oa list of Table elements and the desired center, return the element enveloping the element (of which the center is given)
+    
+    Parameters
+    ----------
+    center: List[int]
+        A tuple with the coordinates of the desired center
+    table_elements: List of tables elements to be considered for the nearest element
+    
+    Returns
+    -------
+    TableElement
+        The table element enveloping the center
+    """
+    rules = []
+    for element in table_elements:
+        if isinstance (element, TableRule):
+            rules.append(element)
+            
+    envelope = min(
+        rules,
+        key=lambda x: math.sqrt(
+            pow(center[0] - x.prediction.center[0], 2)
+            + pow(center[1] - x.prediction.center[1], 2)
+        ),
+    )
+    
+    return envelope
+
 
 def get_nearest_element(
     center: List[int], elements: List[Element]) -> Element:
