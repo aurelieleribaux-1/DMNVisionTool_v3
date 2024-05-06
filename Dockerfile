@@ -40,13 +40,18 @@ RUN [ -f DMNVisionTool_backend/detectron_model/SketchTable_model_final.pth ] && 
 RUN pip install -U pip
 
 
-# Update package lists and install tesseract-ocr
+# Update package lists # Install Tesseract OCR and necessary language data for LSTM mode
 RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    && rm -rf /var/lib/apt/lists/*
+tesseract-ocr \
+tesseract-ocr-eng  # Example: English language data for LSTM mode
 RUN apt-get install -y apt-transport-https
 RUN echo 'deb https://notesalexp.org/tesseract-ocr-dev/bullseye/ bullseye main' >> /etc/apt/sources.list
 #RUN apt-get update
+
+# Install additional trained data for handwritten text recognition
+RUN mkdir -p /usr/share/tesseract-ocr/4.00/tessdata/
+RUN curl -L -o /usr/share/tesseract-ocr/4.00/tessdata/eng.traineddata https://github.com/tesseract-ocr/tessdata_best/raw/main/eng.traineddata
+RUN curl -L -o /usr/share/tesseract-ocr/4.00/tessdata/eng_lstm.traineddata https://github.com/tesseract-ocr/tessdata_best/raw/main/eng_lstm.traineddata
 
 # Install Python dependencies
 COPY backend/requirements.txt ./
