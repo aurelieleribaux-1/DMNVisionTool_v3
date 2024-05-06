@@ -1,6 +1,8 @@
 import jinja2
 from typing import List, TYPE_CHECKING
 from Levenshtein import distance
+import random
+
 
 from DMNVisionTool_backend.DecisionRequirementDiagram.graph_elements import Element, Diagram, Decision
 from DMNVisionTool_backend.DecisionRequirementDiagram.graph_requirements import Requirement
@@ -22,7 +24,6 @@ if TYPE_CHECKING:
 if TYPE_CHECKING:
     from DecisionTables.table_predictions import TablePrediction
 
-# TO DO: I added prints to check the working of the function but we can delete those later
 def convert_object_predictions(predictions: List["ObjectPrediction"]):
     """Method that converts the prediction of the detected dmn object into Elements
 
@@ -52,7 +53,6 @@ def convert_object_predictions(predictions: List["ObjectPrediction"]):
 
     return elements
 
-# TO DO: I added prints to check the working of the function but we can delete those later
 def convert_keypoint_prediction(predictions: List["KeyPointPrediction"]):
     """Method that converts the prediction of the keypoint into Requirement
 
@@ -155,7 +155,6 @@ def reference_requirements(requirements: List[Requirement], elements: List[Eleme
         
     return requirements
 
-# TO DO: I added prints to check the working of the function but we can delete those later
 def convert_table_object_predictions(predictions: List["TablePrediction"]):
     """Method that converts the prediction of the detected table into a Table Element
 
@@ -256,38 +255,63 @@ def connect_graph2tables(elements: List[Element], tables: List[Table]):
     tables: List[Table]
         List of the tables
     """
+    """Method that connects table to the right decision element based on its header
+    
+    Parameters
+    ----------
+    elements: List[Element]
+        List of the decision elements
+    tables: List[Table]
+        List of the tables
+    """
     decisions = []
     for element in elements: 
         if isinstance(element, Decision):
             decisions.append(element)
-
-    for decision in decisions:
-        decision_name = decision.get_name()
-        print("Decision name:", decision_name)
-        for decision_table in tables:
-            if isinstance(decision_table, Table):
-                print("table recognised is an instance of a table")
-                if isinstance(decision_table.header, TableHeader):
-                    print("There is a decision table header of the class TableHeader")
-                    header_label = decision_table.header.get_label()
-                    print("Header label:", header_label)
-                    
-                    if not header_label or (distance(decision_table.header.get_label(), decision_name)) <= 20:
-                        decision.table.append(decision_table)
-                        print("Decision table added to the decision")
-                    else:
-                        for output in decision_table.outputs:
-                            if isinstance(output, TableOutput):
-                               print("There is a decision table output of the class TableOutput")
-                               output_label = output.get_label()
-                               print("Output label:", output_label)
-                               if not output_label or (distance(output.get_label(), decision_name)) <= 20:
-                                  decision.table.append(decision_table)
-                                  print("Decision table added to the decision")
-                else: 
-                    print("There is no decision table's header or it is not of the class TableHeader")
+            
+    for decision_table in tables:
+        if isinstance(decision_table, Table):
+            print("Table recognised is an instance of a table")
+            if isinstance(decision_table.header, TableHeader):
+                print("There is a decision table header of the class TableHeader")
+                header_label = decision_table.header.get_label()
+                print("Header label:", header_label)
+                label = header_label # Header label will be used for the matching
+            
+            elif isinstance(decision_table.outputs, TableOutput):
+                output_label = decision_table.outputs.get_label()
+                print("There is a decision table output of the class TableOutput")
+                print("Output label:", output_label)
+                label = output_label # Output label will be used for the matching
                 
             else: 
-                print("No table has been recognised")
+                print("Neither header nor output label was recongized in the table so table will be assigned to a random decision")
+                label = None
+                
+            # Case 1: There is either a header or output recognized
+            if label is not None:
+            # Check in all decisions in the graph, which one is the closest (Levenstein) to the label used for the matching
+            # Initialize distance
+                dist=0
+                old_distance = 10000
+                for decision in decisions:
+                    decision_name = decision.get_name()
+                    print("Decision name:", decision_name)
+                    dist = distance(decision_table.header.get_label(), decision_name)
+                    if dist < old_distance:
+                        decision_matched = decision
+                    
+                decision_matched.table.append(decision_table)
+                    
+            # Case 2: Neither header nor output was recognized, label is None
+            else: 
+                # Assign table to random decision
+                for decision in decisions:
+                    random_decision = random.choice(decisions)
+                    random_decision.table.append(decision_table)
+                
+        else:
+            print("Table is not an instance of Table class, something went wrong")
+            label = None
                 
     return elements

@@ -188,7 +188,7 @@ class TablePredictor:
         )
         cfg.OUTPUT_DIR = here("../../detectron_model") # Make sure to use right directory
         cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "Table_model_final.pth")  # path to the trained model
-        cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
+        cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.6
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 8
         cfg.MODEL.DEVICE = "cpu"
         self._predictor = DefaultPredictor(cfg)

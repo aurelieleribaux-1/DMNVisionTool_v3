@@ -65,8 +65,10 @@ async def convert_images(request:Request):
                                 scs.connect_requirements(requirements, drd_elements)
                                 scs.reference_requirements(requirements, drd_elements)
                      
-                                drd_elements = sos.get_text_from_img(ocr_img_sketch,drd_elements)
-             
+                                text = sos.get_text_from_img(ocr_img_sketch,obj_predictions)
+                                sos.link_text(text, drd_elements)
+                                # drd_elements= sos.get_text_from_img(ocr_img_sketch,drd_elements)
+
                         # HANDWRITTEN + DECISION TABLE
                         elif decisionLogic_field in form and form[decisionLogic_field] == 'true':
                                 ocr_img_sketch, predict_img_sketch = spps.get_ocr_and_predict_images(path)
@@ -115,7 +117,7 @@ async def convert_images(request:Request):
                                                 output_entries.append(table_element)
                                                 print("CR - There is a output entry")
                                                 
-                                scs.create_extra_table_elements(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules, input_entries, output_entries)
+                                #scs.create_extra_table_elements(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules, input_entries, output_entries)
             
                                 table_rules = scs.connect_entries2rule(table_rules, input_entries, output_entries)
                                 table_connect = scs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)

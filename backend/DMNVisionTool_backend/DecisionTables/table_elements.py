@@ -22,8 +22,8 @@ class Table:
     ):
         self.id = id
         self.prediction = prediction
-        self.header = TableHeader
-        self.hitPolicy = TableHitPolicy
+        self.header = None
+        self.hitPolicy = None
         self.inputs = []
         self.outputs = []
         self.rules = []
@@ -70,7 +70,6 @@ class TableHeader(TableElement):
     ):        
         self.id = id
         self.prediction = prediction
-        self.hitPolicy = []
         self.label = []
         self.jinja_environment = Environment(loader=BaseLoader())
 
@@ -134,11 +133,14 @@ class TableInput(TableElement):
             return " ".join([text.text for text in self.label])
     
     def render_input(self):
-        last_word = self.label[-1].text if self.label else ""
-        self.typeRef.append("string")
+        if self.label:
+           last_words = [text.text.split()[-1] for text in self.label]  # Extract last word from each label text
+           self.typeRef.extend(last_words)  # Extend typeRef with the last words  
+        else:       
+         self.typeRef.append("string")
         template = """
         <input id="{{ input.id }}" label="{{ input.get_label() }}">
-            <inputExpression id="{{ input.id }}_{{ input.id }}" typeRef="{{ input.typeRef[-1] }}">
+            <inputExpression id="{{ input.id }}_{{ input.id }}" typeRef="{{ input.typeRef }}">
             </inputExpression>
         </input>
         """
@@ -179,10 +181,13 @@ class TableOutput(TableElement):
         else:
             return " ".join([text.text for text in self.label])
     
-    def render_output(self):        
-        last_word = self.label[-1].text if self.label else ""
-        self.typeRef.append("string")
-        template = """<output id="{{ output.id }}" label="{{ output.get_label() }}" typeRef="{{ output.typeRef[-1] }}"/> """
+    def render_output(self): 
+        if self.label:
+           last_words = [text.text.split()[-1] for text in self.label]  # Extract last word from each label text
+           self.typeRef.extend(last_words)  # Extend typeRef with the last words
+        else:       
+         self.typeRef.append("string")
+        template = """<output id="{{ output.id }}" label="{{ output.get_label() }}" typeRef="{{ output.typeRef}}"/> """
         rtemplate = self.jinja_environment.from_string(template)
         data = rtemplate.render(output=self)
 

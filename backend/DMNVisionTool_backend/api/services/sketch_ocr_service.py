@@ -9,11 +9,88 @@ from DMNVisionTool_backend.DecisionTables.table_elements import TableElement
 from DMNVisionTool_backend.DecisionRequirementDiagram.graph_predictions import Text as GraphText
 from DMNVisionTool_backend.DecisionTables.table_predictions import Text as TableText
 from DMNVisionTool_backend.commons.utils import get_nearest_element
-#from textblob import TextBlob
+from textblob import TextBlob
 import numpy as np
 import cv2
+import nltk
+from collections import Counter
 
-def get_text_from_img(img, elements: List[Element]):
+# Load English words dictionary from nltk
+nltk.download('words')
+english_words = set(nltk.corpus.words.words())
+
+def get_valid_word(word, all_words):
+    if word.lower() in english_words:
+        return word
+    else:
+        # If the word is not in the dictionary, return a word from the list of all words detected in the image
+        for w in all_words:
+            if w.lower() in english_words:
+                return w
+        # If no valid replacement word is found, return a placeholder word or handle it as desired
+        return "word"
+
+
+def get_text_from_img(img,predictions: List[ObjectPrediction]):
+    """Extract text from an image using OCR with Tesseract after ROI selection.
+    Parameters
+    ----------
+    img: ndarray
+        The image to use for text extraction (as Numpy ndarray)
+
+    Returns
+    -------
+    List[GraphText]
+        The list of detected text with bounding boxes
+    """
+    # Convert the image to grayscale
+    #gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    if len(predictions) > 14:
+        resize_factor = 27
+    elif len(predictions) > 7:
+        resize_factor = 20
+    else: 
+        resize_factor = 10
+    # Initialize list to store extracted text with bounding boxes
+    text_list = []
+
+    # Iterate over the predictions and extract text from each predicted box
+    for prediction in predictions:
+        x1, y1, x2, y2 = prediction.get_box_coordinates()
+        # Extract the ROI from the grayscale image
+        roi = img[int(y1):int(y2), int(x1):int(x2)]
+        # Resize the ROI based on the resizing factor
+        roi_resized = cv2.resize(roi, None, fx=resize_factor, fy=resize_factor, interpolation=cv2.INTER_CUBIC)
+        # Perform OCR on the ROI
+        text = pytesseract.image_to_string(roi_resized, config="--psm 12 --oem 1")
+        # Tokenize the text
+        words = text.split()
+        # Initialize a set to keep track of unique words in the corrected text
+        unique_words = set()
+        # Replace nonsensical words with the most frequent English word
+        corrected_text = []
+        for word in words:
+            if word.lower() not in english_words:
+                # If the word is not in the English words dictionary, replace it with a valid word
+                valid_word = get_valid_word(word, words)
+                if valid_word not in unique_words:
+                    # Add the valid word to the corrected text and the set of unique words
+                    corrected_text.append(valid_word)
+                    unique_words.add(valid_word)
+            else:
+                # If the word is in the English words dictionary, keep it in the corrected text
+                corrected_text.append(word)
+        # Join the corrected text into a single string
+        corrected_text = " ".join(corrected_text)
+        # Create a GraphText object with the corrected text and bounding box
+        graph_text = GraphText(corrected_text, x1, y1, x2 - x1, y2 - y1)
+        # Append the GraphText object to the list
+        text_list.append(graph_text) 
+
+    return text_list
+
+def get_text_from_img2(img, elements: List[Element]):
     """Extract text from an image using OCR with Tesseract after ROI selection.
 
     Parameters
@@ -68,6 +145,7 @@ def get_text_from_img(img, elements: List[Element]):
         table_text = GraphText(extracted_text, x1, y1, x2, y2)
             
         element.name.append(table_text)
+        
             
     return elements
 
@@ -128,3 +206,23 @@ def get_text_from_table_img_sketch(img, table_elements: List[TableElement]) -> L
         table_element.label.append(table_text)
             
     return table_elements
+
+def link_text(texts: List[GraphText], elements: List[Element]):
+    """Method that links the Text to the corresponding Elements
+
+    Parameters
+    ----------
+    texts: List[GraphText]
+        List of detected Text
+    elements: List[Element]
+        List of Element to be linked
+
+    Returns
+    -------
+    List[Element]
+        The list of updated Element
+    """
+    for text in texts:
+        nearest = get_nearest_element(text.center, elements)
+        nearest.name.append(text)
+    return elements

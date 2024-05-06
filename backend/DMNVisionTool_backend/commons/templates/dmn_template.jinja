@@ -18,11 +18,15 @@
             {% endfor %}
             {% if element.table %}
               {% for table in element.table %}
-                  {% set hit_policy_first_word = table.hitPolicy.get_label().split()[0]|upper %}
-                  {% if hit_policy_first_word in ['UNIQUE', 'FIRST', 'PRIORITY', 'COLLECT'] %}
+                  {% if table.hitPolicy %}
+                    {% set hit_policy_first_word = table.hitPolicy.get_label().split()[0]|upper %}
+                    {% if hit_policy_first_word in ['UNIQUE', 'FIRST', 'PRIORITY', 'COLLECT'] %}
                             <decisionTable id="{{ table.id }}" hitPolicy="{{ hit_policy_first_word }}">
-                  {% else %}
+                    {% else %}
                             <decisionTable id="{{ table.id }}" hitPolicy="UNIQUE">
+                    {% endif %}
+                  {% else %}
+                    <decisionTable id="{{ table.id }}" hitPolicy="UNIQUE">
                   {% endif %}
                   {% for input in table.inputs %}
                     {{input.render_input()| indent(8)}}

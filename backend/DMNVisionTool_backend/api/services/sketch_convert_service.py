@@ -160,7 +160,6 @@ def reference_requirements(requirements: List[Requirement], elements: List[Eleme
     return requirements
 
 
-# TO DO: I added prints to check the working of the function but we can delete those later
 def convert_table_object_predictions(predictions: List["TablePrediction"]):
     """Method that converts the prediction of the detected table into a Table Element
 
@@ -298,12 +297,13 @@ def connect_graph2tables(elements: List[Element], tables: List[Table]):
             if label is not None:
             # Check in all decisions in the graph, which one is the closest (Levenstein) to the label used for the matching
             # Initialize distance
+                dist=0
                 old_distance = 10000
                 for decision in decisions:
                     decision_name = decision.get_name()
                     print("Decision name:", decision_name)
-                    distance = distance(label, decision_name)
-                    if distance < old_distance:
+                    dist = distance(decision_table.header.get_label(), decision_name)
+                    if dist < old_distance:
                         decision_matched = decision
                     
                 decision_matched.table.append(decision_table)

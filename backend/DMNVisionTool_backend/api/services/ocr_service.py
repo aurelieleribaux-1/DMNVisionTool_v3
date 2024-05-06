@@ -28,6 +28,12 @@ def get_text_from_img(img,predictions: List[ObjectPrediction]):
     # Convert the image to grayscale
     #gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
+    if len(predictions) > 14:
+        resize_factor = 27
+    elif len(predictions) > 7:
+        resize_factor = 17
+    else: 
+        resize_factor = 10
     # Initialize list to store extracted text with bounding boxes
     text_list = []
 
@@ -37,7 +43,7 @@ def get_text_from_img(img,predictions: List[ObjectPrediction]):
         # Extract the ROI from the grayscale image
         roi = img[int(y1):int(y2), int(x1):int(x2)]
         # Resize the ROI based on the resizing factor
-        roi_resized = cv2.resize(roi, None, fx=20 if len(predictions) > 7 else 10, fy=20 if len(predictions) > 7 else 10, interpolation=cv2.INTER_CUBIC)
+        roi_resized = cv2.resize(roi, None, fx=resize_factor, fy=resize_factor, interpolation=cv2.INTER_CUBIC)
         # Perform OCR on the ROI
         text = pytesseract.image_to_string(roi_resized, config="--psm 12")
         # Spell-check the extracted text using TextBlob
@@ -68,6 +74,11 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
     # Convert the image to grayscale
     #gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
+    if len(predictions) > 19:
+        resize_factor = 2
+    else: 
+        resize_factor = 1
+
     # Initialize list to store extracted text with bounding boxes
     text_list = []
 
@@ -77,9 +88,12 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
         # Extract the ROI from the grayscale image
         roi = img[int(y1):int(y2), int(x1):int(x2)]
         # Resize the ROI if needed
-        roi_resized = cv2.resize(roi, None, fx=15, fy=15, interpolation=cv2.INTER_CUBIC)
-        # Perform OCR on the ROI
-        text = pytesseract.image_to_string(roi_resized, config="--psm 12")
+        roi_resized = cv2.resize(roi, None, fx=resize_factor, fy=resize_factor, interpolation=cv2.INTER_CUBIC)
+        if len(predictions) > 19:
+          # Perform OCR on the ROI
+          text = pytesseract.image_to_string(roi_resized, config="--psm 6 -c tessedit_char_blacklist={+-}")
+        else: 
+          text = pytesseract.image_to_string(roi_resized, config="--psm 12 -c tessedit_char_blacklist={+-}")
         # Spell-check the extracted text using TextBlob
         corrected_text = TextBlob(text).correct().string
         # Create a GraphText object with the corrected text and bounding box
