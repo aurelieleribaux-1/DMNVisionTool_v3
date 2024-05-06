@@ -14,14 +14,16 @@ from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten import element
 from DMNVisionTool_backend.DecisionRequirementDiagram.Handwritten import requirements_factories as rf
 from DMNVisionTool_backend.DecisionTables.Handwritten import table_factories as tf 
 
+from DMNVisionTool_backend.DecisionTables.table_predictions import TablePrediction 
+
 if TYPE_CHECKING:
     from DecisionRequirementDiagram.graph_predictions import (
         ObjectPrediction,
         KeyPointPrediction,
     )
 
-if TYPE_CHECKING:
-    from DecisionTables.table_predictions import TableElementPrediction, TablePrediction 
+#if TYPE_CHECKING:
+#    from DecisionTables.table_predictions import TableElementPrediction, TablePrediction 
 
 # TO DO: I added prints to check the working of the function but we can delete those later
 def convert_object_predictions(predictions: List["ObjectPrediction"]):
@@ -318,3 +320,71 @@ def connect_graph2tables(elements: List[Element], tables: List[Table]):
             label = None
                 
     return elements
+
+def create_extra_table_elements(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules, input_entries, output_entries):
+    """Method that creates extra table elements in case of missing ones
+    
+    Parameters
+    ----------
+    table = Table 
+    table_header = TableHeader
+    table_hitPolicy = TableHitPolicy
+    table_inputs = []
+    table_outputs = []
+    table_rules = []
+    input_entries = []
+    output_entries = []
+    
+    Returns
+    -------
+    table = Table 
+    table_header = TableHeader
+    table_hitPolicy = TableHitPolicy
+    table_inputs = []
+    table_outputs = []
+    table_rules = []
+    input_entries = []
+    output_entries = []
+    """
+    # Set a random bbox prediction
+    # To do: Retrieve bbox from one prediction that is well predicted?
+    top_left_x = 1
+    top_left_y = 1
+    bottom_right_x = 10
+    bottom_right_y = 10
+    
+    if not isinstance(table, Table):
+        print("No table was predicted, so one is added")
+        prediction = TablePrediction(7, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
+        factory = tf.get_table_factory(prediction.predicted_label)
+        table = factory.create_element(prediction)
+    elif not isinstance(table_header, TableHeader):
+        print("No table header was predicted, so one is added")
+        prediction = TablePrediction(4, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
+        factory = tf.get_table_factory(prediction.predicted_label)
+        table_header = factory.create_element(prediction)
+    elif not isinstance(table_hitPolicy, TableHitPolicy):
+        print("No table hitpolicy was predicted, so one is added")
+        prediction = TablePrediction(6, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
+        factory = tf.get_table_factory(prediction.predicted_label)
+        table_hitPolicy = factory.create_element(prediction)
+    elif table_inputs == []:
+        print("No table_inputs was predicted, so one is added")
+        prediction = TablePrediction(3, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
+        factory = tf.get_table_factory(prediction.predicted_label)
+        extra_input = factory.create_element(prediction)
+        table_inputs.append(extra_input)
+    elif table_outputs == []:
+        print("No table_outputs was predicted, so one is added")
+        prediction = TablePrediction(2, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
+        factory = tf.get_table_factory(prediction.predicted_label)
+        extra_output = factory.create_element(prediction)
+        table_outputs.append(extra_output)
+    elif table_rules == []:
+        print("No table_rules was predicted, so one is added")
+        prediction = TablePrediction(5, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
+        factory = tf.get_table_factory(prediction.predicted_label)
+        extra_rule = factory.create_element(prediction)
+        table_rules.append(extra_rule)
+        
+    return table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules, input_entries, output_entries
