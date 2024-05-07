@@ -117,7 +117,7 @@
 
         <!-- Right Section -->
         <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'right')">
-          <h2>style="font-size: 32px;">Upload Your Decision Table's Image Here</h2>
+          <h2 style="font-size: 32px;">Upload Your Decision Table Image Here</h2>
           <q-btn
             color="accent"
             icon="upload_file"
