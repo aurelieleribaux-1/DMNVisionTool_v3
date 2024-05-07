@@ -299,6 +299,7 @@ def connect_graph2tables(elements: List[Element], tables: List[Table]):
                     print("Decision name:", decision_name)
                     dist = distance(decision_table.header.get_label(), decision_name)
                     if dist < old_distance:
+                        old_distance = dist
                         decision_matched = decision
                     
                 decision_matched.table.append(decision_table)
