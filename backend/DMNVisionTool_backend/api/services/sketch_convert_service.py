@@ -322,7 +322,7 @@ def connect_graph2tables(elements: List[Element], tables: List[Table]):
                 
     return elements
 
-def create_extra_table_elements(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules, input_entries, output_entries):
+def create_extra_table_elements(table, table_header, table_inputs, table_outputs, table_rules, input_entries, output_entries):
     """Method that creates extra table elements in case of missing ones
     
     Parameters
@@ -364,11 +364,6 @@ def create_extra_table_elements(table, table_header, table_hitPolicy, table_inpu
         prediction = TablePrediction(4, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
         factory = tf.get_table_factory(prediction.predicted_label)
         table_header = factory.create_element(prediction)
-    elif not isinstance(table_hitPolicy, TableHitPolicy):
-        print("No table hitpolicy was predicted, so one is added")
-        prediction = TablePrediction(6, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
-        factory = tf.get_table_factory(prediction.predicted_label)
-        table_hitPolicy = factory.create_element(prediction)
     elif table_inputs == []:
         print("No table_inputs was predicted, so one is added")
         prediction = TablePrediction(3, top_left_x, top_left_y, bottom_right_x, bottom_right_y)
@@ -388,4 +383,4 @@ def create_extra_table_elements(table, table_header, table_hitPolicy, table_inpu
         extra_rule = factory.create_element(prediction)
         table_rules.append(extra_rule)
         
-    return table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules, input_entries, output_entries
+    return table, table_header, table_inputs, table_outputs, table_rules, input_entries, output_entries

@@ -8,6 +8,14 @@
           <div style="font-size: 18px">
             {{ $t('home.description') }}
           </div>
+          <div style="font-size: 18px; text-align: left">
+            <ol>
+              <li>{{ $t('home.specifyImageType') }}</li>
+              <li>{{ $t('home.specifyHandwritten') }}</li>
+              <li>{{ $t('home.specifyContent') }}</li>
+              <li>{{ $t('home.convertImages') }}</li>
+            </ol>
+          </div>
         </div>
       </div>
     </header>
@@ -17,7 +25,7 @@
       <div class="upload-container">
         <!-- Left Section -->
         <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'left')">
-          <h2>Upload Your DRD Image Here</h2>
+          <h2 style="font-size: 32px;">Upload Your DRD's Image Here</h2>
           <q-btn
             color="accent"
             icon="upload_file"
@@ -32,30 +40,30 @@
             @update:model-value="loadImageLeft(fileLeft as File)"
           ></q-file>
           <q-dialog v-model="conversionDialogLeft" persistent>
-                <q-card>
-                  <q-card-section class="row items-center">
-                    <span class="q-ml-sm">{{ $t('home.converted') }}</span>
-                    <q-space />
-                    <q-btn icon="close" flat round dense v-close-popup />
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      flat
-                      icon="download"
-                      label="Download"
-                      color="primary"
-                      @click="downloadModel()"
-                    />
-                    <q-btn
-                      flat
-                      icon="arrow_forward"
-                      :label="$t('home.open')"
-                      color="primary"
-                      @click="editModelLeft()"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
+            <q-card>
+              <q-card-section class="row items-center">
+                <span class="q-ml-sm">{{ $t('home.converted') }}</span>
+                <q-space />
+                <q-btn icon="close" flat round dense v-close-popup />
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn
+                  flat
+                  icon="download"
+                  label="Download"
+                  color="primary"
+                  @click="downloadModel()"
+                />
+                <q-btn
+                  flat
+                  icon="arrow_forward"
+                  :label="$t('home.open')"
+                  color="primary"
+                  @click="editModelLeft()"
+                />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
           <div class="options">
             <q-checkbox
               :disable="isTableLeft"
@@ -77,15 +85,14 @@
             ></q-checkbox>
           </div>
           <div class="image-display">
-            <h2>Your Uploaded DRD Image </h2>
             <div class="image-container">
               <q-img
                 :style="'border: 2px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
-                sizes="(max-width: 800px) 800px, (max-height: 600px) 600px"
+                sizes="(max-width: 400px) 400px, (max-height: 300px) 300px"
                 fit="contain"
                 position="50% 50%"
-                width="800px"
-                height="600px"
+                width="400px"
+                height="300px"
                 placeholder-src="../assets/default-placeholder.png"
                 no-spinner
                 :src="(imgSrcLeft as string)"
@@ -110,7 +117,7 @@
 
         <!-- Right Section -->
         <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'right')">
-          <h2>Upload Your Decision Table Image Here</h2>
+          <h2>style="font-size: 32px;">Upload Your Decision Table's Image Here</h2>
           <q-btn
             color="accent"
             icon="upload_file"
@@ -125,23 +132,23 @@
             @update:model-value="loadImageRight(fileRight as File)"
           ></q-file>
           <q-dialog v-model="conversionDialogRight" persistent>
-                <q-card>
-                  <q-card-section class="row items-center">
-                    <span class="q-ml-sm">{{ $t('home.converted') }}</span>
-                    <q-space />
-                    <q-btn icon="close" flat round dense v-close-popup />
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      flat
-                      icon="arrow_forward"
-                      :label="$t('home.open')"
-                      color="primary"
-                      @click="editModelRight()"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
+            <q-card>
+              <q-card-section class="row items-center">
+                <span class="q-ml-sm">{{ $t('home.converted') }}</span>
+                <q-space />
+                <q-btn icon="close" flat round dense v-close-popup />
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn
+                  flat
+                  icon="arrow_forward"
+                  :label="$t('home.open')"
+                  color="primary"
+                  @click="editModelRight()"
+                />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
           <div class="options">
             <q-checkbox
               class="q-pr-md"
@@ -162,15 +169,14 @@
             ></q-checkbox>
           </div>
           <div class="image-display">
-            <h2>Your Uploaded Image 2</h2>
             <div class="image-container">
               <q-img
                 :style="'border: 2px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
-                sizes="(max-width: 800px) 800px, (max-height: 600px) 600px"
+                sizes="(max-width: 400px) 400px, (max-height: 300px) 300px"
                 fit="contain"
                 position="50% 50%"
-                width="800px"
-                height="600px"
+                width="400px"
+                height="300px"
                 placeholder-src="../assets/default-placeholder.png"
                 no-spinner
                 :src="(imgSrcRight as string)"
@@ -187,15 +193,12 @@
 
     <!-- Example Images Section -->
     <div class="q-pa-md" style="text-align: center">
-      <div style="font-size: 40px">{{ $t('home.examples') }}</div>
-      <div style="font-size: 35px">{{ $t('home.examplesInstruction') }}</div>
+      <div style="font-size: 32px">{{ $t('home.examples') }}</div>
+      <div style="font-size: 18px">{{ $t('home.examplesInstruction') }}</div>
       <!-- New Instructions for Image Specifications -->
-      <div style="font-size: 35px; text-align: left">
+      <div style="font-size: 18px; text-align: left">
         <ol>
-          <li>{{ $t('home.specifyImageType') }}</li>
-          <li>{{ $t('home.specifyHandwritten') }}</li>
-          <li>{{ $t('home.specifyContent') }}</li>
-          <li>{{ $t('home.convertImages') }}</li>
+          <li>{{ $t('home.ImageExample') }}</li>
         </ol>
       </div>
       <!-- End of New Instructions -->
@@ -219,13 +222,14 @@
     <div class="q-py-md" style="margin: auto; text-align: center; width: 100%">
       <div style="font-size: 18px">
         DMN Computer Vision Tool
-          <br />
-          {{ $t('home.university') }}
-          <br />
+        <br />
+        {{ $t('home.university') }}
+        <br />
       </div>
     </div>
   </div>
 </template>
+
 
 
 

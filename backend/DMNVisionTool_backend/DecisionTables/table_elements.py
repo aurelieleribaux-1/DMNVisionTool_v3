@@ -132,12 +132,8 @@ class TableInput(TableElement):
         else:
             return " ".join([text.text for text in self.label])
     
-    def render_input(self):
-        if self.label:
-           last_words = [text.text.split()[-1] for text in self.label]  # Extract last word from each label text
-           self.typeRef.extend(last_words)  # Extend typeRef with the last words  
-        else:       
-         self.typeRef.append("string")
+    def render_input(self):      
+        self.typeRef.append("string")
         template = """
         <input id="{{ input.id }}" label="{{ input.get_label() }}">
             <inputExpression id="{{ input.id }}_{{ input.id }}" typeRef="{{ input.typeRef }}">
@@ -181,12 +177,8 @@ class TableOutput(TableElement):
         else:
             return " ".join([text.text for text in self.label])
     
-    def render_output(self): 
-        if self.label:
-           last_words = [text.text.split()[-1] for text in self.label]  # Extract last word from each label text
-           self.typeRef.extend(last_words)  # Extend typeRef with the last words
-        else:       
-         self.typeRef.append("string")
+    def render_output(self):      
+        self.typeRef.append("string")
         template = """<output id="{{ output.id }}" label="{{ output.get_label() }}" typeRef="{{ output.typeRef}}"/> """
         rtemplate = self.jinja_environment.from_string(template)
         data = rtemplate.render(output=self)

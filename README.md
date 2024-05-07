@@ -1,6 +1,6 @@
 # DMN Computer Vision Tool
 
-DMN Computer Vision Tool is a web application that allows to upload images representing DMN models to convert them in actual DMJN models stored in *.dmn* format.
+DMN Computer Vision Tool is a web application that allows to upload images representing DMN models to convert them in actual DMN models stored in *.dmn* format.
 
 ## Table of contents
 <!--ts-->
@@ -13,73 +13,15 @@ DMN Computer Vision Tool is a web application that allows to upload images repre
 
 ## Functionalities
 
-The user, through the simple and intuitive GUI, can load an image from the local storage in different formats (PNG, JPEG, BMP). The image is then displayed and is ready to be converted. After that, the backend receives the loaded image, extracts the elements and link them togheter in order to obtain the final *.dmn* file. At this pont the result comes back to the frontend and, using the GUI, can be downloaded or can be shown and edited thanks to the integration of the [*bpmn-js*](https://bpmn.io/toolkit/bpmn-js/) library.
+Users can easily load images from local storage in various formats (PNG, JPEG, BMP, TIFF) using the simple and intuitive graphical user interface (GUI). Once loaded, the image is displayed and ready for conversion. The backend processes the loaded image, extracting its elements and linking them together to generate the final .dmn file. Upon completion, the result is sent back to the frontend where users can interact with it through the GUI. They have the option to download the file directly or view and edit it using the bpmn-js library seamlessly integrated into the interface.
 
 Overall, the application is able to provide the following functionalities:
 - Convert an image into the corresponding *.dmn* model;
 - Download the converted model;
-- Visualize the converted model and, next to it, the starting image;
+- Visualize the converted model;
 - Edit the converted model;
 - Open, edit and download an existing *.dmn* model;
-- Create a BPMN model from scratch and download it as *.dmn* file or *.svg* image;
-- Load an image next to the DMN editor.
-
-At present the application is able to detect the following DMN elements with a fair average precision:
-
-<table>
-<tr><td>
-#TO BE CHANGED
-| DMN DRD ELEMENTS                         | AP
-|---------------------------------------|-----
-| Deicison                              | 
-| Input Data                            | 
-| Business knowledge model              | 
-| Business knowledge source             | 
-| Text Annotation                       | 
-| Intermediate Catch Message Event      | 94.489
-| Intermediate Catch Timer Event        | 98.811
-| Intermediate Catch Conditional Event  | 99.010
-| Intermediate Catch Signal Event       | 99.010
-| Intermediate Catch Link Event         | 100.0
-| Intermediate Throw Event              | 86.139
-| Intermediate Throw Message Event      | 88.355
-| Intermediate Throw Escalation Event   | 99.622
-| Intermediate Throw Compensation Event | 100.0
-| Intermediate Throw Signal Event       | 99.586 
-| Intermediate Throw Link Event         | 100.0
-
-
-</td><td>
-#TO BE CHANGED
-| DMN DECISION TABLES ELEMENTS      | AP
-|------------------------          -|-----
-| End Event               | 96.406
-| End Message Event       | 80.499
-| End Escalation Event    | 99.802
-| End Compensation Event  | 100.0
-| End Signal Event        | 99.218
-| End Error Event         | 100.0
-| End Terminate Event     | 98.803
-| Esclusive Gateway       | 96.512
-| Parallel Gateway        | 96.427
-| Inclusive Gateway       | 93.915
-| Event-Based Gateway     | 89.109
-| Task                    | 97.653
-| Data Object             | 96.819
-| Data Store              | 100.0
-| Text Annotation         | 72.670
-| Pool                    | 95.870
-
-</td><td>
-#TO BE CHANGED
-| BPMN Connecting Objects | AP-box | AP-keypoints|
-|-------------------------|--------|-------------|
-| Sequence Flow           | 82.988 | 96.865      |
-| Message Flow            | 73.678 | 88.316      | 
-| Data Association        | 65.154 | 84.546      |
-
-
-</td></tr> </table>
+- Create a DMN model from scratch and download it as *.dmn* file ;
 
 
 ## Quickstart

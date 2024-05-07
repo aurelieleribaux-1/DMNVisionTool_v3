@@ -58,7 +58,7 @@ def get_text_from_img(img,predictions: List[ObjectPrediction]):
     return text_list
 
 
-def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePrediction]) -> List[TableText]:
+def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePrediction]):
     """Extract all the text from an image using OCR with pytesseract
 
     Parameters

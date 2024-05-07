@@ -4,9 +4,8 @@
 export default {
   home: {
     welcome: 'Welcome to the DMN Computer Vision Tool',
-    description:
-      'This is a web application able to convert your images of DMN models into a .dmn format. The tool is able to handle 2 images. The best way to use our application is to start by uploading your DRD image in one of the provided upload spaces. Please do not upload more than 1 DRD at a time. Then, if there is a corresponding decision table, upload it in the other provided space. ',
-    university: 'University of KULeuven',
+    description:'This is a web application able to convert your images of DMN models into a .dmn format. The tool is already able to handle one DRD and link one corresponding Decision Table to this DRD. Moreover, it can handle both digitally drawn and handwritten DMN images.',
+    university:'KULeuven',
     load: 'Load image',
     convert: 'Convert',
     open: 'Open in Editor',
@@ -22,11 +21,12 @@ export default {
     show_elements: 'Elements',
     show_flows: 'Flows',
     examples: 'Examples',
-    examplesInstruction: 'How to use our tool? Here you can find some example images. Please follow these instructions:',
+    examplesInstruction: 'How to use the tool? Please follow these instructions:',
     specifyImageType: ' First upload your DRD image in the provided area. Then, please confirm that is a DRD by ticking the corresponding checkbox above the uploaded image.',
     specifyContent: 'Similarly, upload your Decision Table images in the provided area below and tick the checkbox. ',
     specifyHandwritten: 'Specify if the image is a handwritten file or Digital file by ticking the corresponding boxes.',
     convertImages: 'Click on "Home_Convert Images" to proceed with the conversion.',
+    ImageExample: 'Here you can find some example images. Please use your own DMN images. Beware that these images should be of good quality and resemble our example images.'
   },
   editor: {
     drop: 'Drop',

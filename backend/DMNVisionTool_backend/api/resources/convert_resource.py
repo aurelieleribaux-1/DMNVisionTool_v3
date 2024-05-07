@@ -80,7 +80,6 @@ async def convert_images(request:Request):
                                 
                                 text = sos.get_text_from_table_img_sketch(ocr_img_sketch,table_element_predictions)
                                 sos.link_text_table(text, table_elements)
-                                #table_elements = sos.get_text_from_table_img_sketch(ocr_img_sketch,table_elements)
             
                                 tables = []
                                 table = Table 
@@ -119,7 +118,7 @@ async def convert_images(request:Request):
                                                 output_entries.append(table_element)
                                                 print("CR - There is a output entry")
                                                 
-                                #scs.create_extra_table_elements(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules, input_entries, output_entries)
+                                scs.create_extra_table_elements(table, table_header, table_inputs, table_outputs, table_rules, input_entries, output_entries)
             
                                 table_rules = scs.connect_entries2rule(table_rules, input_entries, output_entries)
                                 table_connect = scs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
@@ -146,7 +145,6 @@ async def convert_images(request:Request):
                                 requirements = cs.convert_keypoint_prediction(kp_predictions)
                                 scs.connect_requirements(requirements, drd_elements)
                                 scs.reference_requirements(requirements, drd_elements)
-                                #drd_elements.extend(requirements)
 
                                 text = os.get_text_from_img(ocr_img_pdf,obj_predictions)
                                 os.link_text(text, drd_elements)
