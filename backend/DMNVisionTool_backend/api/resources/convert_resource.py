@@ -77,8 +77,10 @@ async def convert_images(request:Request):
                         
                                 table_element_predictions = sps.SketchPredictTable(predict_img_sketch)
                                 table_elements = scs.convert_table_object_predictions(table_element_predictions)
-            
-                                table_elements = sos.get_text_from_table_img_sketch(ocr_img_sketch,table_elements)
+                                
+                                text = sos.get_text_from_table_img_sketch(ocr_img_sketch,table_element_predictions)
+                                sos.link_text_table(text, table_elements)
+                                #table_elements = sos.get_text_from_table_img_sketch(ocr_img_sketch,table_elements)
             
                                 tables = []
                                 table = Table 
