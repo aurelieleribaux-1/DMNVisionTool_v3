@@ -5,7 +5,6 @@
         <q-toolbar-title> DMN Computer Vision Tool </q-toolbar-title>
         <q-space></q-space>
         <dark-mode-changer></dark-mode-changer>
-        <locale-changer></locale-changer>
       </q-toolbar>
     </q-header>
 
@@ -41,14 +40,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import LocaleChanger from 'src/components/LocaleChanger.vue';
 import DarkModeChanger from 'src/components/DarkModeChanger.vue';
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    LocaleChanger,
     DarkModeChanger,
   },
 
