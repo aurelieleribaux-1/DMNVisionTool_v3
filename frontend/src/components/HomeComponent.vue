@@ -25,7 +25,7 @@
       <div class="upload-container">
         <!-- Left Section -->
         <section class="upload-section" @dragover="allowDrop($event)" @drop="drop($event, 'left')">
-          <h2 style="font-size: 32px;">Upload Your DRD's Image Here</h2>
+          <h2> style="font-size: 32px;">Upload Your DRD's Image Here</h2>
           <q-btn
             color="accent"
             icon="upload_file"
