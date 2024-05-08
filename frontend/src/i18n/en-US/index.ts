@@ -26,7 +26,7 @@ export default {
     specifyContent: 'Similarly, upload your Decision Table images in the provided area below and tick the checkbox. ',
     specifyHandwritten: 'Specify if the image is a handwritten file or Digital file by ticking the corresponding boxes.',
     convertImages: 'Click on "Home_Convert Images" to proceed with the conversion.',
-    ImageExample: 'Here you can find some example images. Please use your own DMN images. Beware that these images should be of good quality and resemble our example images.'
+    ImageExample: 'Here you can find some example images. Please feel free to download the first two examples if you want to test a digitally drawn DMN, or the last two examples to test a handwritten DMN model. In case you want to use your own images , beware that these images should be of good quality and resemble the example images.'
   },
   editor: {
     drop: 'Drop',

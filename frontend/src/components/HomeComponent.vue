@@ -8,6 +8,7 @@
           <div style="font-size: 18px">
             {{ $t('home.description') }}
           </div>
+          <div style="font-size: 18px">{{ $t('home.examplesInstruction') }}</div>
           <div style="font-size: 18px; text-align: left">
             <ol>
               <li>{{ $t('home.specifyImageType') }}</li>
@@ -194,12 +195,9 @@
     <!-- Example Images Section -->
     <div class="q-pa-md" style="text-align: center">
       <div style="font-size: 32px">{{ $t('home.examples') }}</div>
-      <div style="font-size: 18px">{{ $t('home.examplesInstruction') }}</div>
       <!-- New Instructions for Image Specifications -->
       <div style="font-size: 18px; text-align: left">
-        <ol>
-          <li>{{ $t('home.ImageExample') }}</li>
-        </ol>
+        {{ $t('home.ImageExample') }}
       </div>
       <!-- End of New Instructions -->
       <div class="row justify-evenly wrap">
@@ -214,6 +212,14 @@
             :src="require(`../assets/example${i}.png`)"
             @click="loadExampleImage(i)"
           ></q-img>
+          <q-btn
+            flat
+            icon="cloud_download"
+            label="Download Example"
+            color="primary"
+            :src="require(`../assets/example${i}.png`)"
+            @click="downloadExample(i)"
+          />
         </div>
       </div>
     </div>
@@ -431,6 +437,19 @@ export default defineComponent({
       return formData;
     };
 
+    const downloadExample = async (exampleNumber: number) => {
+      console.log('Button clicked');
+      const fileName = `example${exampleNumber}.png`;
+      const imagePathModule = await import(`../assets/${fileName}`) as { default: string };
+      const imagePath: string = imagePathModule.default;
+      const link = document.createElement('a');
+      link.href = imagePath;
+      link.download = fileName;
+      link.click();
+    };
+
+
+
     const uploadAndConvert = async (formData: FormData)  => {
       const source = axios.CancelToken.source();
       const uploadDialog = $q
@@ -497,6 +516,7 @@ export default defineComponent({
       loadingError,
       editModelLeft,
       downloadModel,
+      downloadExample,
       loadImageLeft,
       loadImageRight,
       convertImages,
