@@ -45,7 +45,7 @@ def get_text_from_img(img,predictions: List[ObjectPrediction]):
         # Resize the ROI based on the resizing factor
         roi_resized = cv2.resize(roi, None, fx=resize_factor, fy=resize_factor, interpolation=cv2.INTER_CUBIC)
         # Perform OCR on the ROI
-        text = pytesseract.image_to_string(roi_resized, config="--psm 12")
+        text = pytesseract.image_to_string(roi_resized, config="--psm 12 -c tessedit_char_blacklist={+-,=./?;:@[]()*&^%$£!¬`}|><_1234567890}")
         # Spell-check the extracted text using TextBlob
         corrected_text = TextBlob(text).correct().string
         # Create a GraphText object with the corrected text and bounding box
@@ -91,9 +91,9 @@ def get_text_from_table_img_pdf(img: np.ndarray, predictions: List[TablePredicti
         roi_resized = cv2.resize(roi, None, fx=resize_factor, fy=resize_factor, interpolation=cv2.INTER_CUBIC)
         if len(predictions) > 19:
           # Perform OCR on the ROI
-          text = pytesseract.image_to_string(roi_resized, config="--psm 6 -c tessedit_char_blacklist={+-}")
+          text = pytesseract.image_to_string(roi_resized, config="--psm 6 -c tessedit_char_blacklist={<>}")
         else: 
-          text = pytesseract.image_to_string(roi_resized, config="--psm 12 -c tessedit_char_blacklist={+-}")
+          text = pytesseract.image_to_string(roi_resized, config="--psm 12 -c tessedit_char_blacklist={<>}")
         # Spell-check the extracted text using TextBlob
         corrected_text = TextBlob(text).correct().string
         # Create a GraphText object with the corrected text and bounding box

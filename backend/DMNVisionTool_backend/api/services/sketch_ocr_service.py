@@ -124,9 +124,9 @@ def get_text_from_table_img_sketch(img,predictions: List[TablePrediction]):
         # Perform OCR on the ROI
         if len(predictions) > 19:
           # Perform OCR on the ROI
-          text = pytesseract.image_to_string(roi_resized, config="--psm 6 --oem 1 ")
+          text = pytesseract.image_to_string(roi_resized, config="--psm 6 --oem 1 -c tessedit_char_blacklist={<>}")
         else: 
-          text = pytesseract.image_to_string(roi_resized, config="--psm 12 --oem 1 ")
+          text = pytesseract.image_to_string(roi_resized, config="--psm 12 --oem 1 -c tessedit_char_blacklist={<>}")
         # Tokenize the text
         words = text.split()
         # Initialize a set to keep track of unique words in the corrected text
