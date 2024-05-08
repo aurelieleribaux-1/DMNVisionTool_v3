@@ -201,7 +201,7 @@
       </div>
       <!-- End of New Instructions -->
       <div class="row justify-evenly wrap">
-        <div class="q-pa-sm" v-for="i in 3" :key="i">
+        <div class="q-pa-sm" v-for="i in 4" :key="i">
           <q-img
             :style="'border: 1px ' + ($q.dark.mode ? 'gray' : 'black') + ' solid'"
             sizes="(max-width: 300px) 300px, (max-height: 300px) 300px"
