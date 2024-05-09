@@ -45,7 +45,7 @@ def get_envelope_element(center: List[int], table_elements: List[TableElement]) 
     for element in table_elements:
         if isinstance (element, TableRule):
             rules.append(element)
-            
+    
     envelope = min(
         rules,
         key=lambda x: math.sqrt(

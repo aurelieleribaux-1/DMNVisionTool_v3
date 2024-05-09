@@ -99,7 +99,10 @@ class TableHitPolicy(TableElement):
 
     def get_label(self):
         """Returns the text of the table hit policy as a string"""
-        return " ".join([text.text for text in self.label])
+        if not self.label:
+            return "UNIQUE"
+        else:
+            return " ".join([text.text for text in self.label])
 
 class TableInput(TableElement): 
     """Class for the input of a Table. 

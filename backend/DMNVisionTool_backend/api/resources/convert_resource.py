@@ -118,7 +118,7 @@ async def convert_images(request:Request):
                                                 output_entries.append(table_element)
                                                 print("CR - There is a output entry")
                                                 
-                                scs.create_extra_table_elements(table, table_header, table_inputs, table_outputs, table_rules, input_entries, output_entries)
+                                scs.create_extra_table_elements(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules, input_entries, output_entries)
             
                                 table_rules = scs.connect_entries2rule(table_rules, input_entries, output_entries)
                                 table_connect = scs.connect_components2table(table, table_header, table_hitPolicy, table_inputs, table_outputs, table_rules)
