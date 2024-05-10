@@ -27,42 +27,25 @@ Overall, the application is able to provide the following functionalities:
 ## Quickstart
 
 #Our web application is available and ready to use at the following link:
-**[BPMN Redrawer](https://pros.unicam.it/bpmn-redrawer-tool/)**.
+****.
 
 #A tutorial on its usage is available by clicking the image below:
-[![Watch the video](https://img.youtube.com/vi/0e2qnbSp9XY/maxresdefault.jpg)](https://youtu.be/0e2qnbSp9XY)
-
-The user can perform very simple steps to obtain a *.dmn* file starting from an image:
-- In the *HOME* page, the user can load an image from local storage with the corresponding button or one of the sample images by clicking on them;
-<p align="center">
-<img src="extra/images/home.png" width="90%" />
-</p>
-
-- If correctly loaded, the image will be displayed;
-- Different options can be enabled to be performed by the backend, such as:
-    - object detection for the DMN elements;
-    - keypoint detection for the DMN flows;
-    - OCR for the DMN labels;
-- Then the *CONVERT* button can be clicked to start the conversion (it takes a few seconds to complete the process);
-- Once the conversion is done, the user can either download or view and edit the resulting model;
-- By selecting the *VIEW IN EDITOR* button, the *EDITOR* page will allow the user to see the converted model and, if needed, to edit and correct it. The starting image is displayed next to the model and simplifies the revising process (a vertical splitter can be moved to resize the BPMN editor and the image viewer);
-<p align="center">
-<img src="extra/images/editor.png" width="90%" />
-</p>
-
-- If the user is happy with the result, the final model can be downloaded either as *.bpmn* file or as *.svg* image.
-
-The user can also use the *EDITOR* page to open, edit and download an existing *.bpmn* model or to create a BPMN model from scratch, as well as loading an image in the image viewer.
+[![Watch the video]()]()
 
 ## How to run
 
-BPMN Redrawer is available as a Docker image by creating it from this folder or pulling it from [DockerHub](https://hub.docker.com/r/proslab/bpmn-redrawer).
+DMNComputerVisionTool is available as a Docker image by creating it from this folder or pulling it from [DockerHub](https://hub.docker.com/r/proslab/bpmn-redrawer).
 
-First of all, download the trained detectron2 models from [Hugging Face](https://huggingface.co/PROSLab/BPMN-Redrawer-Models/tree/main) and move them in the [detectron_model](backend/bpmn_redrawer_backend/detectron_model) folder.
+First of all, download the trained detectron2 models from [Hugging Face]() and move them in the [detectron_model](backend/DMNVisionTool_backend/detectron_model) folder.
 
 In particular these two models are:
-- <b>final_model.pth</b>: the Object Detection model;
-- <b>kp_final_model.pth</b>: the KeyPoint Prediction model.
+- <b>DRD_model_final.pth</b>
+- <b>kp_DRD_model_final.pth</b>
+- <b>Table_model_final.pth</b>
+- <b>SketchDRD_model_final.pth</b>
+- <b>Sketchkp_DRD_model_final.pth</b>
+- <b>SketchTable_model_final.pth</b>
+
 
 This is needed when working with the application without using containers. When using the containers, the models will be downloaded automatically.
 
