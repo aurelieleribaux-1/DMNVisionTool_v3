@@ -34,7 +34,7 @@ Overall, the application is able to provide the following functionalities:
 
 ## How to run
 
-DMNComputerVisionTool is available as a Docker image by creating it from this folder or pulling it from [DockerHub](https://hub.docker.com/r/proslab/bpmn-redrawer).
+DMNComputerVisionTool is available as a Docker image by creating it from this folder or pulling it from [DockerHub](https://hub.docker.com/repository/docker/aurelieleribaux/dmn_computer_vision_tool/general).
 
 First of all, download the trained detectron2 models from [Hugging Face]() and move them in the [detectron_model](backend/DMNVisionTool_backend/detectron_model) folder.
 
