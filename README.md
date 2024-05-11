@@ -31,6 +31,7 @@ Overall, the application is able to provide the following functionalities:
 
 #A tutorial on its usage is available by clicking the image below:
 [![Watch the video]()]()
+https://huggingface.co/spaces/carolineh/DMNComputerVisionTool_DemonstrationVideo
 
 ## How to run
 
