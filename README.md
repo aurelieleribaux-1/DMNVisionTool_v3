@@ -30,7 +30,7 @@ Our web application is available and ready to use at the following link: [DMNCom
 ****.
 
 A tutorial on its usage is available at the following link:
-[![Watch the video](https://huggingface.co/spaces/carolineh/DMNComputerVisionTool_DemonstrationVideo)]
+[Watch the video](https://huggingface.co/spaces/carolineh/DMNComputerVisionTool_DemonstrationVideo)
 
 
 ## How to run
