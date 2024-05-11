@@ -26,12 +26,12 @@ Overall, the application is able to provide the following functionalities:
 
 ## Quickstart
 
-#Our web application is available and ready to use at the following link:# Our web application is available and ready to use at the following link: [DMNComputerVisionTool](http://34.140.25.36/?fbclid=IwZXh0bgNhZW0CMTAAAR38Dx6_bSxHMVnLEGBw5QS28Q_8I_zeaQqhbPxPKLKbetrCr6agWwp2SD0_aem_AXaXDzfDj1C1xsLt0M9k_g6Gusvq5Xch7dq3ebTgRTHiNFfiM-F9j7kFxM__qJ2R80MvVwRU4U9NQYcLgln0z9Df#/home)
+Our web application is available and ready to use at the following link: [DMNComputerVisionTool](http://34.140.25.36/?fbclid=IwZXh0bgNhZW0CMTAAAR38Dx6_bSxHMVnLEGBw5QS28Q_8I_zeaQqhbPxPKLKbetrCr6agWwp2SD0_aem_AXaXDzfDj1C1xsLt0M9k_g6Gusvq5Xch7dq3ebTgRTHiNFfiM-F9j7kFxM__qJ2R80MvVwRU4U9NQYcLgln0z9Df#/home)
 ****.
 
-#A tutorial on its usage is available by clicking the image below:
-[![Watch the video]()]()
-https://huggingface.co/spaces/carolineh/DMNComputerVisionTool_DemonstrationVideo
+A tutorial on its usage is available at the following link:
+[![Watch the video](https://huggingface.co/spaces/carolineh/DMNComputerVisionTool_DemonstrationVideo)]
+
 
 ## How to run
 
